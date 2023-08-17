@@ -4,16 +4,17 @@
             <img class ="logo" alt="keela logo" src="keelaLogo.png">
             <h1>Sign Up</h1>
             <div class="register">
-                <input type="text" v-model="firstName" id="firstName" placeholder ="First Name">
-                <input type="text" v-model="lastName" id="lastName" placeholder ="Last Name">
-                <input type="email" v-model="email" id="email" placeholder ="Email">
-                <input type="text" v-model="orgName" id="orgName" placeholder ="Organization Name">
+                <input type="text" v-model="firstName" id="firstName" placeholder ="First Name" required>
+                <input type="text" v-model="lastName" id="lastName" placeholder ="Last Name" required>
+                <input type="email" v-model="email" id="email" placeholder ="Email" required>
+                <input type="text" v-model="orgName" id="orgName" placeholder ="Organization Name" required>
                 <select class="dropdown" id="OrgRole" v-model="orgRole" placeholder="Organization Role">
                     <option value="Admin" selected>Admin</option>
                     <option value="Coordinator">Coordinator</option>
                 </select>
-                <input v-model="password" type="password" placeholder ="Enter Password">
-                <input v-model="confirmPassword" type="password" placeholder ="Confirm Password">    
+                <input v-model="password" type="password" placeholder ="Enter Password" required>
+                <input v-model="confirmPassword" type="password" placeholder ="Confirm Password" required>
+                <p v-if ="error" class="error-message">{{ error }}</p>    
                 <button type="submit"> Sign Up </button>
             </div>       
         </div>  
@@ -30,13 +31,33 @@ export default {
             lastName:"",
             email:"",
             orgName:"",
+            orgRole:"Admin",
             password:"",
-            confirmPassword:"",
-            orgRole:"Admin",  
+            confirmPassword:"",  
             error:"",   
         };
     },
+    methods:{
+        onSignUp(){
+            const firstName = this.firstName;
+            const lastName = this.lastName;
+            const email = this.email;
+            const orgName = this.orgName;
+            const orgRole = this.orgRole;
+            const password = this.password;
+            const confirmPassword = this.confirmPassword;
+
+            this.error="";
+
+            if(password !== confirmPassword){
+                this.error = "Password should be same";
+            }
+                
+        }
+    }
 }
+
+
 </script>
 
 <style scoped>

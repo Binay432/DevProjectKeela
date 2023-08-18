@@ -22,6 +22,9 @@
 </template>
 
 <script>
+// import { userAccounts } from '../api/userAccountsCollection';
+import login from './login.vue';
+// import { Accounts } from 'meteor/accounts-base';
 
 export default {
     name : 'signup',
@@ -31,13 +34,27 @@ export default {
             lastName:"",
             email:"",
             orgName:"",
-            orgRole:"Admin",
+            orgRole:"",
             password:"",
             confirmPassword:"",  
             error:"",   
         };
     },
     methods:{
+        checkPasswordValidation(password, confirmPassword){
+            if(password !== confirmPassword){
+                this.error = "Password should be same";
+            }
+        },
+        clearInputField(){
+            this.firstName = "";
+            this.lastName = "";
+            this.email = "";
+            this.orgName = "";
+            this.orgRole = "";
+            this.password = "";
+            this.confirmPassword = "";
+        },
         onSignUp(){
             const firstName = this.firstName;
             const lastName = this.lastName;
@@ -46,18 +63,33 @@ export default {
             const orgRole = this.orgRole;
             const password = this.password;
             const confirmPassword = this.confirmPassword;
-
-            this.error="";
-
-            if(password !== confirmPassword){
-                this.error = "Password should be same";
-            }
+            this.checkPasswordValidation(password, confirmPassword);
+            if (this.error === ""){
+                const user = {
+                    email : this.email,
+                    password : this.password,
+                    confirmPassword : this.confirmPassword,
+                    profile:{
+                        firstName : this.firstName,
+                        lastName : this.lastName,
+                        orgName : this.orgName,
+                        orgRole : this.orgRole,
+                    },
+                }
                 
-        }
+                Accounts.createUser(user, (error) => {
+                    if(error){
+                        console.error(error.reason);
+                    }
+                    else{
+                        this.clearInputField();
+                        this.$router.push('/');
+                    }
+                });     
+            }  
+        },
     }
 }
-
-
 </script>
 
 <style scoped>

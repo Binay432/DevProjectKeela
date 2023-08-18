@@ -7,23 +7,18 @@
 <template>
   <headerSection/>
   <sidebar/>
-  <!-- <contactTable/> -->
   <router-view/>
 </template>
 
 <script>
-// import { defineComponent } from '@vue/composition-api'
 import sidebar from './sidebar.vue'
 import headerSection from './headerSection.vue'
-// import contactTable from './contactTable.vue';
 
 export default{
-name:'AppMenu',
-components:{
-  sidebar,
-  headerSection,
-  // contactTable
-  
-}
+  name:'AppMenu',
+  components:{
+    sidebar,
+    headerSection,
+  }
 }
 </script>

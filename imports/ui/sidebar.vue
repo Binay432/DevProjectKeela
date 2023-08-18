@@ -89,7 +89,7 @@ export default {
     .logout-button{
         border: 1px solid black; 
         height:30px;
-        margin-top:500px;
+        margin-top:37vw;
         background-color:rgb(200, 202, 204);
     }
     .logout-button:hover{

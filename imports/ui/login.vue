@@ -37,7 +37,7 @@
 <style scoped>
     .loginContainer{
         display:flex;
-        background-color:none;
+        background-color:None;
         align-content: center;
         flex-direction: column;
         border:1px solid rgb(238, 234, 234);

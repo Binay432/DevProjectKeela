@@ -22,9 +22,7 @@
 </template>
 
 <script>
-// import { userAccounts } from '../api/userAccountsCollection';
 import login from './login.vue';
-// import { Accounts } from 'meteor/accounts-base';
 
 export default {
     name : 'signup',

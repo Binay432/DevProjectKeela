@@ -31,17 +31,27 @@
                 <button class="features-button">Settings</button>
             </div>  
         </div>
-        <div>
-
-        </div>
+        <button class="logout-button" @click="logout">Log Out</button>
     </div>
 </template>
 
 <script> 
+import { Meteor } from 'meteor/meteor';
 export default {
-    name:"sidebar"
+    name:"sidebar",
+    methods:{
+        logout(){
+            Meteor.logout((error) => {
+                if(error){
+                    console.error(error.reason);
+                }
+                else{
+                    this.$router.push('/');
+                }
+            });
+        }
+    }
 }
-console.log("inside sidebar");
 </script>
 
 <style scoped>
@@ -75,6 +85,16 @@ console.log("inside sidebar");
     .features-button:hover{
         background-color:rgb(214, 216, 218);
         cursor:pointer;
+    }
+    .logout-button{
+        border: 1px solid black; 
+        height:30px;
+        margin-top:500px;
+        background-color:rgb(200, 202, 204);
+    }
+    .logout-button:hover{
+        cursor:pointer;
+        background-color:rgb(214, 216, 218);
     }
 
 </style>

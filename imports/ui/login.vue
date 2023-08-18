@@ -1,16 +1,37 @@
 <template>
-    <div class="loginContainer">
-            <img class ="logo_msg" alt="keela logo" src="keelaLogo.png">
-            <h1>Log In</h1>
-            <input class="inputField" type="text" placeholder ="Email">
-            <input class="inputField" type="password" placeholder ="Enter Password">
-            <router-link to="/home"><button class="login_button" > Log In </button> </router-link>
-            <router-link to="/signup" class="signup-link">Not have an account?<strong>Sign Up</strong></router-link>
-    </div>
+    <form @submit.prevent="logIn">
+        <div class="loginContainer">
+                <img class ="logo_msg" alt="keela logo" src="keelaLogo.png">
+                <h1>Log In</h1>
+                <input v-model="email" class="inputField" type="text" placeholder ="Email" required>
+                <input v-model="password" class="inputField" type="password" placeholder ="Enter Password" required>
+                <button type="submit" class="login_button" > Log In </button>
+                <router-link to="/signup" class="signup-link">Not have an account?<strong>Sign Up</strong></router-link>
+        </div>
+    </form>
 </template>
+
 <script>
     export default {
     name : 'login',
+    data(){
+        return {
+            email:"",
+            password:""
+        }
+    },
+    methods:{
+        logIn(){
+            Meteor.loginWithPassword(this.email,this.password, (error)=>{
+                if(error){
+                    console.error(error.reason);
+                }
+                else{
+                    this.$router.push('/home');
+                }
+            })
+        }
+    }
     }
 </script>
 <style scoped>

@@ -57,10 +57,10 @@ export default {
 <style scoped>
     .sidebar-grid{
         display: grid;
-        grid-template-rows:100px 100px 100px;
+        grid-template-rows:100px 100px 100px 1fr;
         row-gap:20px;
         width:160px;
-        background-color:white;
+        background-color:rgb(122, 27, 27);
         border:1px solid rgb(166, 165, 165);
         padding:0.5em;
         top:54.5px;
@@ -89,7 +89,8 @@ export default {
     .logout-button{
         border: 1px solid black; 
         height:30px;
-        margin-top:37vw;
+        place-self: end center;
+        width:140px;
         background-color:rgb(200, 202, 204);
     }
     .logout-button:hover{

@@ -104,7 +104,7 @@ export default {
     margin-top:7%;
     margin-bottom:35;
 }
-    .logo{
+.logo{
     height:50px;
     float:center;
 }

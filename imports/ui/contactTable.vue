@@ -5,7 +5,8 @@
                 <div class ="left-section">Number of contacts</div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
-                    <button type="button" class="add-button" @click="showAlert()">Add Contacts</button>
+                    <button type="button" class="add-button" @click="showForm = true">Add Contact</button>
+                    <contact-form v-if="showForm" :show-Form="showForm" @contact-added="handleContactAdded" @form-closed="formClosed"/>
                 </div>
             </div>
         <div class="contacts-table-box">
@@ -40,19 +41,20 @@
 </template>
 
 <script> 
+import addContactform from './forms/contactForm.vue';
 import AppMenu from './AppMenu.vue'
+import { ref } from 'vue';
+import contactForm from './forms/contactForm.vue';
+
     export default{
         name: "contactTable",
-        methods: {
-            showAlert(){
-                alert('button clicked');
-            }
-        },
         components:{
-            AppMenu
+            AppMenu,
+            contactForm, 
         },
         data(){
             return {
+                showForm: false,
                 data1:{
                     name:"binay sah",
                     email:'binay@email.com',
@@ -63,8 +65,18 @@ import AppMenu from './AppMenu.vue'
                     name:"kamal sah",
                     email:'kamal@email.com',
                     contact:'98657415425',
-                    tags:'tag2'
-                }
+                    tags:'tag2',
+                },
+            }
+        },
+        methods:{
+            handleContactAdded(newContact){
+                alert("contact Added pop test");
+                this.showForm = false; 
+            },
+            formClosed(message){
+                // alert(message);
+                this.showForm = false;
             }
         }
     }

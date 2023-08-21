@@ -60,7 +60,7 @@ export default {
         grid-template-rows:100px 100px 100px 1fr;
         row-gap:20px;
         width:160px;
-        background-color:rgb(122, 27, 27);
+        background-color:white;
         border:1px solid rgb(166, 165, 165);
         padding:0.5em;
         top:54.5px;

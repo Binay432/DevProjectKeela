@@ -5,7 +5,8 @@
                 <div class ="left-section">Number of tags</div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
-                    <button type="button" class="add-button" @click="showAlert()">Add Tags</button>
+                    <button type="button" class="add-button" @click="showForm = true">Add Tags</button>
+                    <tag-form v-if="showForm" :show-Form="showForm" @tag-added="handleTagAdded" @form-closed="formClosed"/>
                 </div>
             </div>
         <div class="contacts-table-box">
@@ -35,18 +36,18 @@
 
 <script> 
 import AppMenu from './AppMenu.vue';
+import { ref } from 'vue';
+import tagForm from './forms/tagForm.vue';
+
     export default{
         name: "tagsTable",
-        methods: {
-            showAlert(){
-                alert('button clicked');
-            }
-        },
         components:{
-            AppMenu
+            AppMenu,
+            tagForm,
         },
         data(){
             return {
+                showForm: false, 
                 data1:{
                     name:"Tag 1",
                     createDate:"2023/01/05",
@@ -57,6 +58,17 @@ import AppMenu from './AppMenu.vue';
                 }
             }
         },
+
+        methods:{
+            handleTagAdded(newTag){
+                alert("added tag");
+                this.showForm = false;
+            },
+            formClosed(message){
+                // alert(message);
+                this.showForm = false;
+            }
+        }
        
     }
 </script>

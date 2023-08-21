@@ -41,7 +41,6 @@
 </template>
 
 <script> 
-import addContactform from './forms/contactForm.vue';
 import AppMenu from './AppMenu.vue'
 import { ref } from 'vue';
 import contactForm from './forms/contactForm.vue';

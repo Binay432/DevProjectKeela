@@ -18,6 +18,7 @@
 
 <script>
 import {ref} from 'vue';
+import { Contacts }  from '../../api/userAccountsCollection';
 
 export default {
     name:"contactForm", 
@@ -37,6 +38,7 @@ export default {
                 contactTag : contactTag.value,
                 contactNumber : contactNumber.value, 
             };
+            Contacts.insert(newContact);
             context.emit('contact-added', newContact);
             // Clear form fields
             contactName.value = '';

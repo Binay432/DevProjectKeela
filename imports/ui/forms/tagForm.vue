@@ -6,7 +6,7 @@
             </div>
             <h2>Add Tag</h2>
             <form @submit.prevent = "addTag">
-                <input type= "text" v-model ="Tag" placeholder = "Tag" required>
+                <input type= "text" v-model ="tagName" placeholder = "Tag" required>
                 <button type="submit">Submit</button>
             </form>
         </div>
@@ -15,6 +15,7 @@
 
 <script>
 import {ref} from 'vue';
+import { Tags } from '../../api/userAccountsCollection';
 
 export default {
     name:"tagForm", 
@@ -22,14 +23,15 @@ export default {
         showForm:Boolean, // props defined a properties (showForm here) that is expected to recieve from parent components and here its in the boolean form which is used to verify in the above template 
     },
     setup (props, context){
-        const Tag = ref ('');
+        const tagName = ref ('');
         const addTag = () => {
             const newTag = {
-                Tag : Tag.value,
+                tagName : tagName.value,
             };
+            Tags.insert(newTag);
             context.emit('tag-added', newTag);
             // Clear form field
-            Tag.value = '';
+            tagName.value = '';
         };
         
         const closeForm = () => {
@@ -37,7 +39,7 @@ export default {
         };
 
         return {
-            Tag,
+            tagName,
             addTag,
             closeForm,
         };

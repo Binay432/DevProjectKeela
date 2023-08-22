@@ -20,21 +20,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{{ data1.name }}</td>
-                        <td>{{ data1.email }}</td>
-                        <td>{{ data1.tags }}</td>
-                        <td>{{ data1.contact }}</td>
+                    <tr v-for="contact in contacts" :key="contact._id">
+                        <td>{{ contact.contactName }}</td>
+                        <td>{{ contact.contactEmail }}</td>
+                        <td>{{ contact.contactTag }}</td>
+                        <td>{{ contact.contactNumber }}</td>
                     </tr>
-                    <tr>
-                        <td>{{ data2.name }}</td>
-                        <td>{{ data2.email }}</td>
-                        <td>{{ data2.tags }}</td>
-                        <td>{{ data2.contact }}</td>
-                    </tr>
-
-                </tbody>
-                
+                </tbody>    
             </table>
         </div>
     </div>
@@ -42,8 +34,9 @@
 
 <script> 
 import AppMenu from './AppMenu.vue'
-import { ref } from 'vue';
+import { ref ,onMounted } from 'vue';
 import contactForm from './forms/contactForm.vue';
+import { Contacts } from '../api/userAccountsCollection';
 
     export default{
         name: "contactTable",
@@ -54,25 +47,19 @@ import contactForm from './forms/contactForm.vue';
         data(){
             return {
                 showForm: false,
-                data1:{
-                    name:"binay sah",
-                    email:'binay@email.com',
-                    contact:'9865741258',
-                    tags:'tag1'
-                },
-                data2:{
-                    name:"kamal sah",
-                    email:'kamal@email.com',
-                    contact:'98657415425',
-                    tags:'tag2',
-                },
-            }
+                contacts:[]
+            };
         },
         methods:{
+            onMounted(){
+                this.contacts = Contacts.find().fetch(); //fetch the contacts when te component is  mounted 
+            }, 
+
             handleContactAdded(newContact){
-                alert("contact Added pop test");
+                this.contacts.push(newContact); //push the contacts to contacts collections 
                 this.showForm = false; 
             },
+
             formClosed(message){
                 // alert(message);
                 this.showForm = false;

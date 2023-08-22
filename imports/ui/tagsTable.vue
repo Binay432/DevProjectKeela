@@ -18,17 +18,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{{ data1.name }}</td>
-                        <td>{{ data1.createDate }}</td>
+                    <tr v-for="tag in tags" :key="tag._id">
+                        <td>{{ tag.tagName }}</td>
                     </tr>
-                    <tr>
-                        <td>{{ data2.name }}</td>
-                        <td>{{ data2.createDate }}</td>
-                    </tr>
-
                 </tbody>
-                
             </table>
         </div>
     </div>
@@ -36,8 +29,9 @@
 
 <script> 
 import AppMenu from './AppMenu.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import tagForm from './forms/tagForm.vue';
+import { Tags } from "../api/userAccountsCollection";
 
     export default{
         name: "tagsTable",
@@ -48,20 +42,16 @@ import tagForm from './forms/tagForm.vue';
         data(){
             return {
                 showForm: false, 
-                data1:{
-                    name:"Tag 1",
-                    createDate:"2023/01/05",
-                },
-                data2:{
-                    name:"Tag 2",
-                    createDate:"2022/05/05",
-                }
+                tags : []
             }
         },
 
         methods:{
+            onMounted(){
+                this.tags = Tags.find().fetch();
+            },
             handleTagAdded(newTag){
-                alert("added tag");
+                this.tags.push(newTag);
                 this.showForm = false;
             },
             formClosed(message){

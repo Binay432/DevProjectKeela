@@ -74,14 +74,13 @@ export default {
                         orgRole : this.orgRole,
                     },
                 }
-                
                 Accounts.createUser(user, (error) => {
                     if(error){
                         console.error(error.reason);
                     }
                     else{
                         this.clearInputField();
-                        this.$router.push('/');
+                        this.$router.push('/'); //navigate to login page 
                     }
                 });     
             }  

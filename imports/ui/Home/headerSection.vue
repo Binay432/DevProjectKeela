@@ -4,27 +4,37 @@
             <img class="keelaLogo" src="keela-logo-2.png" alt="keela image">
         </div>
         <div class="middleBox">
-           Place for inner Content 
+          <h1> {{ organizationName }} </h1>
         </div>
         <div class="rightBox">
             <select class="org-dropdown" id="organization" v-model="selectedOption">
-                <option value="org1" selected>Org1</option>
-                <option value="org2">org2</option>
+                <option value="user" selected>{{ userName }}</option>
             </select>
         </div>
     </div>
 </template>
 
 <script>
-    export default {
-        data(){
+import { Meteor } from 'meteor/meteor';
+export default {
+    name : 'headerSection',
+    data(){ 
         return {
-            selectedOption:"org1"
+            selectedOption:'',
         };
     },
-    name : 'headerSection'
-    }
+    computed:{
+        organizationName() {
+            const user = Meteor.user();
+            return user ? user.profile.orgName : '';
+        },
+        userName(){
+            const user = Meteor.user();
+            return user ? user.profile.firstName+ user.profile.lastName : '' ;
+        }
+    },
     
+};
 </script>
 
 
@@ -59,6 +69,10 @@
         margin-left:5px;
         margin-right:5px;
         align-content:center;
+    }
+    .middleBox h1{
+        font-size: 25px;
+        color:purple
     }
     .rightBox{
         display:flex;

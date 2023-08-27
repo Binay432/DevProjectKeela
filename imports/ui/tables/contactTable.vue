@@ -1,64 +1,83 @@
 <template>
-    <AppMenu/>
+    <home/>
     <div class = "table-grid">
             <div class="contacts-info-box">
-                <div class ="left-section">Number of tags</div>
+                <div class ="left-section">Number of contacts</div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
-                    <button type="button" class="add-button" @click="showAlert()">Add Tags</button>
+                    <button type="button" class="add-button" @click="showForm = true">Add Contact</button>
+                    <contact-form v-if="showForm" :show-Form="showForm" @contact-added="handleContactAdded" @form-closed="formClosed"/>
                 </div>
             </div>
         <div class="contacts-table-box">
             <table class="contact-table">
                 <thead>
                     <tr>   
+                        <th>FULL NAME</th>
+                        <th>EMAIL</th>
                         <th>TAGS</th>
-                        <th>CREATED DATE</th>
+                        <th>CONTACT NUMBER</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{{ data1.name }}</td>
-                        <td>{{ data1.createDate }}</td>
+                    <tr v-for="contact in contacts" :key="contact._id">
+                        <td>{{ contact.contactName }}</td>
+                        <td>{{ contact.contactEmail }}</td>
+                        <td>{{ contact.contactTag }}</td>
+                        <td>{{ contact.contactNumber }}</td>
                     </tr>
-                    <tr>
-                        <td>{{ data2.name }}</td>
-                        <td>{{ data2.createDate }}</td>
-                    </tr>
-
-                </tbody>
-                
+                </tbody>    
             </table>
         </div>
     </div>
 </template>
 
 <script> 
-import AppMenu from './AppMenu.vue';
-    export default{
-        name: "tagsTable",
-        methods: {
-            showAlert(){
-                alert('button clicked');
+import home from '../Home/home.vue';
+import { ref ,onMounted } from 'vue';
+import contactForm from '../forms/contactForm.vue';
+import { Contacts } from '../../api/userAccountsCollection';
+import { Meteor} from 'meteor/meteor';
+
+
+
+export default{
+    name: "contactTable",
+    data(){
+        return {
+            showForm: false,
+            contacts:[]
+        };
+    },
+    components:{
+        home,
+        contactForm, 
+    },
+    
+    methods:{
+        onMounted(){
+            this.contacts = Contacts.find().fetch(); //fetch the contactsof the specif ic branch g
+        }, 
+
+        handleContactAdded(newContact){
+            this.contacts.push(newContact); //push the contacts to contacts collections 
+            this.showForm = false; 
+            const currentUser = Meteor.user();
+            console.log(currentUser);
+            if(currentUser){
+                console.log("this is a current User");
+                const organizationName = currentUser.profile.orgName;
+                this.contacts = Contacts.find({organization:organizationName}).fetch();
+                console.log(contacts)
             }
         },
-        components:{
-            AppMenu
-        },
-        data(){
-            return {
-                data1:{
-                    name:"Tag 1",
-                    createDate:"2023/01/05",
-                },
-                data2:{
-                    name:"Tag 2",
-                    createDate:"2022/05/05",
-                }
-            }
-        },
-       
+
+        formClosed(message){
+            // alert(message);
+            this.showForm = false;
+        }
     }
+}
 </script>
 
 <style scoped>

@@ -1,72 +1,65 @@
 <template>
-    <AppMenu/>
+    <home/>
     <div class = "table-grid">
             <div class="contacts-info-box">
-                <div class ="left-section">Number of contacts</div>
+                <div class ="left-section">Number of tags</div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
-                    <button type="button" class="add-button" @click="showAlert()">Add Contacts</button>
+                    <button type="button" class="add-button" @click="showForm = true">Add Tags</button>
+                    <tag-form v-if="showForm" :show-Form="showForm" @tag-added="handleTagAdded" @form-closed="formClosed"/>
                 </div>
             </div>
         <div class="contacts-table-box">
             <table class="contact-table">
                 <thead>
                     <tr>   
-                        <th>FULL NAME</th>
-                        <th>EMAIL</th>
                         <th>TAGS</th>
-                        <th>CONTACT NUMBER</th>
+                        <th>CREATED DATE</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{{ data1.name }}</td>
-                        <td>{{ data1.email }}</td>
-                        <td>{{ data1.tags }}</td>
-                        <td>{{ data1.contact }}</td>
+                    <tr v-for="tag in tags" :key="tag._id">
+                        <td>{{ tag.tagName }}</td>
                     </tr>
-                    <tr>
-                        <td>{{ data2.name }}</td>
-                        <td>{{ data2.email }}</td>
-                        <td>{{ data2.tags }}</td>
-                        <td>{{ data2.contact }}</td>
-                    </tr>
-
                 </tbody>
-                
             </table>
         </div>
     </div>
 </template>
 
 <script> 
-import AppMenu from './AppMenu.vue'
+import home from '../Home/home.vue';
+import { ref, onMounted } from 'vue';
+import tagForm from '../forms/tagForm.vue';
+// import { Tags } from "../api/userAccountsCollection";
+
     export default{
-        name: "contactTable",
-        methods: {
-            showAlert(){
-                alert('button clicked');
-            }
-        },
+        name: "tagsTable",
         components:{
-            AppMenu
+            home,
+            tagForm,
         },
         data(){
             return {
-                data1:{
-                    name:"binay sah",
-                    email:'binay@email.com',
-                    contact:'9865741258',
-                    tags:'tag1'
-                },
-                data2:{
-                    name:"kamal sah",
-                    email:'kamal@email.com',
-                    contact:'98657415425',
-                    tags:'tag2'
-                }
+                showForm: false, 
+                tags : []
+            }
+        },
+
+        methods:{
+            onMounted(){
+                this.tags = Tags.find().fetch();
+            },
+            handleTagAdded(newTag){
+                this.tags.push(newTag);
+                this.showForm = false;
+            },
+            formClosed(message){
+                // alert(message);
+                this.showForm = false;
             }
         }
+       
     }
 </script>
 

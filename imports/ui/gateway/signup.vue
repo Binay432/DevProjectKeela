@@ -74,14 +74,13 @@ export default {
                         orgRole : this.orgRole,
                     },
                 }
-                
                 Accounts.createUser(user, (error) => {
                     if(error){
                         console.error(error.reason);
                     }
                     else{
                         this.clearInputField();
-                        this.$router.push('/');
+                        this.$router.push('/'); //navigate to login page 
                     }
                 });     
             }  
@@ -104,7 +103,7 @@ export default {
     margin-top:7%;
     margin-bottom:35;
 }
-    .logo{
+.logo{
     height:50px;
     float:center;
 }

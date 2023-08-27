@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import login from './login.vue'
-import signup from './signup.vue'
-import sidebar from './sidebar.vue'
-import headerSection from './headerSection.vue'
-// import contactTable from  './contactTable.vue'
-import AppMenu from './AppMenu.vue'
-import tagsTable from './tagsTable.vue'
+import login from './gateway/login.vue'
+import signup from './gateway/signup.vue'
+import sidebar from './home/sidebar.vue'
+import headerSection from './home/headerSection.vue'
+import contactTable from './tables/contactTable.vue';
+import home from './Home/home.vue'
+import tagsTable from './tables/tagsTable.vue'
+import empty from './empty.vue'
 
 
 const router = createRouter({
@@ -23,8 +24,8 @@ const router = createRouter({
     },
     {
       path:'/contactTable',
-      name:'contacTable',
-      component: () => import('./contactTable.vue')
+      name:'contactTable',
+      component:contactTable,
     },
     {
       path:'/tags',
@@ -32,9 +33,14 @@ const router = createRouter({
       component:tagsTable
     },
     {
+      path:'/empty',
+      name:'empty',
+      component:empty
+    },
+    {
       path:'/home',
-      name:'AppMenu',
-      component:()=>import('./AppMenu.vue'),
+      name:'home',
+      component:()=>import('./Home/home.vue'),
       children:[
         {path:'',components:{headerSection:headerSection, sidebar:sidebar}},
       ],

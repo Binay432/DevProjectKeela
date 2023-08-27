@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import { Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
 export default {
     name : 'headerSection',
-    data(){
+    data(){ 
         return {
             selectedOption:'',
         };

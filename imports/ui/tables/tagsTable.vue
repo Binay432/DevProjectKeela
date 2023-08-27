@@ -1,5 +1,5 @@
 <template>
-    <AppMenu/>
+    <home/>
     <div class = "table-grid">
             <div class="contacts-info-box">
                 <div class ="left-section">Number of tags</div>
@@ -28,15 +28,15 @@
 </template>
 
 <script> 
-import AppMenu from './AppMenu.vue';
+import home from '../Home/home.vue';
 import { ref, onMounted } from 'vue';
-import tagForm from './forms/tagForm.vue';
-import { Tags } from "../api/userAccountsCollection";
+import tagForm from '../forms/tagForm.vue';
+// import { Tags } from "../api/userAccountsCollection";
 
     export default{
         name: "tagsTable",
         components:{
-            AppMenu,
+            home,
             tagForm,
         },
         data(){

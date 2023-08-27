@@ -18,7 +18,7 @@
 
 <script>
 import {ref} from 'vue';
-import { Contacts }  from '../../api/userAccountsCollection';
+import {contactsCollection } from '../../db/contactsCollection';
 
 export default {
     name:"contactForm", 
@@ -32,13 +32,15 @@ export default {
         const contactNumber = ref ('');
 
         const addContact = () => {
+            const currentUser =Meteor.user();
             const newContact = {
+                organization:currentUser.profile.orgName,
                 contactName : contactName.value,
                 contactEmail : contactEmail.value,
                 contactTag : contactTag.value,
                 contactNumber : contactNumber.value, 
             };
-            Contacts.insert(newContact);
+            contactCollection.insert(newContact);
             context.emit('contact-added', newContact);
             // Clear form fields
             contactName.value = '';

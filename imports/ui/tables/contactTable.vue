@@ -1,5 +1,5 @@
 <template>
-    <AppMenu/>
+    <home/>
     <div class = "table-grid">
             <div class="contacts-info-box">
                 <div class ="left-section">Number of contacts</div>
@@ -33,39 +33,51 @@
 </template>
 
 <script> 
-import AppMenu from './AppMenu.vue'
+import home from '../Home/home.vue';
 import { ref ,onMounted } from 'vue';
-import contactForm from './forms/contactForm.vue';
-import { Contacts } from '../api/userAccountsCollection';
+import contactForm from '../forms/contactForm.vue';
+import { Contacts } from '../../api/userAccountsCollection';
+import { Meteor} from 'meteor/meteor';
 
-    export default{
-        name: "contactTable",
-        components:{
-            AppMenu,
-            contactForm, 
-        },
-        data(){
-            return {
-                showForm: false,
-                contacts:[]
-            };
-        },
-        methods:{
-            onMounted(){
-                this.contacts = Contacts.find().fetch(); //fetch the contacts when te component is  mounted 
-            }, 
 
-            handleContactAdded(newContact){
-                this.contacts.push(newContact); //push the contacts to contacts collections 
-                this.showForm = false; 
-            },
 
-            formClosed(message){
-                // alert(message);
-                this.showForm = false;
+export default{
+    name: "contactTable",
+    data(){
+        return {
+            showForm: false,
+            contacts:[]
+        };
+    },
+    components:{
+        home,
+        contactForm, 
+    },
+    
+    methods:{
+        onMounted(){
+            this.contacts = Contacts.find().fetch(); //fetch the contactsof the specif ic branch g
+        }, 
+
+        handleContactAdded(newContact){
+            this.contacts.push(newContact); //push the contacts to contacts collections 
+            this.showForm = false; 
+            const currentUser = Meteor.user();
+            console.log(currentUser);
+            if(currentUser){
+                console.log("this is a current User");
+                const organizationName = currentUser.profile.orgName;
+                this.contacts = Contacts.find({organization:organizationName}).fetch();
+                console.log(contacts)
             }
+        },
+
+        formClosed(message){
+            // alert(message);
+            this.showForm = false;
         }
     }
+}
 </script>
 
 <style scoped>

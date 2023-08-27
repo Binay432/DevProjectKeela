@@ -28,7 +28,9 @@
                 <img class="features-icon" src="settings.png"> 
             </div>
             <div>
-                <button class="features-button">Settings</button>
+                <router-link to="/empty">
+                    <button class="features-button">Settings</button>
+                </router-link>
             </div>  
         </div>
         <button class="logout-button" @click="logout">Log Out</button>

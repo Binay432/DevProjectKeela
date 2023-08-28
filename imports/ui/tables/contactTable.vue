@@ -36,8 +36,9 @@
 import home from '../Home/home.vue';
 import { ref ,onMounted } from 'vue';
 import contactForm from '../forms/contactForm.vue';
-import { Contacts } from '../../api/userAccountsCollection';
+import { contactsCollection } from '../../db/contactsCollection';
 import { Meteor} from 'meteor/meteor';
+import '../../api/methods/contactsMethods'
 
 
 
@@ -55,21 +56,23 @@ export default{
     },
     
     methods:{
-        onMounted(){
-            this.contacts = Contacts.find().fetch(); //fetch the contactsof the specif ic branch g
-        }, 
+        // onMounted(){
+        //     this.contacts = contactsCollection.find().fetch(); //fetch the contactsof the specif ic branch g
+        // }, 
 
         handleContactAdded(newContact){
-            this.contacts.push(newContact); //push the contacts to contacts collections 
+            /*this.contacts.push(newContact); //push the contacts to contacts collections 
             this.showForm = false; 
             const currentUser = Meteor.user();
             console.log(currentUser);
             if(currentUser){
                 console.log("this is a current User");
                 const organizationName = currentUser.profile.orgName;
-                this.contacts = Contacts.find({organization:organizationName}).fetch();
+                this.contacts = contactsCollection.find({organization:organizationName}).fetch();
                 console.log(contacts)
-            }
+            }*/
+            Meteor.call('contacts.insert',newContact);
+            this.showForm = false; 
         },
 
         formClosed(message){

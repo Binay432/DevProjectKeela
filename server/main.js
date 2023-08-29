@@ -5,10 +5,28 @@ import { tags } from '../imports/db/tagsCollections';
 import '../imports/api/methods/tagsMethods';
 
 Meteor.publish('contacts', function (){
-    return contacts.find();
-
+    if (this.userId) {
+        return contacts.find({ userId: this.userId });
+    } else {
+        return this.ready(); //indicate that the publication is ready but contains no data.
+    }
 });
 
 Meteor.publish('tags', function publishTags(){
-    return tags.find();
-})
+    if(this.userId){
+        return tags.find({userId: this.userId});
+    } else{
+        return this.ready(); //indicate that the publication is ready but contains no data.
+    }
+   
+});
+// Meteor.publish('contactCount', function () {
+//     if (this.userId) {
+//       return [
+//         contacts.find({ userId: this.userId }),
+//         Meteor.users.find({ _id: this.userId }, { fields: { profile: 1 } }),
+//       ];
+//     } else {
+//       return [];
+//     }
+// });

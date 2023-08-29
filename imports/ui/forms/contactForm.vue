@@ -10,7 +10,7 @@
                 <input type="email" v-model="contactEmail" placeholder="Eamil" required>
                 <input type= "text" v-model ="contactTag" placeholder = "Tag" required>
                 <input type= "text" v-model ="contactNumber" placeholder = "Number" required>
-                <button type="submit">Submit</button>
+                <button type="submit">{{ editingContact ? 'Save' : 'Add' }}</button>
             </form>
         </div>
     </div>
@@ -21,17 +21,21 @@ import {ref} from 'vue';
 
 export default {
     name:"contactForm",
-    data(){
-        return {
-            contactName: '',
-            contactEmail: '',
-            contactTag: '',
-            contactNumber: '',
-        }
-    },
     props:{
         showForm:Boolean, // props defined a properties (showForm here) that is expected to recieve from parent components and here its in the boolean form which is used to verify in the above template 
+        editingContact: Object,
     },
+    created() {
+        console.log('editingContact prop in contactForm:', this.editingContact);
+    },
+    data(){
+        return {
+            contactName: this.editingContact ? this.editingContact.contactName: '',
+            contactEmail: this.editingContact? this.editingContact.contactEmail:'',
+            contactTag: this.editingContact? this.editingContact.contactTag: '',
+            contactNumber: this.editingContact? this.editingContact.contactNumber: '',
+        }
+    }, 
     setup (props, context){
         const contactName = ref ('');
         const contactEmail = ref ('');
@@ -41,13 +45,12 @@ export default {
         const addContact = () => {
             const currentUser =Meteor.user();
             const newContact = {
-                organization:currentUser.profile.orgName,
                 contactName : contactName.value.trim(),
                 contactEmail : contactEmail.value.trim(),
                 contactTag : contactTag.value.trim(),
                 contactNumber : contactNumber.value.trim(), 
             };
-            context.emit('contact-added', newContact);
+            context.emit('contact-added', newContact); //alternative this.$emit()
             // Clear form fields
             contactName.value = '';
             contactEmail.value = '';

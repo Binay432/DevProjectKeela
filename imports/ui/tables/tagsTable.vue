@@ -5,8 +5,8 @@
                 <div class ="left-section">Number of tags</div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
-                    <button type="button" class="add-button" @click="showForm = true">Add Tags</button>
-                    <tag-form v-if="showForm" :show-Form="showForm" @tag-added="handleTagAdded" @form-closed="formClosed"/>
+                    <button type="button" class="add-button" @click="addTag">Add Tags</button>
+                    <tag-form v-if="showForm" :show-Form="showForm" edit-Tag ="editingTag" @tag-added="handleTagAdded" @form-closed="formClosed"/>
                 </div>
             </div>
         <div class="contacts-table-box">
@@ -21,6 +21,10 @@
                     <tr v-for="tag in tags" :key="tag._id">
                         <td>{{ tag.newTag.tagName }}</td>
                         <td>{{ tag.createdAt}}</td>
+                        <td>
+                            <button class="edit-tag" @click="editTag(tag)">Edit</button>
+                            <button class="delete-tag" @click="deleteTag(tag)">Delete</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -44,12 +48,22 @@ export default{
     data(){
         return {
             showForm: false, 
+            editingTag : Object,
         }
     },
 
     methods:{
         onMounted(){
             this.tags = tags.find().fetch();
+        },
+        addTag(){
+            this.editingTag = null;
+            this.showForm = true;
+        },
+        editTag(tag){
+            this.editingTag = {...tag};
+            console.log(this.editingTag);
+            this.showForm = true ;
         },
         handleTagAdded(newTag){
             Meteor.call('tags.insert',newTag);
@@ -58,6 +72,16 @@ export default{
         formClosed(message){
             // alert(message);
             this.showForm = false;
+        },
+        deleteTag(tag){
+            if(confirm('Are you sure you want to delete this tag?')){
+                Meteor.call('tags.delete',tag._id,(error)=>{
+                    if(error){
+                        console.error('Error deleting tag:', error);
+                        alert('Error deleting tag:' + error.tag);
+                    }
+                });
+            }
         }
     },
     meteor:{
@@ -138,5 +162,28 @@ export default{
     }
     .contact-table tbody tr:nth-of-type(even){
         background-color:#f3f3f3;
+    }
+    .delete-tag{
+        background-color:rgb(232, 197, 232);
+        border:1px solid black;
+        width:20%;
+        box-sizing: border-box;
+
+    }
+    .delete-tag:hover{
+        background-color:rgb(197, 193, 197);
+        cursor:pointer;
+    }
+    .edit-tag{
+        margin-left:5px;
+        background-color:rgb(121, 157, 121);
+        border:1px solid black;
+        width:20%;
+        margin-right:5%;
+        box-sizing: border-box;
+    }
+    .edit-tag:hover{
+        background-color:rgb(197, 193, 197);
+        cursor:pointer;
     }
 </style>

@@ -8,7 +8,7 @@ Meteor.methods ( {
         throw new Meteor.Error('not-authorized','You are not authorizded to add contacts.');
     }
     contacts.insert({
-            newContact, 
+            ...newContact, 
             createdAt: new Date(),
             userId: this.userId,
         })

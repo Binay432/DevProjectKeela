@@ -2,11 +2,11 @@
     <home/>
     <div class = "table-grid">
             <div class="contacts-info-box">
-                <div class ="left-section">{{ contactCount }} Contacts</div>
+                <div class ="left-section"><strong>{{ contacts.length }} Contacts</strong></div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
                     <button type="button" class="add-button" @click="addContact">Add Contact</button>
-                    <contactForm v-if="showForm" :show-Form="showForm" editing-Contact ="editingContact" @contact-added="handleContactAdded" @form-closed="formClosed"/>
+                    <contactForm v-if="showForm" :show-Form="showForm" :editingContact ="editingContact" @contact-added="handleContactAdded" @form-closed="formClosed"/>
                 </div>
             </div>
         <div class="contacts-table-box">
@@ -22,10 +22,10 @@
                 </thead>
                 <tbody>
                     <tr v-for="contact in contacts" :key="contact._id">
-                        <td>{{ contact.newContact.contactName }}</td>
-                        <td>{{ contact.newContact.contactEmail }}</td>
-                        <td>{{ contact.newContact.contactTag }}</td>
-                        <td>{{ contact.newContact.contactNumber }}</td>
+                        <td>{{ contact.contactName }}</td>
+                        <td>{{ contact.contactEmail }}</td>
+                        <td>{{ contact.contactTag }}</td>
+                        <td>{{ contact.contactNumber }}</td>
                         <td>
                             <button class="edit-contact" @click="editContact(contact)">Edit</button>
                             <button class="delete-contact" @click="deleteContact(contact)">Delete</button>
@@ -57,16 +57,6 @@ export default{
             editingContact: null,
         };
     },
-    setup(){
-        const contactCount = ref(0);  //get contact number
-        onMounted (async () => {
-            const response = await Meteor.call('contacts.getCount');
-            contactCount.value = response;
-        }) 
-        return {
-            contactCount,
-        }
-    },
     meteor:{
         $subscribe:{
             contacts:[],
@@ -81,7 +71,7 @@ export default{
             this.contacts = contacts.find().fetch();
         },
         addContact(){
-            this.editingContact = null;
+            // this.editingContact = undefined;
             this.showForm = true;
         },
         editContact(contact){

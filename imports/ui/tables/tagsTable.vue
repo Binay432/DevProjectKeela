@@ -2,7 +2,7 @@
     <home/>
     <div class = "table-grid">
             <div class="contacts-info-box">
-                <div class ="left-section">Number of tags</div>
+                <div class ="left-section"> <strong>{{ tags.length }} Tags</strong></div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
                     <button type="button" class="add-button" @click="addTag">Add Tags</button>
@@ -19,7 +19,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="tag in tags" :key="tag._id">
-                        <td>{{ tag.newTag.tagName }}</td>
+                        <td>{{ tag.tagName }}</td>
                         <td>{{ tag.createdAt}}</td>
                         <td>
                             <button class="edit-tag" @click="editTag(tag)">Edit</button>
@@ -112,7 +112,7 @@ export default{
         justify-content: space-between;
         align-items: center;
     }
-    .lef-section{
+    .left-section{
         display:flex;
         margin-left:5px;
     }

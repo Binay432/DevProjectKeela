@@ -4,7 +4,7 @@
             <div class="close-button" @click="closeForm">
                 <img class ="form-close-icon"  src="cross.png">
             </div>
-            <h2>Add Contact</h2>
+            <h2>Add Contact{{ contactName }}</h2>
             <form @submit.prevent = "addContact">
                 <input type="text" v-model="contactName" placeholder="Name" required>
                 <input type="email" v-model="contactEmail" placeholder="Eamil" required>
@@ -23,21 +23,26 @@ export default {
     name:"contactForm",
     props:{
         showForm:Boolean, // props defined a properties (showForm here) that is expected to recieve from parent components and here its in the boolean form which is used to verify in the above template 
-        editingContact: Object,
+        editingContact: {
+            type: Object,
+            default: {}
+        },
     },
     created() {
         console.log('editingContact prop in contactForm:', this.editingContact);
     },
     data(){
+        // console.log(this.editingContact.newContact);
         return {
-            contactName: this.editingContact ? this.editingContact.contactName: '',
+            contactName: this.editingContact ? this.editingContact.newContact.contactName: '',
             contactEmail: this.editingContact? this.editingContact.contactEmail:'',
             contactTag: this.editingContact? this.editingContact.contactTag: '',
             contactNumber: this.editingContact? this.editingContact.contactNumber: '',
         }
     }, 
     setup (props, context){
-        const contactName = ref ('');
+        console.log(props.editingContact);
+        const contactName = ref (props.editingContact?.newContact ? props.editingContact.newContact.contactName: '');
         const contactEmail = ref ('');
         const contactTag = ref ('');
         const contactNumber = ref ('');

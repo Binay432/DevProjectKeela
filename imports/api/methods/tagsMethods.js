@@ -8,7 +8,7 @@ Meteor.methods ( {
         throw new Meteor.Error('not-authorized','You are not authorizded to add tags.');
     }
     tags.insert({
-            newTag, 
+            ...newTag,  //this means not transaferring newTag rather the contents of the new tag 
             createdAt: new Date(),
             userId: this.userId,
         })

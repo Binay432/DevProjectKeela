@@ -7,7 +7,7 @@
             <h2>Add Tag</h2>
             <form @submit.prevent = "addTag">
                 <input type= "text" v-model ="tagName" placeholder = "Tag" required>
-                <button type="submit">Submit</button>
+                <button type="submit">{{ editingTag ? 'Save' : 'Add' }}</button>
             </form>
         </div>
     </div>
@@ -20,10 +20,11 @@ export default {
     name:"tagForm", 
     props:{
         showForm:Boolean, // props defined a properties (showForm here) that is expected to recieve from parent components and here its in the boolean form which is used to verify in the above template 
+        editingTag: String,
     },
     data(){
         return {
-            tagName: ''
+            tagName: this.editingTag ? this.editingTag:'',
         }
     },
     setup (props, context){

@@ -2,11 +2,11 @@
     <home/>
     <div class = "table-grid">
             <div class="contacts-info-box">
-                <div class ="left-section">Number of contacts</div>
+                <div class ="left-section"><strong>{{ contacts.length }} Contacts</strong></div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
-                    <button type="button" class="add-button" @click="showForm = true">Add Contact</button>
-                    <contact-form v-if="showForm" :show-Form="showForm" @contact-added="handleContactAdded" @form-closed="formClosed"/>
+                    <button type="button" class="add-button" @click="addContact">Add Contact</button>
+                    <contactForm v-if="showForm" :show-Form="showForm" :editingContact ="editingContact" @contact-added="handleContactAdded" @form-closed="formClosed"/>
                 </div>
             </div>
         <div class="contacts-table-box">
@@ -22,13 +22,13 @@
                 </thead>
                 <tbody>
                     <tr v-for="contact in contacts" :key="contact._id">
-                        <td>{{ contact.newContact.contactName }}</td>
-                        <td>{{ contact.newContact.contactEmail }}</td>
-                        <td>{{ contact.newContact.contactTag }}</td>
-                        <td>{{ contact.newContact.contactNumber }}</td>
+                        <td>{{ contact.contactName }}</td>
+                        <td>{{ contact.contactEmail }}</td>
+                        <td>{{ contact.contactTag }}</td>
+                        <td>{{ contact.contactNumber }}</td>
                         <td>
-                            <button class="edit-contact">Edit</button>
-                            <button class="delete-contact">Delete</button>
+                            <button class="edit-contact" @click="editContact(contact)">Edit</button>
+                            <button class="delete-contact" @click="deleteContact(contact)">Delete</button>
                         </td>
                     </tr>
                 </tbody>    
@@ -40,33 +40,44 @@
 <script> 
 import home from '../Home/home.vue';
 import { ref , onMounted} from 'vue';
-import contactForm from '../forms/contactForm.vue';
+import  contactForm  from '../forms/contactForm.vue';
 import { contacts } from '../../db/contactsCollection';
-import { Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
+
 
 export default{
     name: "contactTable",
-    data(){
-        return {
-            showForm: false,
-        };
-    },
-    meteor:{
-        $subscribe:{
-            contacts:[]
-        },
-        contacts(){
-            return contacts.find().fetch();
-        }
-    },
     components:{
         home,
         contactForm, 
     },
- 
+    data(){
+        return {
+            showForm: false,
+            editingContact: null,
+        };
+    },
+    meteor:{
+        $subscribe:{
+            contacts:[],
+        },
+        contacts(){
+            return contacts.find().fetch();
+        },
+    },
+    
     methods:{
         onMounted(){
             this.contacts = contacts.find().fetch();
+        },
+        addContact(){
+            // this.editingContact = undefined;
+            this.showForm = true;
+        },
+        editContact(contact){
+            this.editingContact = {...contact};
+                console.log(this.editingContact);
+            this.showForm = true;
         },
         handleContactAdded(newContact){
             Meteor.call('contacts.insert',newContact);
@@ -75,7 +86,18 @@ export default{
 
         formClosed(message){
             this.showForm = false;
-        }
+        },
+        deleteContact(contact){
+            if(confirm('Are you sure you want to delete this contact?')){
+                Meteor.call('contacts.delete', contact._id, (error)=>{
+                    if(error){
+                        console.error('Error deleting contact:', error);
+                        alert('Error deleting contact: ' + error.message);
+                    }
+                });
+            }
+        },
+        
     },
 }
 </script>

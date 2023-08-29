@@ -18,7 +18,6 @@
 
 <script>
 import {ref} from 'vue';
-const newContact = ref ('');
 
 export default {
     name:"contactForm",

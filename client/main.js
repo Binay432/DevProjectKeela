@@ -1,6 +1,9 @@
 // main entry point is in imports/ui/main.jsx
 import { Meteor } from 'meteor/meteor';
 
+
 Meteor.startup(() => {
-  Meteor.subscribe('contacts');
+  Meteor.subscribe('contactsAll');
+  Meteor.subscribe ('tags');
 });
+

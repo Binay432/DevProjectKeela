@@ -9,5 +9,11 @@ Meteor.methods ( {
             createdAt: new Date(),
             userId: this.userId,
         })
-   }
+   },
+   'contacts.delete'(contactId){
+    if(!this.userId) {
+        throw new Meteor.Error('not-authorized','You are not authorizded to delete contacts.');
+    }
+    contacts.remove({_id:contactId, userId:this.userId});
+  }
 });

@@ -28,7 +28,7 @@
                         <td>{{ contact.newContact.contactNumber }}</td>
                         <td>
                             <button class="edit-contact">Edit</button>
-                            <button class="delete-contact">Delete</button>
+                            <button class="delete-contact" @click="deleteContact(contact)">Delete</button>
                         </td>
                     </tr>
                 </tbody>    
@@ -75,7 +75,16 @@ export default{
 
         formClosed(message){
             this.showForm = false;
-        }
+        },
+        deleteContact(contact){
+            if(confirm('Are you sure you want to delete this contact?')){
+                Meteor.call('contacts.delete', contact._id, (error)=>{
+                    if(error){
+                        console.error('Error deleting contact:',error);
+                    }
+                });
+            }
+        },
     },
 }
 </script>

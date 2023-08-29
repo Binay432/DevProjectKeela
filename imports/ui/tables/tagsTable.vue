@@ -19,7 +19,8 @@
                 </thead>
                 <tbody>
                     <tr v-for="tag in tags" :key="tag._id">
-                        <td>{{ tag.tagName }}</td>
+                        <td>{{ tag.newTag.tagName }}</td>
+                        <td>{{ tag.createdAt}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -31,36 +32,44 @@
 import home from '../Home/home.vue';
 import { ref, onMounted } from 'vue';
 import tagForm from '../forms/tagForm.vue';
-// import { Tags } from "../api/userAccountsCollection";
+import {tags} from '../../db/tagsCollections';
+import { Meteor } from 'meteor/meteor';
 
-    export default{
-        name: "tagsTable",
-        components:{
-            home,
-            tagForm,
-        },
-        data(){
-            return {
-                showForm: false, 
-                tags : []
-            }
-        },
-
-        methods:{
-            onMounted(){
-                this.tags = Tags.find().fetch();
-            },
-            handleTagAdded(newTag){
-                this.tags.push(newTag);
-                this.showForm = false;
-            },
-            formClosed(message){
-                // alert(message);
-                this.showForm = false;
-            }
+export default{
+    name: "tagsTable",
+    components:{
+        home,
+        tagForm,
+    },
+    data(){
+        return {
+            showForm: false, 
         }
-       
+    },
+
+    methods:{
+        onMounted(){
+            this.tags = tags.find().fetch();
+        },
+        handleTagAdded(newTag){
+            Meteor.call('tags.insert',newTag);
+            this.showForm = false;
+        },
+        formClosed(message){
+            // alert(message);
+            this.showForm = false;
+        }
+    },
+    meteor:{
+        $subscribe:{
+            tags:[]
+        },
+        tags(){
+            return tags.find().fetch();
+        }
     }
+    
+}
 </script>
 
 <style scoped>

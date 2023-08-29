@@ -17,14 +17,19 @@
                         <th>EMAIL</th>
                         <th>TAGS</th>
                         <th>CONTACT NUMBER</th>
+                        <th>ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="contact in contacts" :key="contact._id">
-                        <td>{{ contact.contactName }}</td>
-                        <td>{{ contact.contactEmail }}</td>
-                        <td>{{ contact.contactTag }}</td>
-                        <td>{{ contact.contactNumber }}</td>
+                        <td>{{ contact.newContact.contactName }}</td>
+                        <td>{{ contact.newContact.contactEmail }}</td>
+                        <td>{{ contact.newContact.contactTag }}</td>
+                        <td>{{ contact.newContact.contactNumber }}</td>
+                        <td>
+                            <button class="edit-contact">Edit</button>
+                            <button class="delete-contact">Delete</button>
+                        </td>
                     </tr>
                 </tbody>    
             </table>
@@ -34,49 +39,44 @@
 
 <script> 
 import home from '../Home/home.vue';
-import { ref ,onMounted } from 'vue';
+import { ref , onMounted} from 'vue';
 import contactForm from '../forms/contactForm.vue';
-import { Contacts } from '../../api/userAccountsCollection';
+import { contacts } from '../../db/contactsCollection';
 import { Meteor} from 'meteor/meteor';
-
-
 
 export default{
     name: "contactTable",
     data(){
         return {
             showForm: false,
-            contacts:[]
         };
+    },
+    meteor:{
+        $subscribe:{
+            contacts:[]
+        },
+        contacts(){
+            return contacts.find().fetch();
+        }
     },
     components:{
         home,
         contactForm, 
     },
-    
+ 
     methods:{
         onMounted(){
-            this.contacts = Contacts.find().fetch(); //fetch the contactsof the specif ic branch g
-        }, 
-
+            this.contacts = contacts.find().fetch();
+        },
         handleContactAdded(newContact){
-            this.contacts.push(newContact); //push the contacts to contacts collections 
+            Meteor.call('contacts.insert',newContact);
             this.showForm = false; 
-            const currentUser = Meteor.user();
-            console.log(currentUser);
-            if(currentUser){
-                console.log("this is a current User");
-                const organizationName = currentUser.profile.orgName;
-                this.contacts = Contacts.find({organization:organizationName}).fetch();
-                console.log(contacts)
-            }
         },
 
         formClosed(message){
-            // alert(message);
             this.showForm = false;
         }
-    }
+    },
 }
 </script>
 
@@ -96,7 +96,7 @@ export default{
         justify-content: space-between;
         align-items: center;
     }
-    .lef-section{
+    .left-section{
         display:flex;
         margin-left:5px;
     }
@@ -147,4 +147,28 @@ export default{
     .contact-table tbody tr:nth-of-type(even){
         background-color:#f3f3f3;
     }
+    .delete-contact{
+        background-color:rgb(232, 197, 232);
+        border:1px solid black;
+        width:20%;
+        box-sizing: border-box;
+
+    }
+    .delete-contact:hover{
+        background-color:rgb(197, 193, 197);
+        cursor:pointer;
+    }
+    .edit-contact{
+        margin-left:5px;
+        background-color:rgb(121, 157, 121);
+        border:1px solid black;
+        width:20%;
+        margin-right:5%;
+        box-sizing: border-box;
+    }
+    .edit-contact:hover{
+        background-color:rgb(197, 193, 197);
+        cursor:pointer;
+    }
+    
 </style>

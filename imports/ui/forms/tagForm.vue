@@ -15,20 +15,24 @@
 
 <script>
 import {ref} from 'vue';
-// import { Tags } from '../../api/userAccountsCollection';
 
 export default {
     name:"tagForm", 
     props:{
         showForm:Boolean, // props defined a properties (showForm here) that is expected to recieve from parent components and here its in the boolean form which is used to verify in the above template 
     },
+    data(){
+        return {
+            tagName: ''
+        }
+    },
     setup (props, context){
         const tagName = ref ('');
         const addTag = () => {
             const newTag = {
-                tagName : tagName.value,
+                tagName : tagName.value.trim(),
             };
-            Tags.insert(newTag);
+            //Tags.insert(newTag);
             context.emit('tag-added', newTag);
             // Clear form field
             tagName.value = '';

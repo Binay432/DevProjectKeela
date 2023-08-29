@@ -18,10 +18,17 @@
 
 <script>
 import {ref} from 'vue';
-import {contactsCollection } from '../../db/contactsCollection';
 
 export default {
-    name:"contactForm", 
+    name:"contactForm",
+    data(){
+        return {
+            contactName: '',
+            contactEmail: '',
+            contactTag: '',
+            contactNumber: '',
+        }
+    },
     props:{
         showForm:Boolean, // props defined a properties (showForm here) that is expected to recieve from parent components and here its in the boolean form which is used to verify in the above template 
     },
@@ -35,12 +42,11 @@ export default {
             const currentUser =Meteor.user();
             const newContact = {
                 organization:currentUser.profile.orgName,
-                contactName : contactName.value,
-                contactEmail : contactEmail.value,
-                contactTag : contactTag.value,
-                contactNumber : contactNumber.value, 
+                contactName : contactName.value.trim(),
+                contactEmail : contactEmail.value.trim(),
+                contactTag : contactTag.value.trim(),
+                contactNumber : contactNumber.value.trim(), 
             };
-            contactCollection.insert(newContact);
             context.emit('contact-added', newContact);
             // Clear form fields
             contactName.value = '';
@@ -48,11 +54,9 @@ export default {
             contactNumber.value = '';
             contactTag.value = '';
         };
-        
         const closeForm = () => {
             context.emit('form-closed', "Closed");
         };
-
         return {
             contactName,
             contactEmail,
@@ -62,7 +66,9 @@ export default {
             closeForm,
         };
     },
-}
+    
+};
+   
 </script>
 
 <style scoped>

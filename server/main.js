@@ -1,12 +1,14 @@
 import { Meteor } from 'meteor/meteor';
-import { contactsCollection } from '../imports/db/contactsCollection';
+import { contacts } from '../imports/db/contactsCollection';
+import '../imports/api/methods/contactsMethods';
+import { tags } from '../imports/db/tagsCollections';
+import '../imports/api/methods/tagsMethods';
 
-// const insertContact = newContact => TasksCollection.insert({ newContact });
- 
-// Meteor.startup(() => {
-//   if (TasksCollection.find().count() === 0) {
-//     [
-//       las
-//     ].forEach(insertTask)
-//   }
-// });
+Meteor.publish('contacts', function (){
+    return contacts.find();
+
+});
+
+Meteor.publish('tags', function publishTags(){
+    return tags.find();
+})

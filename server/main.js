@@ -20,13 +20,3 @@ Meteor.publish('tags', function publishTags(){
     }
    
 });
-// Meteor.publish('contactCount', function () {
-//     if (this.userId) {
-//       return [
-//         contacts.find({ userId: this.userId }),
-//         Meteor.users.find({ _id: this.userId }, { fields: { profile: 1 } }),
-//       ];
-//     } else {
-//       return [];
-//     }
-// });

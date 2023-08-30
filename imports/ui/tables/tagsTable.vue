@@ -6,7 +6,7 @@
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
                     <button type="button" class="add-button" @click="addTag">Add Tags</button>
-                    <tag-form v-if="showForm" :show-Form="showForm" edit-Tag ="editingTag" @tag-added="handleTagAdded" @form-closed="formClosed"/>
+                    <tagForm v-if="showForm" :show-Form="showForm" :editing-Tag ="editingTag" @tag-added="handleTagAdded" @tag-edit="handleTagEdit" @form-closed="formClosed"/>
                 </div>
             </div>
         <div class="contacts-table-box">
@@ -82,7 +82,18 @@ export default{
                     }
                 });
             }
-        }
+        },
+        handleTagEdit(tagId, newTag){
+            if(confirm('Are you sure you want to edit this Tag?')){
+                Meteor.call('tags.edit', tagId, newTag, (error)=>{
+                    if(error){
+                        console.error('Error updating Tag:', error);
+                        alert('Error editing Tag: ' + error.message);
+                    }
+                });
+            }
+            this.showForm = false;
+        }   
     },
     meteor:{
         $subscribe:{

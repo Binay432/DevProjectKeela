@@ -6,7 +6,8 @@
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
                     <button type="button" class="add-button" @click="addContact">Add Contact</button>
-                    <contactForm v-if="showForm" :show-Form="showForm" :editingContact ="editingContact" @contact-added="handleContactAdded" @form-closed="formClosed"/>
+                    <!-- editingContat ="editingContact" means just a string of editingContact is props while :editingContat ="editingContact" means contents of editingContact is props -->
+                    <contactForm v-if="showForm" :show-Form="showForm" :editingContact ="editingContact" @contact-added="handleContactAdded" @form-closed="formClosed" @contact-edit="handleContactEdit"/>   
                 </div>
             </div>
         <div class="contacts-table-box">
@@ -71,12 +72,11 @@ export default{
             this.contacts = contacts.find().fetch();
         },
         addContact(){
-            // this.editingContact = undefined;
+            this.editingContact = null;
             this.showForm = true;
         },
         editContact(contact){
             this.editingContact = {...contact};
-                console.log(this.editingContact);
             this.showForm = true;
         },
         handleContactAdded(newContact){
@@ -97,6 +97,17 @@ export default{
                 });
             }
         },
+        handleContactEdit(contactId, newContact){
+            if(confirm('Are you sure you want to edit this contact?')){
+                Meteor.call('contacts.edit', contactId, newContact, (error)=>{
+                    if(error){
+                        console.error('Error updating contact:', error);
+                        alert('Error editing contact: ' + error.message);
+                    }
+                });
+            }
+            this.showForm = false;
+        }
         
     },
 }

@@ -65,8 +65,7 @@ export default{
         contacts(){
             return contacts.find().fetch();
         },
-    },
-    
+    },  
     methods:{
         onMounted(){
             this.contacts = contacts.find().fetch();

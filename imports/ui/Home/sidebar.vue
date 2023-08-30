@@ -28,7 +28,7 @@
                 <img class="features-icon" src="settings.png"> 
             </div>
             <div>
-                <router-link to="/empty">
+                <router-link to="/settings">
                     <button class="features-button">Settings</button>
                 </router-link>
             </div>  

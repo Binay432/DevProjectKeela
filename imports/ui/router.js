@@ -7,7 +7,7 @@ import contactTable from './tables/contactTable.vue';
 import home from './Home/home.vue'
 import tagsTable from './tables/tagsTable.vue'
 import empty from './empty.vue'
-
+import userTable from './tables/userTable.vue';
 
 const router = createRouter({
   history: createWebHistory(), //use to store the history of navigated routes 
@@ -36,6 +36,11 @@ const router = createRouter({
       path:'/empty',
       name:'empty',
       component:empty
+    },
+    {
+      path:'/settings',
+      name:'userTable',
+      component:userTable
     },
     {
       path:'/home',

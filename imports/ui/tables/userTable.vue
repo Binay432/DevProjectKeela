@@ -5,8 +5,8 @@
                 <div class ="left-section"><strong>{{ users.length }} Users</strong></div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
-                    <button type="button" class="invite-button">Invite User</button>
-                    <!-- <contactForm v-if="showForm" :show-Form="showForm" :editingContact ="editingContact" @contact-added="handleContactAdded" @form-closed="formClosed" @contact-edit="handleContactEdit"/>    -->
+                    <button type="button" class="invite-button" @click="inviteUser">Invite User</button>
+                    <inviteForm v-if="showForm" :show-Form="showForm" @invite-user="handleInviteContact" @form-closed = "formClosed"/>   
                 </div>
             </div>
         <div class="contacts-table-box">
@@ -39,12 +39,19 @@
 <script>
 import home from '../Home/home.vue';
 import { Meteor } from 'meteor/meteor';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import inviteForm from '../forms/inviteForm.vue';
 
 export default {
     name:'userTable',
     components:{
         home,
+        inviteForm,
+    },
+    data(){
+        return {
+            showForm: false, 
+        }
     },
     meteor: {
         $subscribe: {
@@ -53,8 +60,22 @@ export default {
         users() {
             return Meteor.users
                 .find({}).fetch();
-            },
         },
+    },
+    methods:{
+        inviteUser(){
+            this.showForm = true;
+        },
+        handleInviteContact(){
+            alert("invite form work ");
+            this.showForm = false;
+        },
+        formClosed(message){
+            console.log(message);
+            this.showForm = false;
+        }
+        
+    }
 }
 </script>
 

@@ -13,10 +13,15 @@ Meteor.publish('contacts', function (){
 });
 
 Meteor.publish('tags', function publishTags(){
+    console.log(this.profile.orgName);
     if(this.userId){
         return tags.find({userId: this.userId});
     } else{
         return this.ready(); //indicate that the publication is ready but contains no data.
     }
    
+});
+
+Meteor.publish("users", function (){
+    return Meteor.user.find({});
 });

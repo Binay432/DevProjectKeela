@@ -15,6 +15,7 @@
                     <tr>   
                         <th>TAGS</th>
                         <th>CREATED DATE</th>
+                        <th>ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>

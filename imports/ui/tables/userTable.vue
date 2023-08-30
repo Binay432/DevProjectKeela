@@ -15,22 +15,20 @@
                     <tr>   
                         <th>FULL NAME</th>
                         <th>EMAIL</th>
-                        <th>TAGS</th>
                         <th>ROLE</th>
                         <th>ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- <tr v-for="contact in contacts" :key="contact._id">
-                        <td>{{ contact.contactName }}</td>
-                        <td>{{ contact.contactEmail }}</td>
-                        <td>{{ contact.contactTag }}</td>
-                        <td>{{ contact.contactNumber }}</td>
+                    <tr v-for="user in users" :key="user._id">
+                        <td>{{ user.profile.firstName + user.profile.lastName }}</td>
+                        <td>{{ user.emails }}</td>
+                        <td>{{ user.profile.orgRole }}</td>
                         <td>
-                            <button class="edit-contact" @click="editContact(contact)">Edit</button>
-                            <button class="delete-contact" @click="deleteContact(contact)">Delete</button>
+                            <!-- <button class="edit-contact" @click="editContact(contact)">Edit</button> -->
+                            <button class="delete-contact">Delete</button>
                         </td>
-                    </tr> -->
+                    </tr>
                 </tbody>    
             </table>
         </div>
@@ -40,12 +38,24 @@
 
 <script>
 import home from '../Home/home.vue';
-
+import { Meteor } from 'meteor/meteor';
+import { ref } from 'vue';
+const userInfo = Meteor.user({fields: { email:1, profile:1}});
+console.log(userInfo);
 export default {
     name:'userTable',
     components:{
         home,
-    }
+    },
+    // meteor:{
+    //     $subscribe:{
+    //         users:[],
+    //     },
+    //     users(){
+    //         return users.find().fetch();
+    //     }
+    // }
+
 }
 </script>
 

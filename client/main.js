@@ -5,6 +5,6 @@ import { Meteor } from 'meteor/meteor';
 Meteor.startup(() => {
   Meteor.subscribe('contactsAll');
   Meteor.subscribe ('tags');
-  Meteor.subscribe('users');
+  Meteor.subscribe('userData');
 });
 

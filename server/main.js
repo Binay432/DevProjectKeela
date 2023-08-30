@@ -13,7 +13,6 @@ Meteor.publish('contacts', function (){
 });
 
 Meteor.publish('tags', function publishTags(){
-    console.log(this.profile.orgName);
     if(this.userId){
         return tags.find({userId: this.userId});
     } else{
@@ -22,6 +21,6 @@ Meteor.publish('tags', function publishTags(){
    
 });
 
-Meteor.publish("users", function (){
-    return Meteor.user.find({});
-});
+Meteor.publish('userData', function () {
+    return Meteor.users.find({});
+  });

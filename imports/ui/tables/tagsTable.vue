@@ -52,7 +52,6 @@ export default{
             editingTag : Object,
         }
     },
-
     methods:{
         onMounted(){
             this.tags = tags.find().fetch();

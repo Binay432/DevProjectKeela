@@ -2,7 +2,7 @@
     <home/>
     <div class = "table-grid">
             <div class="contacts-info-box">
-                <div class ="left-section"><strong> User Count</strong></div>
+                <div class ="left-section"><strong>{{ users.length }} Users</strong></div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
                     <button type="button" class="invite-button">Invite User</button>
@@ -22,7 +22,7 @@
                 <tbody>
                     <tr v-for="user in users" :key="user._id">
                         <td>{{ user.profile.firstName + user.profile.lastName }}</td>
-                        <td>{{ user.emails }}</td>
+                        <td>{{ user.emails[0].address }}</td>
                         <td>{{ user.profile.orgRole }}</td>
                         <td>
                             <!-- <button class="edit-contact" @click="editContact(contact)">Edit</button> -->
@@ -40,22 +40,21 @@
 import home from '../Home/home.vue';
 import { Meteor } from 'meteor/meteor';
 import { ref } from 'vue';
-const userInfo = Meteor.user({fields: { email:1, profile:1}});
-console.log(userInfo);
+
 export default {
     name:'userTable',
     components:{
         home,
     },
-    // meteor:{
-    //     $subscribe:{
-    //         users:[],
-    //     },
-    //     users(){
-    //         return users.find().fetch();
-    //     }
-    // }
-
+    meteor: {
+        $subscribe: {
+            users: [],
+        },
+        users() {
+            return Meteor.users
+                .find({}).fetch();
+            },
+        },
 }
 </script>
 

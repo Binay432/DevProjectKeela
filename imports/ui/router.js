@@ -8,6 +8,7 @@ import home from './Home/home.vue'
 import tagsTable from './tables/tagsTable.vue'
 import empty from './empty.vue'
 import userTable from './tables/userTable.vue';
+import organizationsTable from './tables/organizationTable.vue';
 
 const router = createRouter({
   history: createWebHistory(), //use to store the history of navigated routes 
@@ -41,6 +42,11 @@ const router = createRouter({
       path:'/settings',
       name:'userTable',
       component:userTable
+    },
+    {
+      path:'/organzations',
+      name:'organizationsTable',
+      component:organizationsTable
     },
     {
       path:'/home',

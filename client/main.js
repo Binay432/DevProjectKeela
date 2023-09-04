@@ -6,5 +6,6 @@ Meteor.startup(() => {
   Meteor.subscribe('contactsAll');
   Meteor.subscribe ('tags');
   Meteor.subscribe('userData');
+  Meteor.subscribe('organizations');
 });
 

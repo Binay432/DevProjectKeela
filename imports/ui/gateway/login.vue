@@ -1,7 +1,7 @@
 <template>
     <form @submit.prevent="logIn">
         <div class="loginContainer">
-                <img class ="logo_msg" alt="keela logo" src="keelaLogo.png">
+                <img class ="logo_msg" alt="keela logo" src="keela-logo-2.png">
                 <h1>Log In</h1>
                 <input v-model="email" class="inputField" type="text" placeholder ="Email" required>
                 <input v-model="password" class="inputField" type="password" placeholder ="Enter Password" required>
@@ -37,10 +37,10 @@
 <style scoped>
     .loginContainer{
         display:flex;
-        background-color:None;
+        background-color:rgb(239, 212, 239);
         align-content: center;
         flex-direction: column;
-        border:1px solid rgb(238, 234, 234);
+        border:1px solid rgb(5, 4, 4);
         width:350px;
         height:auto;
         align-items: center;
@@ -58,13 +58,14 @@
         color:purple;
     }
     .inputField{
-        border:1px solid rgb(238, 234, 234);
+        border:1px solid rgb(0, 0, 0);
         width:300px;;
         height:30px;
         display:block;
         margin-right:auto;
         margin-left:auto;
         margin-top:10px;
+        background-color:rgb(239, 212, 239);
     }
     .login_button{
         width: auto;
@@ -74,7 +75,7 @@
         margin-top:10px;
         width:300px;
         height:40px;
-        border:1px solid rgb(238, 234, 234);
+        border:1px solid rgb(58, 56, 56);
         margin-bottom: 10px;
     }
     .login_button:hover{

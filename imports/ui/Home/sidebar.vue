@@ -1,38 +1,48 @@
 <template>
     <div class="sidebar-grid">
-        <div class="keela-features">
-            <div>
-                <img class="features-icon" src="contactsIcon.png"> 
+        <router-link to ="/contactTable">
+            <div class="keela-features">
+                <div>
+                    <img class="features-icon" src="contactsIcon.png"> 
+                </div>
+                <div>
+                    <h1 class="features-text">Contacts</h1>
+                </div>
             </div>
-            <div>
-                <nav>
-                    <router-link to="/contactTable">
-                        <button class="features-button">Contacts</button>
-                    </router-link>
-                 </nav>
-                 <router-view/>
-            </div>           
-        </div>
-        <div class="keela-features">
-            <div>
-                <img class="features-icon" src="tags.png"> 
+        </router-link>
+
+        <router-link to="/tags">
+            <div class="keela-features">
+                <div>
+                    <img class="features-icon" src="tags.png"> 
+                </div>
+                <div>
+                    <h1 class="features-text">Tags</h1>
+                </div>  
             </div>
-            <div>
-                <router-link to="/tags">
-                    <button class="features-button">Tags</button>
-                </router-link>
-            </div>  
-        </div>
-        <div class="keela-features">
-            <div>
-                <img class="features-icon" src="settings.png"> 
+        </router-link>
+        <router-link to="/settings">
+            <div class="keela-features">
+                <div>
+                    <img class="features-icon" src="users.png"> 
+                </div>
+                <div>
+                    <h1 class="features-text">Users</h1>
+                </div>  
             </div>
-            <div>
-                <router-link to="/settings">
-                    <button class="features-button">Settings</button>
-                </router-link>
-            </div>  
-        </div>
+        </router-link>
+
+        <router-link to="/organzations">
+            <div class="keela-features">
+                <div>
+                    <img class="features-icon" src="organization.png"> 
+                </div>
+                <div>
+                    <h1 class="features-text">Organization</h1>
+                </div>  
+            </div>
+        </router-link>
+
         <button class="logout-button" @click="logout">Log Out</button>
     </div>
 </template>
@@ -59,34 +69,35 @@ export default {
 <style scoped>
     .sidebar-grid{
         display: grid;
-        grid-template-rows:100px 100px 100px 1fr;
+        grid-template-rows:15px 15px 15px 15px 1fr;
         row-gap:20px;
         width:160px;
-        background-color:white;
+        background-color:rgb(196, 195, 195);
         border:1px solid rgb(166, 165, 165);
         padding:0.5em;
         top:54.5px;
         bottom:0;
         position:fixed;
         border-radius: 5px;
+        box-sizing: border-box;
     }
     .keela-features{
-        display:grid;
-        grid-template-rows:80px 1fr;
+        display:flex;
+        align-items: center;
+        margin-top:10px;
+        background-color:rgb(239, 235, 243);
+    }
+    .keela-features:hover{
+        cursor:pointer; 
+        background-color:rgb(214, 216, 218);
+
     }
     .features-icon{
-        width:50px;
-        margin-top:20px;
-        margin-left:50px;
+        width:20px;
+        margin-right:5px;
     }
-    .features-button{
-        width:140px;
-        height:30px;  
-        background-color:rgb(200, 202, 204);
-    }
-    .features-button:hover{
-        background-color:rgb(214, 216, 218);
-        cursor:pointer;
+    .features-text{
+        margin:0;
     }
     .logout-button{
         border: 1px solid black; 

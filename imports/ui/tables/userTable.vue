@@ -2,110 +2,83 @@
     <home/>
     <div class = "table-grid">
             <div class="contacts-info-box">
-                <div class ="left-section"> <strong>{{ tags.length }} Tags</strong></div>
+                <div class ="left-section"><strong>{{ users.length }} Users</strong></div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
-                    <button type="button" class="add-button" @click="addTag">Add Tags</button>
-                    <tagForm v-if="showForm" :show-Form="showForm" :editing-Tag ="editingTag" @tag-added="handleTagAdded" @tag-edit="handleTagEdit" @form-closed="formClosed"/>
+                    <button type="button" class="invite-button" @click="inviteUser">Invite User</button>
+                    <inviteForm v-if="showForm" :show-Form="showForm" @invite-user="handleInviteContact" @form-closed = "formClosed"/>   
                 </div>
             </div>
         <div class="contacts-table-box">
             <table class="contact-table">
                 <thead>
                     <tr>   
-                        <th>TAGS</th>
-                        <th>CREATED DATE</th>
+                        <th>FULL NAME</th>
+                        <th>EMAIL</th>
+                        <th>ROLE</th>
                         <th>ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="tag in tags" :key="tag._id">
-                        <td>{{ tag.tagName }}</td>
-                        <td>{{ tag.createdAt}}</td>
+                    <tr v-for="user in users" :key="user._id">
+                        <td>{{ user.profile.firstName + user.profile.lastName }}</td>
+                        <td>{{ user.emails[0].address }}</td>
+                        <td>{{ user.profile.orgRole }}</td>
                         <td>
-                            <button class="edit-tag" @click="editTag(tag)">Edit</button>
-                            <button class="delete-tag" @click="deleteTag(tag)">Delete</button>
+                            <!-- <button class="edit-contact" @click="editContact(contact)">Edit</button> -->
+                            <button class="delete-contact">Delete</button>
                         </td>
                     </tr>
-                </tbody>
+                </tbody>    
             </table>
         </div>
     </div>
 </template>
 
-<script> 
-import home from '../Home/home.vue';
-import { ref, onMounted } from 'vue';
-import tagForm from '../forms/tagForm.vue';
-import {tags} from '../../db/tagsCollections';
-import { Meteor } from 'meteor/meteor';
 
-export default{
-    name: "tagsTable",
+<script>
+import home from '../Home/home.vue';
+import { Meteor } from 'meteor/meteor';
+import { ref, onMounted } from 'vue';
+import inviteForm from '../forms/inviteForm.vue';
+
+export default {
+    name:'userTable',
     components:{
         home,
-        tagForm,
+        inviteForm,
     },
     data(){
         return {
             showForm: false, 
-            editingTag : Object,
         }
     },
-    methods:{
-        onMounted(){
-            this.tags = tags.find().fetch();
+    meteor: {
+        $subscribe: {
+            users: [],
         },
-        addTag(){
-            this.editingTag = null;
+        users() {
+            return Meteor.users
+                .find({}).fetch();
+        },
+    },
+    methods:{
+        inviteUser(){
             this.showForm = true;
         },
-        editTag(tag){
-            this.editingTag = {...tag};
-            console.log(this.editingTag);
-            this.showForm = true ;
-        },
-        handleTagAdded(newTag){
-            Meteor.call('tags.insert',newTag);
+        handleInviteContact(){
+            alert("invite form work ");
             this.showForm = false;
         },
         formClosed(message){
-            // alert(message);
+            console.log(message);
             this.showForm = false;
-        },
-        deleteTag(tag){
-            if(confirm('Are you sure you want to delete this tag?')){
-                Meteor.call('tags.delete',tag._id,(error)=>{
-                    if(error){
-                        console.error('Error deleting tag:', error);
-                        alert('Error deleting tag:' + error.tag);
-                    }
-                });
-            }
-        },
-        handleTagEdit(tagId, newTag){
-            if(confirm('Are you sure you want to edit this Tag?')){
-                Meteor.call('tags.edit', tagId, newTag, (error)=>{
-                    if(error){
-                        console.error('Error updating Tag:', error);
-                        alert('Error editing Tag: ' + error.message);
-                    }
-                });
-            }
-            this.showForm = false;
-        }   
-    },
-    meteor:{
-        $subscribe:{
-            tags:[]
-        },
-        tags(){
-            return tags.find().fetch();
         }
+        
     }
-    
 }
 </script>
+
 
 <style scoped>
     .table-grid{
@@ -135,7 +108,7 @@ export default{
         background-color:white;
         border:1px solid rgb(168, 166, 166);
     }
-    .add-button{
+    .invite-button{
         width:100px;
         height:35px;
         border-radius:5px;
@@ -174,18 +147,18 @@ export default{
     .contact-table tbody tr:nth-of-type(even){
         background-color:#f3f3f3;
     }
-    .delete-tag{
+    .delete-contact{
         background-color:rgb(232, 197, 232);
         border:1px solid black;
         width:20%;
         box-sizing: border-box;
 
     }
-    .delete-tag:hover{
+    .delete-contact:hover{
         background-color:rgb(197, 193, 197);
         cursor:pointer;
     }
-    .edit-tag{
+    .edit-contact{
         margin-left:5px;
         background-color:rgb(121, 157, 121);
         border:1px solid black;
@@ -193,8 +166,9 @@ export default{
         margin-right:5%;
         box-sizing: border-box;
     }
-    .edit-tag:hover{
+    .edit-contact:hover{
         background-color:rgb(197, 193, 197);
         cursor:pointer;
     }
+    
 </style>

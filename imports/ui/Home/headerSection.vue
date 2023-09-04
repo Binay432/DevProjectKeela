@@ -46,7 +46,7 @@ export default {
         height: 55px;
         border-width: 1px;
         border-radius: 5px;
-        background-color:white;
+        background-color:rgb(196, 195, 195);
         border:1px solid rgb(166, 165, 165);
         top :0;
         left:0;

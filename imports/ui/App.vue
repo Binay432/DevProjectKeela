@@ -20,5 +20,6 @@
  color: #2c3e50;
  margin-top: 0px;
  margin-left: 0px;
+ background-color:none;
 }
 </style>

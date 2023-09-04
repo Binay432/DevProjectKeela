@@ -1,7 +1,7 @@
 <template>
     <form @submit.prevent="onSignUp">
         <div class="signupContainer">
-            <img class ="logo" alt="keela logo" src="keelaLogo.png">
+            <img class ="logo" alt="keela logo" src="keela-logo-2.png">
             <h1>Sign Up</h1>
             <div class="register">
                 <input type="text" v-model="firstName" id="firstName" placeholder ="First Name" required>
@@ -92,10 +92,10 @@ export default {
 <style scoped>
 .signupContainer{
     display:flex;
-    background-color:none;
+    background-color:rgb(239, 212, 239);
     align-content: center;
     flex-direction: column;
-    border:1px solid rgb(238, 234, 234);
+    border:1px solid rgb(26, 25, 25);
     width:350px;
     height:auto;
     align-items: center;
@@ -119,8 +119,8 @@ h1{
     margin-right:auto;
     margin-left:auto;
     margin-top:10px;
-    border: 1px solid;
-    border-color:skyblue;
+    border:1px solid rgb(26, 25, 25);
+    background-color:rgb(239, 212, 239);
     } 
 
 .dropdown{
@@ -131,19 +131,19 @@ h1{
     margin-right:auto;
     margin-left:auto;
     margin-top:10px;
-    border: 1px solid;
-    border-color:skyblue;
+    border:1px solid rgb(26, 25, 25);
+    background-color:rgb(239, 212, 239);
 }
 .register button{
     width: auto;
     border: 1px solid;
     margin-right:auto;
     margin-left:auto;
-    margin-top:10px;
+    margin-top:15px;
     width:300px;
     height:40px;
-    border:1px solid rgb(238, 234, 234);
-    margin-bottom: 10px;
+    border:1px solid rgb(9, 8, 8);
+    margin-bottom: 20px;
 }
 .register button:hover{
     cursor:pointer;

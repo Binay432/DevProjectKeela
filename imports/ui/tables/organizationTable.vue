@@ -20,7 +20,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="organization in organizations" :key="organization._id">
+                    <tr v-for="organization in organizations" :key="organization._id" @click="clickOrganization(organization.organizationName)">
                         <td>{{ organization.organizationName }}</td>
                         <td>{{ organization.organizationEmail}}</td>
                         <td>{{  }}</td>
@@ -42,6 +42,7 @@ import { ref, onMounted } from 'vue';
 import organizationForm from '../forms/organizationForm.vue'
 import { organizations } from '../../db/organizationsCollection'
 import { Meteor } from 'meteor/meteor';
+import userTable from './userTable.vue';
 
 
 export default {
@@ -49,6 +50,7 @@ export default {
     components:{
         home,
         organizationForm,
+        userTable,
     },
     data(){
        
@@ -104,6 +106,9 @@ export default {
         },
         formClosed(message){
             this.showForm = false;
+        },
+        clickOrganization(orgName){
+            this.$router.push('/userTable');
         }
         
     }

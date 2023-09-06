@@ -1,14 +1,15 @@
 <template>
     <home/>
     <div class = "table-grid">
-            <div class="contacts-info-box">
-                <div class ="left-section"><strong>{{ users.length }} Users</strong></div>
-                <div class ="middle-section">middle</div>
-                <div class="right-section">
-                    <button type="button" class="invite-button" @click="inviteUser">Invite User</button>
-                    <inviteForm v-if="showForm" :show-Form="showForm" :editingUser ="editingUser" @invite-user="handleInviteContact" @user-edit ="handleUserEdit" @form-closed = "formClosed"/>   
-                </div>
+        <button class = "back-button" @click="backToOrganization">Back</button>
+        <div class="contacts-info-box">
+            <div class ="left-section"><strong>{{ users.length }} Users</strong></div>
+            <div class ="middle-section">middle</div>
+            <div class="right-section">
+                <button type="button" class="invite-button" @click="inviteUser">Invite User</button>
+                <inviteForm v-if="showForm" :show-Form="showForm" :editingUser ="editingUser" @invite-user="handleInviteContact" @user-edit ="handleUserEdit" @form-closed = "formClosed"/>   
             </div>
+        </div>
         <div class="contacts-table-box">
             <table class="contact-table">
                 <thead>
@@ -41,12 +42,14 @@ import home from '../Home/home.vue';
 import { Meteor } from 'meteor/meteor';
 import { ref, onMounted } from 'vue';
 import inviteForm from '../forms/inviteForm.vue';
+// import organizationTable from './organizationTable.vue';
 
 export default {
     name:'userTable',
     components:{
         home,
         inviteForm,
+        // organizationTable,
     },
     data(){
         return {
@@ -117,7 +120,10 @@ export default {
                 });
             }
         },
-       
+       backToOrganization(){
+            this.$router.push('/organizations');
+            // alert("back to organiozation table");
+       }
     }
 }
 </script>
@@ -138,6 +144,7 @@ export default {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+        padding:0.5%
     }
     .left-section{
         display:flex;
@@ -151,14 +158,15 @@ export default {
         background-color:white;
         border:1px solid rgb(168, 166, 166);
     }
-    .invite-button{
+    .invite-button,.back-button{
         width:100px;
         height:35px;
         border-radius:5px;
         background-color:rgb(198, 138, 198);
         border-style:solid;   
     }
-    .add-button:hover{
+    
+    .invite-button:hover,.back-button:hover{
         background-color:rgb(197, 193, 197);
         cursor:pointer;
     }

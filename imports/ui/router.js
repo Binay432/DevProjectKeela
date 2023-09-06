@@ -39,12 +39,12 @@ const router = createRouter({
       component:empty
     },
     {
-      path:'/settings',
+      path:'/userTable',
       name:'userTable',
       component:userTable
     },
     {
-      path:'/organzations',
+      path:'/organizations',
       name:'organizationsTable',
       component:organizationsTable
     },

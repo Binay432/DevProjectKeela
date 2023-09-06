@@ -6,7 +6,7 @@
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
                     <button type="button" class="invite-button" @click="inviteUser">Invite User</button>
-                    <inviteForm v-if="showForm" :show-Form="showForm" @invite-user="handleInviteContact" @form-closed = "formClosed"/>   
+                    <inviteForm v-if="showForm" :show-Form="showForm" :editingUser ="editingUser" @invite-user="handleInviteContact" @user-edit ="handleUserEdit" @form-closed = "formClosed"/>   
                 </div>
             </div>
         <div class="contacts-table-box">
@@ -25,8 +25,8 @@
                         <td>{{ user.emails[0].address }}</td>
                         <td>{{ user.profile.orgRole }}</td>
                         <td>
-                            <!-- <button class="edit-contact" @click="editContact(contact)">Edit</button> -->
-                            <button class="delete-contact">Delete</button>
+                            <button class="edit-user" @click="editUser(user)">Edit</button>
+                            <button class="delete-user" @click="deleteUser(user)">Delete</button>
                         </td>
                     </tr>
                 </tbody>    
@@ -51,6 +51,7 @@ export default {
     data(){
         return {
             showForm: false, 
+            editingUser: null,
         }
     },
     meteor: {
@@ -65,16 +66,58 @@ export default {
     methods:{
         inviteUser(){
             this.showForm = true;
+            this.editingUser = null;
         },
-        handleInviteContact(){
-            alert("invite form work ");
+        editUser(user){
+            this.editingUser = {...user};
+            console.log("user to be edited"+ {...user});
+            this.showForm = true;
+        },
+        handleInviteContact(newUser){
+            const user = {
+                    email : newUser.email,
+                    password : newUser.password,
+                    confirmPassword : newUser.Password,
+                    profile:{
+                        firstName : newUser.firstName,
+                        lastName : newUser.lastName,
+                        orgName : newUser.orgName,
+                        orgRole : newUser.orgRole,
+                    },
+                }
+            Accounts.createUser(user, (error) => {
+                    if(error){
+                        console.error(error.reason);
+                    }
+                });
+            this.showForm = false;
+        },
+        handleUserEdit(userId, newUser){
+            if(confirm('Are you sure you want to edit this user?')){
+                Meteor.call('users.edit', userId, newUser, (error)=>{
+                    if(error){
+                        console.error('Error updating user:', error);
+                        alert('Error editing user: ' + error.message);
+                    }
+                });
+            }
             this.showForm = false;
         },
         formClosed(message){
             console.log(message);
             this.showForm = false;
-        }
-        
+        },
+        deleteUser(user){
+            if(confirm('Are you sure you want to delete this user?')){
+                Meteor.call('users.delete', user._id, (error)=>{
+                    if(error){
+                        console.error('Error deleting contact:', error);
+                        alert('Error deleting contact: ' + error.message);
+                    }
+                });
+            }
+        },
+       
     }
 }
 </script>
@@ -147,18 +190,18 @@ export default {
     .contact-table tbody tr:nth-of-type(even){
         background-color:#f3f3f3;
     }
-    .delete-contact{
-        background-color:rgb(232, 197, 232);
+    .delete-user{
+        background-color: red;
         border:1px solid black;
         width:20%;
         box-sizing: border-box;
 
     }
-    .delete-contact:hover{
+    .delete-user:hover{
         background-color:rgb(197, 193, 197);
         cursor:pointer;
     }
-    .edit-contact{
+    .edit-user{
         margin-left:5px;
         background-color:rgb(121, 157, 121);
         border:1px solid black;
@@ -166,7 +209,7 @@ export default {
         margin-right:5%;
         box-sizing: border-box;
     }
-    .edit-contact:hover{
+    .edit-user:hover{
         background-color:rgb(197, 193, 197);
         cursor:pointer;
     }

@@ -5,6 +5,7 @@ import { tags } from '../imports/db/tagsCollections';
 import '../imports/api/methods/tagsMethods';
 import { organizations } from '../imports/db/organizationsCollection';
 import '../imports/api/methods/organizationsMethods';
+import '../imports/api/methods/userAccountsMethods';
 
 Meteor.publish('contacts', function (){
     if (this.userId) {
@@ -33,4 +34,18 @@ Meteor.publish('organizations', function (){
     }else{
         return this.ready();
     }
-})
+});
+Meteor.users.allow({
+    remove(userId, doc) {
+        return true; 
+    },
+    update(user, doc){
+        return true;
+    }
+});
+Meteor.users.allow({
+    update(userId, doc){
+        return true;
+    }
+});
+

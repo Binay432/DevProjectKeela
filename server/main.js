@@ -7,6 +7,7 @@ import { organizations } from '../imports/db/organizationsCollection';
 import '../imports/api/methods/organizationsMethods';
 import '../imports/api/methods/userAccountsMethods';
 
+
 Meteor.publish('contacts', function (){
     if (this.userId) {
         return contacts.find({ userId: this.userId });
@@ -35,6 +36,7 @@ Meteor.publish('organizations', function (){
         return this.ready();
     }
 });
+
 Meteor.users.allow({
     remove(userId, doc) {
         return true; 

@@ -4,7 +4,7 @@
         <button class = "back-button" @click="backToOrganization">Back</button>
         <div class="contacts-info-box">
             <div class ="left-section"><strong>{{ users.length }} Users</strong></div>
-            <div class ="middle-section">middle</div>
+            <div class ="middle-section">{{ orgName }}</div>
             <div class="right-section">
                 <button type="button" class="invite-button" @click="inviteUser">Invite User</button>
                 <inviteForm v-if="showForm" :show-Form="showForm" :editingUser ="editingUser" @invite-user="handleInviteContact" @user-edit ="handleUserEdit" @form-closed = "formClosed"/>   
@@ -17,13 +17,15 @@
                         <th>FULL NAME</th>
                         <th>EMAIL</th>
                         <th>ROLE</th>
+                        <th>ORG</th>
                         <th>ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="user in users" :key="user._id">
+                    <tr v-for="user in specificOrganization" :key="user._id">
                         <td>{{ user.profile.firstName + user.profile.lastName }}</td>
                         <td>{{ user.emails[0].address }}</td>
+                        <td>{{ user.profile.orgName }}</td>
                         <td>{{ user.profile.orgRole }}</td>
                         <td>
                             <button class="edit-user" @click="editUser(user)">Edit</button>
@@ -42,14 +44,26 @@ import home from '../Home/home.vue';
 import { Meteor } from 'meteor/meteor';
 import { ref, onMounted } from 'vue';
 import inviteForm from '../forms/inviteForm.vue';
-// import organizationTable from './organizationTable.vue';
+
 
 export default {
     name:'userTable',
+    // props: ['orgName'],
+    computed:{
+        orgName(){
+            return this.$route.params.orgName;
+        },
+        specificOrganization(){
+            return this.users.filter(user => user.profile.orgName === this.orgName);
+        }, 
+        orgName(){
+            return this.$route.params.orgName;
+        }
+    },
     components:{
         home,
         inviteForm,
-        // organizationTable,
+     
     },
     data(){
         return {
@@ -122,8 +136,8 @@ export default {
         },
        backToOrganization(){
             this.$router.push('/organizations');
-            // alert("back to organiozation table");
-       }
+       },
+       
     }
 }
 </script>

@@ -2,7 +2,7 @@
     <home/>
     <div class = "table-grid">
             <div class="organization-info-box">
-                <div class ="left-section"><strong> Organizations</strong></div>
+                <div class ="left-section"><strong> {{ organizations.length }} Organizations</strong></div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
                     <button type="button" class="add-button" @click="addOrganization">Add Organization</button>
@@ -20,7 +20,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="organization in organizations" :key="organization._id" @click="clickOrganization(organization.organizationName)">
+                    <tr v-for="organization in organizations" :key="organization._id" @click="navigateToUserTable(organization.organizationName)">
                         <td>{{ organization.organizationName }}</td>
                         <td>{{ organization.organizationEmail}}</td>
                         <td>{{  }}</td>
@@ -43,6 +43,7 @@ import organizationForm from '../forms/organizationForm.vue'
 import { organizations } from '../../db/organizationsCollection'
 import { Meteor } from 'meteor/meteor';
 import userTable from './userTable.vue';
+
 
 
 export default {
@@ -95,7 +96,7 @@ export default {
             this.showForm = false;
         },
         deleteOrganization(organization){
-            if(confirm('Are you sure you want to edit this organization?')){
+            if(confirm('Are you sure you want to delete this organization?')){
                 Meteor.call('organizations.delete', organization._id, (error)=>{
                     if(error){
                         console.error('Error updating organization:', error);
@@ -107,8 +108,8 @@ export default {
         formClosed(message){
             this.showForm = false;
         },
-        clickOrganization(orgName){
-            this.$router.push('/userTable');
+        navigateToUserTable(orgName){
+            this.$router.push({ name:'userTable', params:{orgName} });
         }
         
     }

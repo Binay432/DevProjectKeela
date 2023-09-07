@@ -42,7 +42,7 @@ const router = createRouter({
       path:'/userTable/:orgName',
       name:'userTable',
       component:userTable,
-      props: true,
+      props: route => ({ orgName: route.params.orgName }),
     },
     {
       path:'/organizations',

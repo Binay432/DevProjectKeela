@@ -8,7 +8,12 @@
             <form @submit.prevent = "addContact">
                 <input type="text" v-model="contactName" placeholder="Name" required>
                 <input type="email" v-model="contactEmail" placeholder="Eamil" required>
-                <input type= "text" v-model ="contactTag" placeholder = "Tag" required>
+                <select  class="dropdown" id="tags" v-model="contactTag" placeholder="Tags" @change="addTag(contactTag)">
+                    <option v-for="tag in tags" :key="tag._id" :value="tag.tagName">{{ tag.tagName }}</option>
+                </select>
+                <ul>
+                    <li v-for="tag in selectedTag" :key="tag">{{ tag }}<span class="remove-tag" @click="removeTag(tag)"> x</span> </li>
+                </ul>
                 <input type= "text" v-model ="contactNumber" placeholder = "Number" required>
                 <button type="submit">{{ editingContact ? 'Save' : 'Add' }}</button>
             </form>
@@ -17,7 +22,9 @@
 </template>
 
 <script>
-    import {ref} from 'vue';
+import {ref} from 'vue';
+import { tags } from '../../db/tagsCollections';
+import { Meteor } from 'meteor/meteor';
 
     export default {
         name:"contactForm",
@@ -28,11 +35,20 @@
                 default: {}
             },
         }, 
+        meteor:{
+            $subscribe:{
+                tags:[],
+            },
+            tags(){
+                return tags.find().fetch();
+            },
+        }, 
         setup (props, context){
             const contactName = ref (props.editingContact? props.editingContact.contactName: '');
             const contactEmail = ref (props.editingContact? props.editingContact.contactEmail: '');
-            const contactTag = ref (props.editingContact ? props.editingContact.contactTag: '');
+            const contactTag = ref (props.editingContact ? [props.editingContact.contactTag]: []);
             const contactNumber = ref (props.editingContact ? props.editingContact.contactNumber: '');
+            const selectedTag = ref([]);
 
             const addContact = () => {
                 const currentUser =Meteor.user();
@@ -53,9 +69,19 @@
                 contactEmail.value = '';
                 contactNumber.value = '';
                 contactTag.value = '';
+                selectedTag.value = [];
             };
             const closeForm = () => {
                 context.emit('form-closed', "Closed");
+            };
+            const addTag = (contactTag) =>{
+                selectedTag.value.push(contactTag);
+                console.log(selectedTag);
+            };
+            const removeTag = (tag) =>{
+                let indexOftag = selectedTag.value.indexOf(tag);
+                selectedTag.value.splice(indexOftag, 1);
+                console.log(selectedTag);
             };
             return {
                 contactName,
@@ -64,6 +90,9 @@
                 contactNumber,
                 addContact,
                 closeForm,
+                selectedTag,
+                addTag,
+                removeTag,
             };
         },
         
@@ -128,4 +157,19 @@
     .form-close-icon:hover{
         cursor : pointer;
     }
+    .dropdown{
+    width: 300px; 
+    height: 40px;
+    padding-left:20px;
+    display:block;
+    margin-right:auto;
+    margin-left:auto;
+    margin-top:10px;
+    border:1px solid rgb(26, 25, 25);
+    }
+    .remove-tag:hover{
+       cursor:pointer;
+    }
+
+
 </style>

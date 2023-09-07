@@ -48,22 +48,17 @@ import inviteForm from '../forms/inviteForm.vue';
 
 export default {
     name:'userTable',
-    // props: ['orgName'],
-    computed:{
-        orgName(){
-            return this.$route.params.orgName;
-        },
-        specificOrganization(){
-            return this.users.filter(user => user.profile.orgName === this.orgName);
-        }, 
-        orgName(){
-            return this.$route.params.orgName;
-        }
-    },
     components:{
         home,
         inviteForm,
-     
+    },
+    props: {
+        orgName: String,
+    },
+    computed:{
+        specificOrganization(){
+            return this.users.filter(user => user.profile.orgName === this.orgName);
+        }, 
     },
     data(){
         return {

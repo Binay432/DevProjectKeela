@@ -21,7 +21,7 @@
                 </div>  
             </div>
         </router-link>
-        <router-link to="/userTable">
+        <router-link to="/userTable/:">
             <div class="keela-features">
                 <div>
                     <img class="features-icon" src="users.png"> 

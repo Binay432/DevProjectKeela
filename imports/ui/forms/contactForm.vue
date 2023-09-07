@@ -55,7 +55,7 @@ import { Meteor } from 'meteor/meteor';
                 const newContact = {
                     contactName : contactName.value.trim(),
                     contactEmail : contactEmail.value.trim(),
-                    contactTag : contactTag.value.trim(),
+                    contactTag : {...selectedTag},
                     contactNumber : contactNumber.value.trim(), 
                 };
                 if (props.editingContact){

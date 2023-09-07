@@ -25,7 +25,7 @@
                     <tr v-for="contact in contacts" :key="contact._id">
                         <td>{{ contact.contactName }}</td>
                         <td>{{ contact.contactEmail }}</td>
-                        <td>{{ contact.contactTag }}</td>
+                        <td>{{ contact.contactTag._value }}</td>
                         <td>{{ contact.contactNumber }}</td>
                         <td>
                             <button class="edit-contact" @click="editContact(contact)">Edit</button>

@@ -3,7 +3,7 @@
     <div class = "table-grid">
         <button class = "back-button" @click="backToOrganization">Back</button>
         <div class="contacts-info-box">
-            <div class ="left-section"><strong>{{ users.length }} Users</strong></div>
+            <div class ="left-section"><strong>{{ specificOrganization.length }} Users</strong></div>
             <div class ="middle-section">{{ orgName }}</div>
             <div class="right-section">
                 <button type="button" class="invite-button" @click="inviteUser">Invite User</button>

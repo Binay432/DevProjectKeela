@@ -9,9 +9,7 @@
                 <input type="email" v-model="email" id="email" placeholder ="Email" required>
                 <input type="text" v-model="orgName" id="orgName" placeholder ="Organization Name" required>
                 <select class="dropdown" id="OrgRole" v-model="orgRole" placeholder="Organization Role">
-                    <option value="Keela Admin" selected>Keela Admin</option>
-                    <option value="Admin" selected>Admin</option>
-                    <option value="Coordinator">Coordinator</option>
+                    <option v-for="role in roles" :key="role">{{ role }}</option>
                 </select>
                 <input v-model="password" type="password" placeholder ="Enter Password" required>
                 <input v-model="confirmPassword" type="password" placeholder ="Confirm Password" required>
@@ -38,8 +36,20 @@ export default {
             orgRole:"",
             password:"",
             confirmPassword:"",  
-            error:"",   
+            error:"", 
+            roles: [],  
         };
+    },  
+    mounted() {
+        // Call the Meteor Method to fetch roles
+        Meteor.call('roles.getRoles', (error, result) => {
+            if (!error) {
+                this.roles = result.map((role) => role._id);;
+                console.log(this.roles);
+            } else {
+                console.error(error.reason);
+            }
+        });
     },
     methods:{
         checkPasswordValidation(password, confirmPassword){
@@ -87,8 +97,15 @@ export default {
                     }
                     else{
                         Meteor.call('organizations.insert', newOrganization);
-                        this.clearInputField();
-                        this.$router.push('/'); //navigate to login page 
+                        Meteor.call('assignRole', Meteor.userId(), this.orgRole, (error) => {
+                            if (error) {
+                            console.error(error.reason);
+                            } else {
+                            // Redirect or perform any other actions after successful signup
+                                this.clearInputField();
+                                this.$router.push('/'); //navigate to login page 
+                            }
+                        });
                     }
                 });     
             }  

@@ -71,8 +71,7 @@ export default {
             users: [],
         },
         users() {
-            return Meteor.users
-                .find({}).fetch();
+            return Meteor.users.find({}).fetch();
         },
     },
     methods:{

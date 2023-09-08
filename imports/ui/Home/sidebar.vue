@@ -21,7 +21,7 @@
                 </div>  
             </div>
         </router-link>
-        <router-link to="/settings">
+        <!-- <router-link to="/userTable/:">
             <div class="keela-features">
                 <div>
                     <img class="features-icon" src="users.png"> 
@@ -30,9 +30,9 @@
                     <h1 class="features-text">Users</h1>
                 </div>  
             </div>
-        </router-link>
+        </router-link> -->
 
-        <router-link to="/organzations">
+        <router-link to="/organizations">
             <div class="keela-features">
                 <div>
                     <img class="features-icon" src="organization.png"> 
@@ -69,7 +69,7 @@ export default {
 <style scoped>
     .sidebar-grid{
         display: grid;
-        grid-template-rows:15px 15px 15px 15px 1fr;
+        grid-template-rows:15px 15px 15px 1fr;
         row-gap:20px;
         width:160px;
         background-color:rgb(196, 195, 195);

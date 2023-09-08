@@ -15,6 +15,7 @@
 
 <script>
 import {ref} from 'vue';
+ 
 
     export default {
         name:"tagForm", 
@@ -23,13 +24,18 @@ import {ref} from 'vue';
             editingTag:{
                 type : Object, 
                 default: {}
-            }
+            },
         },
         setup (props, context){
             const tagName = ref (props.editingTag ? props.editingTag.tagName: '');
+            const orgName = ref([]);
+
             const addTag = () => {
+                const currentUser = Meteor.user();
+                const currentOrg = currentUser.profile.orgName;
                 const newTag = {
                     tagName : tagName.value.trim(),
+                    orgName : currentOrg,
                 };
                 //Tags.insert(newTag);
                 if(props.editingTag){

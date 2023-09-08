@@ -4,16 +4,19 @@
             <div class="close-button" @click="closeForm">
                 <img class ="form-close-icon"  src="cross.png">
             </div>
-            <h2>Invite User</h2>
+            <h2>{{ editingUser ? 'Edit User' : 'Invite User' }}</h2>
             <form @submit.prevent = "submit">
+                <input type="text" v-model="firstName" id="firstName" placeholder ="First Name" required>
+                <input type="text" v-model="lastName" id="lastName" placeholder ="Last Name" required>
                 <input type="email" v-model="email" id="email" placeholder ="Email" required>
-                <input type="text" v-model="orgName" id="orgName" placeholder ="Organization Name" required>
+                <!-- <input type="text" v-model="orgName" id="orgName" placeholder ="Organization Name" required> -->
                 <select class="dropdown" id="OrgRole" v-model="orgRole" placeholder="Organization Role">
                     <option value="Keela Admin" selected>Keela Admin</option>
                     <option value="Admin" >Admin</option>
                     <option value="Coordinator">Coordinator</option>
                 </select>
-                <button type="submit">Invite</button><br>
+                <input v-model="password" type="password" placeholder ="Enter Password" required>
+                <button type="submit">{{ editingUser ? 'Save' : 'Invite' }}</button><br>
             </form>
         </div>
     </div>
@@ -25,30 +28,51 @@ export default {
     name:"inviteForm",
     props:{
         showForm:Boolean,
+        editingUser: {
+            type: Object,
+            default: {}
+        }
     },
     setup(props, context){
-        const email = ref();
-        const orgName = ref('');
-        const orgRole = ref('');
+        const firstName = ref(props.editingUser ? props.editingUser.profile.firstName: '');
+        const lastName = ref (props.editingUser ? props.editingUser.profile.lastName: '');
+        const email = ref(props.editingUser ? props.editingUser.emails[0].address: '');
+        // const orgName = ref(props.editingUser ? props.editingUser.profile.orgName: '');
+        const orgRole = ref(props.editingUser ? props.editingUser.profile.orgRole: '');
+        const password = ref (props.editingUser ? props.editingUser.password: '');
 
         const submit = () =>{
             const newUser = {
-                email : email.value.trim(),
-                orgName : orgName.value.trim(),
-                orgRole : orgRole.value.trim()
+                firstName : firstName.value.trim(),
+                lastName : lastName.value.trim(),
+                email: email.value.trim(),
+                // orgName : orgName.value.trim(),
+                orgRole : orgRole.value.trim(),
+                password : password.value.trim(),
             };
-            context.emit('invite-user', newUser);
+            if(props.editingUser){
+                const userId = props.editingUser._id;
+                context.emit('user-edit',userId, newUser);
+            }else{
+                context.emit('invite-user', newUser);
+            }
+            firstName.value = '';
+            lastName.value = '';
             email.value ='';
-            orgName.value = '';
+            // orgName.value = '';
             orgRole.value = '';
+            password.value ='';
         };
         const closeForm =() => {
                 context.emit('form-closed', "Closed");
         };
         return {
-            email,
-            orgName,
+            firstName,
+            lastName,
+            email,   
+            // orgName,
             orgRole,
+            password,
             submit,
             closeForm,
         };

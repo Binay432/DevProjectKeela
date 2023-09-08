@@ -2,7 +2,7 @@
     <home/>
     <div class = "table-grid">
             <div class="organization-info-box">
-                <div class ="left-section"><strong> Organizations</strong></div>
+                <div class ="left-section"><strong> {{ organizations.length }} Organizations</strong></div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
                     <button type="button" class="add-button" @click="addOrganization">Add Organization</button>
@@ -20,10 +20,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="organization in organizations" :key="organization._id">
-                        <td>{{ organization.organizationName }}</td>
-                        <td>{{ organization.organizationEmail}}</td>
-                        <td>{{  }}</td>
+                    <tr class = "org-row" v-for="organization in organizations" :key="organization._id">
+                        <td @click="navigateToUserTable(organization.organizationName)">{{ organization.organizationName }}</td>
+                        <td @click="navigateToUserTable(organization.organizationName)">{{ organization.organizationEmail}}</td>
+                        <td @click="navigateToUserTable(organization.organizationName)">{{  }}</td>
                         <td>
                             <button class="edit-organization" @click="editOrganization(organization)">Edit</button>
                             <button class="delete-organization" @click="deleteOrganization(organization)">Delete</button>
@@ -42,6 +42,8 @@ import { ref, onMounted } from 'vue';
 import organizationForm from '../forms/organizationForm.vue'
 import { organizations } from '../../db/organizationsCollection'
 import { Meteor } from 'meteor/meteor';
+import userTable from './userTable.vue';
+
 
 
 export default {
@@ -49,6 +51,7 @@ export default {
     components:{
         home,
         organizationForm,
+        userTable,
     },
     data(){
        
@@ -93,7 +96,7 @@ export default {
             this.showForm = false;
         },
         deleteOrganization(organization){
-            if(confirm('Are you sure you want to edit this organization?')){
+            if(confirm('Are you sure you want to delete this organization?')){
                 Meteor.call('organizations.delete', organization._id, (error)=>{
                     if(error){
                         console.error('Error updating organization:', error);
@@ -104,6 +107,9 @@ export default {
         },
         formClosed(message){
             this.showForm = false;
+        },
+        navigateToUserTable(orgName){
+            this.$router.push({ name:'userTable', params:{orgName} });
         }
         
     }
@@ -201,6 +207,9 @@ export default {
     .edit-organization:hover{
         background-color:rgb(197, 193, 197);
         cursor:pointer;
+    }
+    .org-row:hover{
+        cursor: pointer;
     }
     
 </style>

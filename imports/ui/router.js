@@ -39,12 +39,13 @@ const router = createRouter({
       component:empty
     },
     {
-      path:'/settings',
+      path:'/userTable/:orgName',
       name:'userTable',
-      component:userTable
+      component:userTable,
+      props: route => ({ orgName: route.params.orgName }),
     },
     {
-      path:'/organzations',
+      path:'/organizations',
       name:'organizationsTable',
       component:organizationsTable
     },

@@ -22,10 +22,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="contact in contacts" :key="contact._id">
+                    <tr v-for="contact in specificOrganization" :key="contact._id">
                         <td>{{ contact.contactName }}</td>
                         <td>{{ contact.contactEmail }}</td>
-                        <td>{{ contact.contactTag }}</td>
+                        <td>{{ contact.contactTag._value }}</td>
                         <td>{{ contact.contactNumber }}</td>
                         <td>
                             <button class="edit-contact" @click="editContact(contact)">Edit</button>
@@ -58,6 +58,7 @@ export default{
             editingContact: null,
         };
     },
+    
     meteor:{
         $subscribe:{
             contacts:[],
@@ -66,6 +67,13 @@ export default{
             return contacts.find().fetch();
         },
     },  
+    computed:{
+        specificOrganization(){
+            const currentUser = Meteor.user();
+            const currentOrg = currentUser.profile.orgName;
+            return this.contacts.filter(contact => contact.orgName === currentOrg);
+        }, 
+    },
     methods:{
         onMounted(){
             this.contacts = contacts.find().fetch();

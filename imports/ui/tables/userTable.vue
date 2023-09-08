@@ -86,6 +86,7 @@ export default {
             this.showForm = true;
         },
         handleInviteContact(newUser){
+            console.log(this.orgName);
             const user = {
                     email : newUser.email,
                     password : newUser.password,
@@ -93,7 +94,7 @@ export default {
                     profile:{
                         firstName : newUser.firstName,
                         lastName : newUser.lastName,
-                        orgName : newUser.orgName,
+                        orgName : this.orgName,
                         orgRole : newUser.orgRole,
                     },
                 }

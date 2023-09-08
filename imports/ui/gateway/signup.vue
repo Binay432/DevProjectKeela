@@ -9,6 +9,7 @@
                 <input type="email" v-model="email" id="email" placeholder ="Email" required>
                 <input type="text" v-model="orgName" id="orgName" placeholder ="Organization Name" required>
                 <select class="dropdown" id="OrgRole" v-model="orgRole" placeholder="Organization Role">
+                    <option value="Keela Admin" selected>Keela Admin</option>
                     <option value="Admin" selected>Admin</option>
                     <option value="Coordinator">Coordinator</option>
                 </select>
@@ -23,6 +24,8 @@
 
 <script>
 import login from './login.vue';
+import { organizations } from '../../db/organizationsCollection';
+import { Meteor } from 'meteor/meteor';
 
 export default {
     name : 'signup',
@@ -74,11 +77,16 @@ export default {
                         orgRole : this.orgRole,
                     },
                 }
+                const newOrganization = {
+                    organizationName : this.orgName,
+                    organizationEmail : this.email,
+                };
                 Accounts.createUser(user, (error) => {
                     if(error){
                         console.error(error.reason);
                     }
                     else{
+                        Meteor.call('organizations.insert', newOrganization);
                         this.clearInputField();
                         this.$router.push('/'); //navigate to login page 
                     }

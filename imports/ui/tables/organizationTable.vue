@@ -20,10 +20,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="organization in organizations" :key="organization._id" @click="navigateToUserTable(organization.organizationName)">
-                        <td>{{ organization.organizationName }}</td>
-                        <td>{{ organization.organizationEmail}}</td>
-                        <td>{{  }}</td>
+                    <tr class = "org-row" v-for="organization in organizations" :key="organization._id">
+                        <td @click="navigateToUserTable(organization.organizationName)">{{ organization.organizationName }}</td>
+                        <td @click="navigateToUserTable(organization.organizationName)">{{ organization.organizationEmail}}</td>
+                        <td @click="navigateToUserTable(organization.organizationName)">{{  }}</td>
                         <td>
                             <button class="edit-organization" @click="editOrganization(organization)">Edit</button>
                             <button class="delete-organization" @click="deleteOrganization(organization)">Delete</button>
@@ -207,6 +207,9 @@ export default {
     .edit-organization:hover{
         background-color:rgb(197, 193, 197);
         cursor:pointer;
+    }
+    .org-row:hover{
+        cursor: pointer;
     }
     
 </style>

@@ -31,7 +31,6 @@ export default {
         const organizationEmail = ref (props.editingOrganization? props.editingOrganization.organizationEmail: '');
 
         const submit = () => {
-            const currentUser = Meteor.user();
             const newOrganization = {
                 organizationName : organizationName.value.trim(),
                 organizationEmail : organizationEmail.value.trim(),

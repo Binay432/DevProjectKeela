@@ -19,7 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="tag in tags" :key="tag._id">
+                    <tr v-for="tag in specificOrganization" :key="tag._id">
                         <td>{{ tag.tagName }}</td>
                         <td>{{ tag.createdAt}}</td>
                         <td>
@@ -52,11 +52,26 @@ export default{
             editingTag : Object,
         }
     },
+    meteor:{
+        $subscribe:{
+            tags:[]
+        },
+        tags(){
+            return tags.find().fetch();
+        }
+    },
+    computed:{
+        specificOrganization(){
+            const currentUser = Meteor.user();
+            const currentOrg = currentUser.profile.orgName;
+            return this.tags.filter(tag => tag.orgName === currentOrg);
+        }, 
+    },
     methods:{
         onMounted(){
             this.tags = tags.find().fetch();
         },
-        addTag(){
+        addTag(orgName){
             this.editingTag = null;
             this.showForm = true;
         },
@@ -95,14 +110,7 @@ export default{
             this.showForm = false;
         }   
     },
-    meteor:{
-        $subscribe:{
-            tags:[]
-        },
-        tags(){
-            return tags.find().fetch();
-        }
-    }
+   
     
 }
 </script>

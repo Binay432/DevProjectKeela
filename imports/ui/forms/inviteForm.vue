@@ -9,7 +9,7 @@
                 <input type="text" v-model="firstName" id="firstName" placeholder ="First Name" required>
                 <input type="text" v-model="lastName" id="lastName" placeholder ="Last Name" required>
                 <input type="email" v-model="email" id="email" placeholder ="Email" required>
-                <input type="text" v-model="orgName" id="orgName" placeholder ="Organization Name" required>
+                <!-- <input type="text" v-model="orgName" id="orgName" placeholder ="Organization Name" required> -->
                 <select class="dropdown" id="OrgRole" v-model="orgRole" placeholder="Organization Role">
                     <option value="Keela Admin" selected>Keela Admin</option>
                     <option value="Admin" >Admin</option>
@@ -37,7 +37,7 @@ export default {
         const firstName = ref(props.editingUser ? props.editingUser.profile.firstName: '');
         const lastName = ref (props.editingUser ? props.editingUser.profile.lastName: '');
         const email = ref(props.editingUser ? props.editingUser.emails[0].address: '');
-        const orgName = ref(props.editingUser ? props.editingUser.profile.orgName: '');
+        // const orgName = ref(props.editingUser ? props.editingUser.profile.orgName: '');
         const orgRole = ref(props.editingUser ? props.editingUser.profile.orgRole: '');
         const password = ref (props.editingUser ? props.editingUser.password: '');
 
@@ -46,7 +46,7 @@ export default {
                 firstName : firstName.value.trim(),
                 lastName : lastName.value.trim(),
                 email: email.value.trim(),
-                orgName : orgName.value.trim(),
+                // orgName : orgName.value.trim(),
                 orgRole : orgRole.value.trim(),
                 password : password.value.trim(),
             };
@@ -57,9 +57,9 @@ export default {
                 context.emit('invite-user', newUser);
             }
             firstName.value = '';
-            lastName.value = '',
+            lastName.value = '';
             email.value ='';
-            orgName.value = '';
+            // orgName.value = '';
             orgRole.value = '';
             password.value ='';
         };
@@ -70,7 +70,7 @@ export default {
             firstName,
             lastName,
             email,   
-            orgName,
+            // orgName,
             orgRole,
             password,
             submit,

@@ -49,14 +49,18 @@ import { Meteor } from 'meteor/meteor';
             const contactTag = ref (props.editingContact ? [props.editingContact.contactTag]: []);
             const contactNumber = ref (props.editingContact ? props.editingContact.contactNumber: '');
             const selectedTag = ref([]);
+            const orgName = ref([]);
 
             const addContact = () => {
-                const currentUser =Meteor.user();
+                const currentUser = Meteor.user();
+                const currentOrg = currentUser.profile.orgName;
+                console.log(currentOrg);
                 const newContact = {
                     contactName : contactName.value.trim(),
                     contactEmail : contactEmail.value.trim(),
                     contactTag : {...selectedTag},
                     contactNumber : contactNumber.value.trim(), 
+                    orgName : currentOrg, 
                 };
                 if (props.editingContact){
                         const contactId = props.editingContact._id;
@@ -76,12 +80,10 @@ import { Meteor } from 'meteor/meteor';
             };
             const addTag = (contactTag) =>{
                 selectedTag.value.push(contactTag);
-                console.log(selectedTag);
             };
             const removeTag = (tag) =>{
                 let indexOftag = selectedTag.value.indexOf(tag);
                 selectedTag.value.splice(indexOftag, 1);
-                console.log(selectedTag);
             };
             return {
                 contactName,

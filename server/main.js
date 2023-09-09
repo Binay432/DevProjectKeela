@@ -11,14 +11,14 @@ import './roles';
 
 Meteor.publish('contacts', function (){
     if (this.userId) {
-        return contacts.find({ userId: this.userId });
+        return contacts.find();
     } else {
         return this.ready(); //indicate that the publication is ready but contains no data.
     }
 });
 Meteor.publish('tags', function publishTags(){
     if(this.userId){
-        return tags.find({userId: this.userId});
+        return tags.find();
     } else{
         return this.ready(); //indicate that the publication is ready but contains no data.
     }  
@@ -30,13 +30,6 @@ Meteor.publish('userData', function () {
         return this.ready();
     }   
 });
-// Meteor.publish('roles', function () {
-//     if (this.userId) {
-//       return Meteor.roleAssignment.find({ 'user._id': this.userId });
-//     } else {
-//       this.ready()
-//     }
-//   })
 Meteor.publish('organizations', function (){
     if(this.userId){
         return organizations.find();

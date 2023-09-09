@@ -1,19 +1,20 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { contacts } from '../../db/contactsCollection';
+import { Roles } from 'meteor/alanning:roles';
 
-Meteor.methods ( {
-   'contacts.insert'(newContact){
+Meteor.methods ({
+  'contacts.insert'(newContact){
     if(!this.userId) {
         throw new Meteor.Error('not-authorized','You are not authorizded to add contacts.');
     }
     contacts.insert({
-            ...newContact, 
-            createdAt: new Date(),
-            userId: this.userId,
-        })
-   },
-   'contacts.delete'(contactId){
+      ...newContact, 
+      createdAt: new Date(),
+      userId: this.userId,
+    })
+  },
+  'contacts.delete'(contactId){
     if(!this.userId) {
         throw new Meteor.Error('not-authorized','You are not authorizded to delete contacts.');
     }

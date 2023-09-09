@@ -9,11 +9,8 @@
                 <input type="text" v-model="firstName" id="firstName" placeholder ="First Name" required>
                 <input type="text" v-model="lastName" id="lastName" placeholder ="Last Name" required>
                 <input type="email" v-model="email" id="email" placeholder ="Email" required>
-                <!-- <input type="text" v-model="orgName" id="orgName" placeholder ="Organization Name" required> -->
                 <select class="dropdown" id="OrgRole" v-model="orgRole" placeholder="Organization Role">
-                    <option value="Keela Admin" selected>Keela Admin</option>
-                    <option value="Admin" >Admin</option>
-                    <option value="Coordinator">Coordinator</option>
+                    <option v-for="role in roles" :key="role">{{ role }}</option>
                 </select>
                 <input v-model="password" type="password" placeholder ="Enter Password" required>
                 <button type="submit">{{ editingUser ? 'Save' : 'Invite' }}</button><br>
@@ -24,6 +21,7 @@
 
 <script>
 import { ref } from 'vue';
+import { Meteor } from 'meteor/meteor';
 export default {
     name:"inviteForm",
     props:{
@@ -32,6 +30,22 @@ export default {
             type: Object,
             default: {}
         }
+    },
+    data(){
+        return {
+            roles:[],
+        }  
+    },
+    mounted() {
+        // Call the Meteor Method to fetch roles
+        Meteor.call('roles.getRoles', (error, result) => {
+            if (!error) {
+                this.roles = result.map((role) => role._id);;
+                console.log(this.roles);
+            } else {
+                console.error(error.reason);
+            }
+        });
     },
     setup(props, context){
         const firstName = ref(props.editingUser ? props.editingUser.profile.firstName: '');

@@ -2,7 +2,7 @@
     <home/>
     <div class = "table-grid">
             <div class="contacts-info-box">
-                <div class ="left-section"><strong>{{ contacts.length }} Contacts</strong></div>
+                <div class ="left-section"><strong>{{ specificOrganization.length }} Contacts</strong></div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
                     <button type="button" class="add-button" @click="addContact">Add Contact</button>

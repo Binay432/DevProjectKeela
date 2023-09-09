@@ -6,18 +6,19 @@ import '../imports/api/methods/tagsMethods';
 import { organizations } from '../imports/db/organizationsCollection';
 import '../imports/api/methods/organizationsMethods';
 import '../imports/api/methods/userAccountsMethods';
+import './roles';
 
 
 Meteor.publish('contacts', function (){
     if (this.userId) {
-        return contacts.find({ userId: this.userId });
+        return contacts.find();
     } else {
         return this.ready(); //indicate that the publication is ready but contains no data.
     }
 });
 Meteor.publish('tags', function publishTags(){
     if(this.userId){
-        return tags.find({userId: this.userId});
+        return tags.find();
     } else{
         return this.ready(); //indicate that the publication is ready but contains no data.
     }  

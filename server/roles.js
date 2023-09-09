@@ -1,13 +1,17 @@
 import { Roles } from 'meteor/alanning:roles';
 import { Meteor } from 'meteor/meteor';
 
-Roles.createRole('Keela Admin');
-Roles.createRole('Admin');
-Roles.createRole('Coordinator');
+Meteor.startup(() => {
+  if (Roles.getAllRoles().length === 0) {
+    Roles.createRole('Keela Admin');
+    Roles.createRole('Admin');
+    Roles.createRole('Coordinator');
+  }
+});
 
 Meteor.methods({
   'roles.getRoles'() {
-    // Fetch roles
+    // Fetch roles 
     return Roles.getAllRoles().fetch();
   },
     'assignRole'(userId, roleName) {

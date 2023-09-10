@@ -4,7 +4,7 @@
         <button class = "back-button" @click="backToOrganization">Back</button>
         <div class="contacts-info-box">
             <div class ="left-section"><strong>{{ specificOrganization.length }} Users</strong></div>
-            <div class ="middle-section">{{ orgName }}</div>
+            <div class ="middle-section"><strong>Organization:</strong> {{ orgName }}</div>
             <div class="right-section">
                 <button type="button" class="invite-button" @click="inviteUser">Invite User</button>
                 <inviteForm v-if="showForm" :show-Form="showForm" :editingUser ="editingUser" @invite-user="handleInviteContact" @user-edit ="handleUserEdit" @form-closed = "formClosed"/>   
@@ -17,7 +17,6 @@
                         <th>FULL NAME</th>
                         <th>EMAIL</th>
                         <th>ROLE</th>
-                        <th>ORG</th>
                         <th>ACTIONS</th>
                     </tr>
                 </thead>
@@ -25,7 +24,6 @@
                     <tr v-for="user in specificOrganization" :key="user._id">
                         <td>{{ user.profile.firstName + user.profile.lastName }}</td>
                         <td>{{ user.emails[0].address }}</td>
-                        <td>{{ user.profile.orgName }}</td>
                         <td>{{ user.profile.orgRole }}</td>
                         <td>
                             <button class="edit-user" @click="editUser(user)">Edit</button>
@@ -100,6 +98,12 @@ export default {
             Accounts.createUser(user, (error) => {
                     if(error){
                         console.error(error.reason);
+                    }else{
+                        Meteor.call('assignRole', Meteor.userId(), user.profile.orgRole, (error) => {
+                            if (error) {
+                            console.error(error.reason);
+                            } 
+                        })
                     }
                 });
             this.showForm = false;

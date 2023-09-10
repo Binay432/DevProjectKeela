@@ -5,7 +5,7 @@
                 <div class ="left-section"><strong>{{ specificOrganization.length }} Contacts</strong></div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
-                    <button type="button" class="add-button" @click="addContact">Add Contact</button>
+                    <button type="button" class="add-button" @click="addContact" :disabled="isButtonDisabled">Add Contact</button>
                     <!-- editingContat ="editingContact" means just a string of editingContact is props while :editingContat ="editingContact" means contents of editingContact is props -->
                     <contactForm v-if="showForm" :show-Form="showForm" :editingContact ="editingContact" @contact-added="handleContactAdded" @form-closed="formClosed" @contact-edit="handleContactEdit"/>   
                 </div>
@@ -44,7 +44,7 @@ import { ref , onMounted} from 'vue';
 import  contactForm  from '../forms/contactForm.vue';
 import { contacts } from '../../db/contactsCollection';
 import { Meteor } from 'meteor/meteor';
-
+import { Roles } from 'meteor/alanning:roles';
 
 export default{
     name: "contactTable",
@@ -56,6 +56,7 @@ export default{
         return {
             showForm: false,
             editingContact: null,
+            isButtonDisabled : false, 
         };
     },
     
@@ -79,15 +80,30 @@ export default{
             this.contacts = contacts.find().fetch();
         },
         addContact(){
-            this.editingContact = null;
-            this.showForm = true;
+            Meteor.call('checkCoordinatorRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        alert("Permission Denied");   
+                    }else{
+                        this.isButtonDisabled = false;
+                        this.editingContact = null;
+                        this.showForm = true;
+                    }
+                }
+            });
         },
         editContact(contact){
             this.editingContact = {...contact};
             this.showForm = true;
         },
         handleContactAdded(newContact){
-            Meteor.call('contacts.insert',newContact);
+            Meteor.call('contacts.insert',newContact ,(error)=>{
+                if(error){
+                    alert('Error adding contact: ' + error.message);
+                }
+            });
             this.showForm = false; 
         },
 
@@ -114,8 +130,7 @@ export default{
                 });
             }
             this.showForm = false;
-        }
-        
+        },
     },
 }
 </script>

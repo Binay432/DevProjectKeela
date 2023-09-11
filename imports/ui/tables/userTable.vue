@@ -95,17 +95,13 @@ export default {
                         orgRole : newUser.orgRole,
                     },
                 }
-            Accounts.createUser(user, (error) => {
+                Meteor.call('createUserAccount',user, (error) =>{
                     if(error){
-                        console.error(error.reason);
+                        alert(error.reason);
                     }else{
-                        Meteor.call('assignRole', Meteor.userId(), user.profile.orgRole, (error) => {
-                            if (error) {
-                            console.error(error.reason);
-                            } 
-                        })
+                        alert('User registered succefully');
                     }
-                });
+                })
             this.showForm = false;
         },
         handleUserEdit(userId, newUser){

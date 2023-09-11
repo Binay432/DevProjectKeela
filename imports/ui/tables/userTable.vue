@@ -40,7 +40,6 @@
 <script>
 import home from '../Home/home.vue';
 import { Meteor } from 'meteor/meteor';
-import { ref, onMounted } from 'vue';
 import inviteForm from '../forms/inviteForm.vue';
 
 

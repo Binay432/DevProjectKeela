@@ -21,19 +21,9 @@
                 </div>  
             </div>
         </router-link>
-        <!-- <router-link to="/userTable/:">
-            <div class="keela-features">
-                <div>
-                    <img class="features-icon" src="users.png"> 
-                </div>
-                <div>
-                    <h1 class="features-text">Users</h1>
-                </div>  
-            </div>
-        </router-link> -->
 
-        <router-link to="/organizations">
-            <div class="keela-features">
+        <div @click="checkPermissionAndNavigate">
+            <div class="keela-features" >
                 <div>
                     <img class="features-icon" src="organization.png"> 
                 </div>
@@ -41,7 +31,7 @@
                     <h1 class="features-text">Organization</h1>
                 </div>  
             </div>
-        </router-link>
+        </div>
 
         <button class="logout-button" @click="logout">Log Out</button>
     </div>
@@ -59,6 +49,19 @@ export default {
                 }
                 else{
                     this.$router.push('/');
+                }
+            });
+        },
+        checkPermissionAndNavigate(){
+            Meteor.call('checkCoordinatorRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        alert("Permission Denied ");   
+                    }else{
+                        this.$router.push('/organizations');
+                    }
                 }
             });
         }

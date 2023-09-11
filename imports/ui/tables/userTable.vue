@@ -24,7 +24,7 @@
                     <tr v-for="user in specificOrganization" :key="user._id">
                         <td>{{ user.profile.firstName + user.profile.lastName }}</td>
                         <td>{{ user.emails[0].address }}</td>
-                        <td>{{ user.profile.orgRole }}</td>
+                        <td>{{ getUserRoleforOrg(user, this.orgName) }}</td>
                         <td>
                             <button class="edit-user" @click="editUser(user)">Edit</button>
                             <button class="delete-user" @click="deleteUser(user)">Delete</button>
@@ -54,7 +54,9 @@ export default {
     },
     computed:{
         specificOrganization(){
-            return this.users.filter(user => user.profile.orgName === this.orgName);
+            return this.users.filter(user => {
+                return user.profile.organization.some(org => org.orgName === this.orgName);
+            });
         }, 
     },
     data(){
@@ -101,8 +103,12 @@ export default {
                     profile:{
                         firstName : newUser.firstName,
                         lastName : newUser.lastName,
-                        orgName : this.orgName,
-                        orgRole : newUser.orgRole,
+                        organization:[
+                            {
+                                orgName: this.orgName,
+                                orgRole : newUser.orgRole,
+                            }
+                        ]
                     },
                 }
                 Meteor.call('createUserAccount',user, (error) =>{
@@ -128,6 +134,10 @@ export default {
         formClosed(message){
             console.log(message);
             this.showForm = false;
+        },
+        getUserRoleforOrg(user, orgName){
+            const organization = user.profile.organization.find(org => org.orgName === orgName);
+            return organization ? organization.orgRole : 'Not Found';
         },
         deleteUser(user){
             if((user._id === Meteor.userId()) || (user.profile.orgRole === 'Keela Admin')){

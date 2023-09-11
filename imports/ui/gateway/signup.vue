@@ -96,7 +96,7 @@ export default {
                 };
                 Accounts.createUser(user, (error) => {
                     if(error){
-                        console.error(error.reason);
+                        alert(error.reason);
                     }
                     else{
                         Meteor.call('organizations.insert', newOrganization, (error, organizationId) =>{

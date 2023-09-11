@@ -5,7 +5,7 @@
                 <div class ="left-section"><strong>{{ specificOrganization.length }} Contacts</strong></div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
-                    <button type="button" class="add-button" @click="addContact">Add Contact</button>
+                    <button type="button" class="add-button" @click="addContact" :disabled="isAddButtonDisabled">Add Contact</button>
                     <!-- editingContat ="editingContact" means just a string of editingContact is props while :editingContat ="editingContact" means contents of editingContact is props -->
                     <contactForm v-if="showForm" :show-Form="showForm" :editingContact ="editingContact" @contact-added="handleContactAdded" @form-closed="formClosed" @contact-edit="handleContactEdit"/>   
                 </div>
@@ -40,11 +40,9 @@
 
 <script> 
 import home from '../Home/home.vue';
-import { ref , onMounted} from 'vue';
 import  contactForm  from '../forms/contactForm.vue';
 import { contacts } from '../../db/contactsCollection';
 import { Meteor } from 'meteor/meteor';
-
 
 export default{
     name: "contactTable",
@@ -56,6 +54,7 @@ export default{
         return {
             showForm: false,
             editingContact: null,
+            isAddButtonDisabled : false,
         };
     },
     
@@ -72,22 +71,49 @@ export default{
             const currentUser = Meteor.user();
             const currentOrg = currentUser.profile.orgName;
             return this.contacts.filter(contact => contact.orgName === currentOrg);
-        }, 
+        },
     },
     methods:{
         onMounted(){
             this.contacts = contacts.find().fetch();
         },
         addContact(){
-            this.editingContact = null;
-            this.showForm = true;
+            Meteor.call('checkCoordinatorRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        alert("Permission Denied");   
+                    }else{
+                        this.isAddButtonDisabled = false;
+                        this.editingContact = null;
+                        this.showForm = true;
+                    }
+                }
+            });
         },
         editContact(contact){
-            this.editingContact = {...contact};
-            this.showForm = true;
+            Meteor.call('checkCoordinatorRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        alert("Permission Denied ");   
+                    }else{
+                        this.isAddButtonDisabled = false;
+                        this.editingContact = {...contact};
+                        this.showForm = true;
+                    }
+                }
+            });
+          
         },
         handleContactAdded(newContact){
-            Meteor.call('contacts.insert',newContact);
+            Meteor.call('contacts.insert',newContact ,(error)=>{
+                if(error){
+                    alert('Error adding contact: ' + error.message);
+                }
+            });
             this.showForm = false; 
         },
 
@@ -95,14 +121,24 @@ export default{
             this.showForm = false;
         },
         deleteContact(contact){
-            if(confirm('Are you sure you want to delete this contact?')){
-                Meteor.call('contacts.delete', contact._id, (error)=>{
-                    if(error){
-                        console.error('Error deleting contact:', error);
-                        alert('Error deleting contact: ' + error.message);
+            Meteor.call('checkCoordinatorRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        alert("Permission Denied");   
+                    }else{
+                        if(confirm('Are you sure you want to delete this contact?')){
+                            Meteor.call('contacts.delete', contact._id, (error)=>{
+                                if(error){
+                                    console.error('Error deleting contact:', error);
+                                    alert('Error deleting contact: ' + error.message);
+                                }
+                            });
+                        }
                     }
-                });
-            }
+                }
+            });
         },
         handleContactEdit(contactId, newContact){
             if(confirm('Are you sure you want to edit this contact?')){
@@ -114,9 +150,8 @@ export default{
                 });
             }
             this.showForm = false;
-        }
-        
-    },
+        },
+    }
 }
 </script>
 

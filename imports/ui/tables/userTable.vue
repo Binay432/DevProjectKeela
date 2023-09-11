@@ -4,9 +4,9 @@
         <button class = "back-button" @click="backToOrganization">Back</button>
         <div class="contacts-info-box">
             <div class ="left-section"><strong>{{ specificOrganization.length }} Users</strong></div>
-            <div class ="middle-section">{{ orgName }}</div>
+            <div class ="middle-section"><strong>Organization:</strong> {{ orgName }}</div>
             <div class="right-section">
-                <button type="button" class="invite-button" @click="inviteUser">Invite User</button>
+                <button type="button" class="invite-button" @click="inviteUser" :disabled="isInviteButtonDisabled">Invite User</button>
                 <inviteForm v-if="showForm" :show-Form="showForm" :editingUser ="editingUser" @invite-user="handleInviteContact" @user-edit ="handleUserEdit" @form-closed = "formClosed"/>   
             </div>
         </div>
@@ -17,7 +17,6 @@
                         <th>FULL NAME</th>
                         <th>EMAIL</th>
                         <th>ROLE</th>
-                        <th>ORG</th>
                         <th>ACTIONS</th>
                     </tr>
                 </thead>
@@ -25,7 +24,6 @@
                     <tr v-for="user in specificOrganization" :key="user._id">
                         <td>{{ user.profile.firstName + user.profile.lastName }}</td>
                         <td>{{ user.emails[0].address }}</td>
-                        <td>{{ user.profile.orgName }}</td>
                         <td>{{ user.profile.orgRole }}</td>
                         <td>
                             <button class="edit-user" @click="editUser(user)">Edit</button>
@@ -42,7 +40,6 @@
 <script>
 import home from '../Home/home.vue';
 import { Meteor } from 'meteor/meteor';
-import { ref, onMounted } from 'vue';
 import inviteForm from '../forms/inviteForm.vue';
 
 
@@ -64,6 +61,7 @@ export default {
         return {
             showForm: false, 
             editingUser: null,
+            isInviteButtonDisabled : false,
         }
     },
     meteor: {
@@ -80,9 +78,19 @@ export default {
             this.editingUser = null;
         },
         editUser(user){
-            this.editingUser = {...user};
-            console.log("user to be edited"+ {...user});
-            this.showForm = true;
+            if((user._id === Meteor.userId()) || (user.profile.orgRole === 'Keela Admin')){
+                Meteor.call('checkAdminRole',(error,result) =>{
+                    if(error){
+                        alert('Error Checking permission : ', error.message);
+                    }else if(result){
+                        alert("Permission Denied");
+                    }
+                })
+            }else{
+                this.editingUser = {...user};
+                this.showForm = true;
+            }
+            
         },
         handleInviteContact(newUser){
             console.log(this.orgName);
@@ -97,11 +105,13 @@ export default {
                         orgRole : newUser.orgRole,
                     },
                 }
-            Accounts.createUser(user, (error) => {
+                Meteor.call('createUserAccount',user, (error) =>{
                     if(error){
-                        console.error(error.reason);
+                        alert(error.reason);
+                    }else{
+                        alert('User registered succefully');
                     }
-                });
+                })
             this.showForm = false;
         },
         handleUserEdit(userId, newUser){
@@ -120,13 +130,23 @@ export default {
             this.showForm = false;
         },
         deleteUser(user){
-            if(confirm('Are you sure you want to delete this user?')){
-                Meteor.call('users.delete', user._id, (error)=>{
+            if((user._id === Meteor.userId()) || (user.profile.orgRole === 'Keela Admin')){
+                Meteor.call('checkAdminRole',(error,result) =>{
                     if(error){
-                        console.error('Error deleting contact:', error);
-                        alert('Error deleting contact: ' + error.message);
+                        alert('Error Checking permission : ', error.message);
+                    }else if(result){
+                        alert("Permission Denied");
                     }
-                });
+                })
+            }else{
+                if(confirm('Are you sure you want to delete this user?')){
+                    Meteor.call('users.delete', user._id, (error)=>{
+                        if(error){
+                            console.error('Error deleting contact:', error);
+                            alert('Error deleting contact: ' + error.message);
+                        }
+                    });
+                }
             }
         },
        backToOrganization(){

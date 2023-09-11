@@ -5,8 +5,8 @@ import { Roles } from 'meteor/alanning:roles';
 
 Meteor.methods ({
   'contacts.insert'(newContact){
-    if(!this.userId) {
-        throw new Meteor.Error('not-authorized','You are not authorizded to add contacts.');
+    if((!this.userId) || (!Roles.userIsInRole(this.userId, ['Keela Admin','Admin']))) {
+      throw new Meteor.Error('not-authorized','You are not authorized to add contact.');
     }
     contacts.insert({
       ...newContact, 
@@ -15,17 +15,16 @@ Meteor.methods ({
     })
   },
   'contacts.delete'(contactId){
-    if(!this.userId) {
-        throw new Meteor.Error('not-authorized','You are not authorizded to delete contacts.');
+    if((!this.userId) || (!Roles.userIsInRole(this.userId, ['Keela Admin','Admin']))) {
+      throw new Meteor.Error('not-authorized','You are not authorized to delete contact.');
     }
     contacts.remove({_id:contactId, userId:this.userId});
   },
   'contacts.edit'(contactId, updatedContact) {
-    if (this.userId) {
-      contacts.update({ _id: contactId, userId: this.userId }, { $set: updatedContact });
-    } else {
-      throw new Meteor.Error('not-authorized', 'You are not authorized to edit this contact.');
-    }
+    if((!this.userId) || (!Roles.userIsInRole(this.userId, ['Keela Admin','Admin']))) {
+      throw new Meteor.Error('not-authorized','You are not authorized to edit contact.');
+    } 
+    contacts.update({ _id: contactId, userId: this.userId }, { $set: updatedContact });
   },
 
 });

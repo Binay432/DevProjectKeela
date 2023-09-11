@@ -3,7 +3,7 @@
     <div class = "table-grid">
             <div class="organization-info-box">
                 <div class ="left-section"><strong> {{ organizations.length }} Organizations</strong></div>
-                <div class ="middle-section">middle</div>
+                <div class ="middle-section"></div>
                 <div class="right-section">
                     <button type="button" class="add-button" :disabled="isAddButtonDisabled" @click="addOrganization">Add Organization</button>
                     <organizationForm v-if="showForm" :show-Form="showForm" :editingOrganization="editingOrganization" @organization-added="handleOrganizationAdd" @organization-edit="handleOrganizationEdit" @form-closed = "formClosed"/>   

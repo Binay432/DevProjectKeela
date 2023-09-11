@@ -3,7 +3,7 @@
     <div class = "table-grid">
             <div class="contacts-info-box">
                 <div class ="left-section"> <strong>{{ specificOrganization.length }} Tags</strong></div>
-                <div class ="middle-section">middle</div>
+                <div class ="middle-section"></div>
                 <div class="right-section">
                     <button type="button" class="add-button" @click="addTag">Add Tags</button>
                     <tagForm v-if="showForm" :show-Form="showForm" :editing-Tag ="editingTag" @tag-added="handleTagAdded" @tag-edit="handleTagEdit" @form-closed="formClosed"/>

@@ -32,7 +32,7 @@ export default {
             firstName:"",
             lastName:"",
             email:"",
-            orgName:"",
+            orgName:[],
             orgRole:"",
             password:"",
             confirmPassword:"",  
@@ -45,9 +45,8 @@ export default {
         Meteor.call('roles.getRoles', (error, result) => {
             if (!error) {
                 this.roles = result.map((role) => role._id);;
-                console.log(this.roles);
             } else {
-                console.error(error.reason);
+                alert(error.reason);
             }
         });
     },
@@ -83,8 +82,12 @@ export default {
                     profile:{
                         firstName : this.firstName,
                         lastName : this.lastName,
-                        orgName : this.orgName,
-                        orgRole : this.orgRole,
+                        organization:[
+                            {
+                                orgName : this.orgName,
+                                orgRole : this.orgRole,
+                            }
+                        ]
                     },
                 }
                 const newOrganization = {
@@ -96,14 +99,18 @@ export default {
                         console.error(error.reason);
                     }
                     else{
-                        Meteor.call('organizations.insert', newOrganization);
-                        Meteor.call('assignRole', Meteor.userId(), this.orgRole, (error) => {
-                            if (error) {
-                            console.error(error.reason);
-                            } else {
-                            // Redirect or perform any other actions after successful signup
-                                this.clearInputField();
-                                this.$router.push('/'); //navigate to login page 
+                        Meteor.call('organizations.insert', newOrganization, (error, organizationId) =>{
+                            if(error){
+                                alert(error.message);
+                            }else{
+                                Meteor.call('assignRole', Meteor.userId(), this.orgRole, organizationId,(error) => {
+                                    if (error) {
+                                        alert(error.reason);
+                                    } else {
+                                        this.clearInputField();
+                                        this.$router.push('/'); //navigate to login page 
+                                    }
+                                });
                             }
                         });
                     }

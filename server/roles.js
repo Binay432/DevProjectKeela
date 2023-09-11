@@ -17,14 +17,14 @@ Meteor.methods({
   'getUserRole'(){
     return Roles.getRolesForUser(this.userId);
   },
-  'assignRole'(userId, roleName) {
+  'assignRole'(userId, roleName, organizationId) {
       // Check if the user already has a role
       const userRoles = Roles.getRolesForUser(userId);
       if (userRoles && userRoles.length > 0) {
         throw new Meteor.Error('user-already-has-role', 'User already has a role assigned.');
       }    // Assign the specified role to the user
       else if (userId && roleName) {
-        Roles.addUsersToRoles(userId, roleName);
+        Roles.addUsersToRoles(userId, roleName, organizationId);
       }
     },
     'checkKeelaAdminRole'(){

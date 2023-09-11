@@ -7,11 +7,12 @@ Meteor.methods ({
         if(!this.userId){
             throw new Meteor.Error('not-authorized','You are not authorzed to add organization.');
         }
-        organizations.insert({
+        const organizationId = organizations.insert({
             ...newOrganization,
             createdAt: new Date(),
             userId: this.userId,
         })
+        return organizationId;
     },
     'organizations.delete'(organizationId){
         if(!this.userId){

@@ -14,6 +14,9 @@ Meteor.methods({
     // Fetch roles 
     return Roles.getAllRoles().fetch();
   },
+  'getUserRole'(){
+    return Roles.getRolesForUser(this.userId);
+  },
   'assignRole'(userId, roleName) {
       // Check if the user already has a role
       const userRoles = Roles.getRolesForUser(userId);

@@ -5,7 +5,7 @@
                 <div class ="left-section"><strong> {{ organizations.length }} Organizations</strong></div>
                 <div class ="middle-section">middle</div>
                 <div class="right-section">
-                    <button type="button" class="add-button" @click="addOrganization">Add Organization</button>
+                    <button type="button" class="add-button" :disabled="isAddButtonDisabled" @click="addOrganization">Add Organization</button>
                     <organizationForm v-if="showForm" :show-Form="showForm" :editingOrganization="editingOrganization" @organization-added="handleOrganizationAdd" @organization-edit="handleOrganizationEdit" @form-closed = "formClosed"/>   
                 </div> 
             </div>
@@ -58,6 +58,7 @@ export default {
         return {
             showForm: false, 
             editingOrganization: null, 
+            isAddButtonDisabled : false,
         }
     },
     meteor: {
@@ -73,8 +74,19 @@ export default {
             this.organizations = organizations.find().fetch();
         },
         addOrganization(){
-            this.editingOrganization = null; 
-            this.showForm = true;
+            Meteor.call('checkAdminRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        alert("Permission Denied");   
+                    }else{
+                        this.isAddButtonDisabled = false;
+                        this.editingOrganization = null; 
+                        this.showForm = true;
+                    }
+                }
+            });    
         },
         editOrganization(organization){
             this.editingOrganization = {...organization};
@@ -96,14 +108,24 @@ export default {
             this.showForm = false;
         },
         deleteOrganization(organization){
-            if(confirm('Are you sure you want to delete this organization?')){
-                Meteor.call('organizations.delete', organization._id, (error)=>{
-                    if(error){
-                        console.error('Error updating organization:', error);
-                        alert('Error editing contact: ' + error.message);
+            Meteor.call('checkAdminRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        alert("Permission Denied");   
+                    }else{
+                        if(confirm('Are you sure you want to delete this organization?')){
+                            Meteor.call('organizations.delete', organization._id, (error)=>{
+                                if(error){
+                                    console.error('Error updating organization:', error);
+                                    alert('Error editing contact: ' + error.message);
+                                }
+                            })
+                        }
                     }
-                })
-            }
+                }
+            });    
         },
         formClosed(message){
             this.showForm = false;

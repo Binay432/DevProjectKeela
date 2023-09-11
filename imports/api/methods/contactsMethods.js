@@ -5,7 +5,6 @@ import { Roles } from 'meteor/alanning:roles';
 
 Meteor.methods ({
   'contacts.insert'(newContact){
-    console.log(this.userId);
     if((!this.userId) || (!Roles.userIsInRole(this.userId, ['Keela Admin','Admin']))) {
       throw new Meteor.Error('not-authorized','You are not authorized to add contact.');
     }

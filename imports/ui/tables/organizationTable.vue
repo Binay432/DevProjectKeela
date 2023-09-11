@@ -118,8 +118,7 @@ export default {
                         if(confirm('Are you sure you want to delete this organization?')){
                             Meteor.call('organizations.delete', organization._id, (error)=>{
                                 if(error){
-                                    console.error('Error updating organization:', error);
-                                    alert('Error editing contact: ' + error.message);
+                                    alert('Error deleting organization: ' + error.message);
                                 }
                             })
                         }

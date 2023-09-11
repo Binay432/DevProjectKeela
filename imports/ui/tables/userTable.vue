@@ -79,9 +79,19 @@ export default {
             this.editingUser = null;
         },
         editUser(user){
-            this.editingUser = {...user};
-            console.log("user to be edited"+ {...user});
-            this.showForm = true;
+            if((user._id === Meteor.userId()) || (user.profile.orgRole === 'Keela Admin')){
+                Meteor.call('checkAdminRole',(error,result) =>{
+                    if(error){
+                        alert('Error Checking permission : ', error.message);
+                    }else if(result){
+                        alert("Permission Denied");
+                    }
+                })
+            }else{
+                this.editingUser = {...user};
+                this.showForm = true;
+            }
+            
         },
         handleInviteContact(newUser){
             console.log(this.orgName);
@@ -126,26 +136,18 @@ export default {
                     if(error){
                         alert('Error Checking permission : ', error.message);
                     }else if(result){
-                        alert("Permission Denied")
+                        alert("Permission Denied");
                     }
-                        // if(confirm('Are you sure you want to delete this user?')){
-                        //     Meteor.call('users.delete', user._id, (error)=>{
-                        //         if(error){
-                        //             console.error('Error deleting contact:', error);
-                        //             alert('Error deleting contact: ' + error.message);
-                        //         }
-                        //     });
-                        // }
-                    })
-                }else{
-                    if(confirm('Are you sure you want to delete this user?')){
-                        Meteor.call('users.delete', user._id, (error)=>{
-                            if(error){
-                                console.error('Error deleting contact:', error);
-                                alert('Error deleting contact: ' + error.message);
-                            }
-                        });
-                    }
+                })
+            }else{
+                if(confirm('Are you sure you want to delete this user?')){
+                    Meteor.call('users.delete', user._id, (error)=>{
+                        if(error){
+                            console.error('Error deleting contact:', error);
+                            alert('Error deleting contact: ' + error.message);
+                        }
+                    });
+                }
             }
         },
        backToOrganization(){

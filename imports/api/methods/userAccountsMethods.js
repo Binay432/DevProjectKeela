@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
+import { Roles } from 'meteor/alanning:roles';
 
 Meteor.methods({
     'createUserAccount'(user){
@@ -23,6 +24,8 @@ Meteor.methods({
         if(!this.userId){
             throw new Meteor.Error('not-authorized','You are not authorzed to delete organization.');
         }
+        const userRoles = Roles.getRolesForUser(userId);
+        Roles.removeUsersFromRoles(userId, userRoles);
         Meteor.users.remove(userId);
     }
 })

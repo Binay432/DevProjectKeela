@@ -57,6 +57,7 @@ export default {
             showForm: false, 
             editingOrganization: null, 
             isAddButtonDisabled : false,
+            CheckAdminRole: '',
         }
     },
     meteor: {
@@ -71,10 +72,8 @@ export default {
             return Meteor.users.find({}).fetch();
         },
     },
+    
     methods:{
-        onMounted(){
-            this.organizations = organizations.find().fetch();
-        },
         addOrganization(){
             Meteor.call('checkAdminRole',(error,result) =>{
                 if(error){
@@ -91,8 +90,32 @@ export default {
             });    
         },
         editOrganization(organization){
-            this.editingOrganization = {...organization};
-            this.showForm = true;
+            Meteor.call('checkKeelaAdminRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        this.editingOrganization = {...organization};
+                        this.showForm = true;  
+                    }
+                }
+            }); 
+            Meteor.call('checkAdminRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        if(Meteor.user().profile.orgName === organization.organizationName){
+                            this.editingOrganization = {...organization};
+                            this.showForm = true;
+                        }
+                        else {
+                            alert("permission denied: You're not in this organization");
+                        }
+                    }
+                }
+            })
+            
         },
         handleOrganizationAdd(newOrganization){
             Meteor.call('organizations.insert',newOrganization);
@@ -132,12 +155,33 @@ export default {
             this.showForm = false;
         },
         navigateToUserTable(orgName){
-            this.$router.push({ name:'userTable', params:{orgName} });
+            Meteor.call('checkKeelaAdminRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        this.$router.push({ name:'userTable', params:{orgName}});
+                    }
+                }
+            }); 
+            Meteor.call('checkAdminRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        if(Meteor.user().profile.orgName === orgName){
+                            this.$router.push({ name:'userTable', params:{orgName}});
+                        }
+                        else {
+                            alert("permission denied: You're not in this organization");
+                        }
+                    }
+                }
+            })
         },
         usersInSpecificOrganization(orgName){
             return (this.users.filter(user => user.profile.orgName === orgName)).length;
         },
-        
     }
 }
 </script>

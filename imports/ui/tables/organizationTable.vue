@@ -23,7 +23,7 @@
                     <tr class = "org-row" v-for="organization in organizations" :key="organization._id">
                         <td @click="navigateToUserTable(organization.organizationName)">{{ organization.organizationName }}</td>
                         <td @click="navigateToUserTable(organization.organizationName)">{{ organization.organizationEmail}}</td>
-                        <td @click="navigateToUserTable(organization.organizationName)">{{  }}</td>
+                        <td @click="navigateToUserTable(organization.organizationName)"> {{ usersInSpecificOrganization(organization.organizationName)}}</td>
                         <td>
                             <button class="edit-organization" @click="editOrganization(organization)">Edit</button>
                             <button class="delete-organization" @click="deleteOrganization(organization)">Delete</button>
@@ -38,7 +38,6 @@
 
 <script>
 import home from '../Home/home.vue';
-import { ref, onMounted } from 'vue';
 import organizationForm from '../forms/organizationForm.vue'
 import { organizations } from '../../db/organizationsCollection'
 import { Meteor } from 'meteor/meteor';
@@ -53,8 +52,7 @@ export default {
         organizationForm,
         userTable,
     },
-    data(){
-       
+    data(){    
         return {
             showForm: false, 
             editingOrganization: null, 
@@ -64,9 +62,13 @@ export default {
     meteor: {
         $subscribe: {
             organizations: [],
+            users: [],
         },
         organizations() {
             return organizations.find({}).fetch();
+        },
+        users() {
+            return Meteor.users.find({}).fetch();
         },
     },
     methods:{
@@ -131,7 +133,10 @@ export default {
         },
         navigateToUserTable(orgName){
             this.$router.push({ name:'userTable', params:{orgName} });
-        }
+        },
+        usersInSpecificOrganization(orgName){
+            return (this.users.filter(user => user.profile.orgName === orgName)).length;
+        },
         
     }
 }

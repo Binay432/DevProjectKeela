@@ -3,7 +3,7 @@
     <div class = "table-grid">
             <div class="organization-info-box">
                 <div class ="left-section"><strong> {{ organizations.length }} Organizations</strong></div>
-                <div class ="middle-section">middle</div>
+                <div class ="middle-section"></div>
                 <div class="right-section">
                     <button type="button" class="add-button" :disabled="isAddButtonDisabled" @click="addOrganization">Add Organization</button>
                     <organizationForm v-if="showForm" :show-Form="showForm" :editingOrganization="editingOrganization" @organization-added="handleOrganizationAdd" @organization-edit="handleOrganizationEdit" @form-closed = "formClosed"/>   
@@ -23,7 +23,7 @@
                     <tr class = "org-row" v-for="organization in organizations" :key="organization._id">
                         <td @click="navigateToUserTable(organization.organizationName)">{{ organization.organizationName }}</td>
                         <td @click="navigateToUserTable(organization.organizationName)">{{ organization.organizationEmail}}</td>
-                        <td @click="navigateToUserTable(organization.organizationName)">{{  }}</td>
+                        <td @click="navigateToUserTable(organization.organizationName)"> {{ usersInSpecificOrganization(organization.organizationName)}}</td>
                         <td>
                             <button class="edit-organization" @click="editOrganization(organization)">Edit</button>
                             <button class="delete-organization" @click="deleteOrganization(organization)">Delete</button>
@@ -38,7 +38,6 @@
 
 <script>
 import home from '../Home/home.vue';
-import { ref, onMounted } from 'vue';
 import organizationForm from '../forms/organizationForm.vue'
 import { organizations } from '../../db/organizationsCollection'
 import { Meteor } from 'meteor/meteor';
@@ -53,26 +52,28 @@ export default {
         organizationForm,
         userTable,
     },
-    data(){
-       
+    data(){    
         return {
             showForm: false, 
             editingOrganization: null, 
             isAddButtonDisabled : false,
+            CheckAdminRole: '',
         }
     },
     meteor: {
         $subscribe: {
             organizations: [],
+            users: [],
         },
         organizations() {
             return organizations.find({}).fetch();
         },
-    },
-    methods:{
-        onMounted(){
-            this.organizations = organizations.find().fetch();
+        users() {
+            return Meteor.users.find({}).fetch();
         },
+    },
+    
+    methods:{
         addOrganization(){
             Meteor.call('checkAdminRole',(error,result) =>{
                 if(error){
@@ -89,8 +90,32 @@ export default {
             });    
         },
         editOrganization(organization){
-            this.editingOrganization = {...organization};
-            this.showForm = true;
+            Meteor.call('checkKeelaAdminRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        this.editingOrganization = {...organization};
+                        this.showForm = true;  
+                    }
+                }
+            }); 
+            Meteor.call('checkAdminRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        if(Meteor.user().profile.orgName === organization.organizationName){
+                            this.editingOrganization = {...organization};
+                            this.showForm = true;
+                        }
+                        else {
+                            alert("permission denied: You're not in this organization");
+                        }
+                    }
+                }
+            })
+            
         },
         handleOrganizationAdd(newOrganization){
             Meteor.call('organizations.insert',newOrganization);
@@ -130,9 +155,33 @@ export default {
             this.showForm = false;
         },
         navigateToUserTable(orgName){
-            this.$router.push({ name:'userTable', params:{orgName} });
-        }
-        
+            Meteor.call('checkKeelaAdminRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        this.$router.push({ name:'userTable', params:{orgName}});
+                    }
+                }
+            }); 
+            Meteor.call('checkAdminRole',(error,result) =>{
+                if(error){
+                    alert('Error Checking permission : ', error.message);
+                }else{
+                    if(result){
+                        if(Meteor.user().profile.orgName === orgName){
+                            this.$router.push({ name:'userTable', params:{orgName}});
+                        }
+                        else {
+                            alert("permission denied: You're not in this organization");
+                        }
+                    }
+                }
+            })
+        },
+        usersInSpecificOrganization(orgName){
+            return (this.users.filter(user => user.profile.orgName === orgName)).length;
+        },
     }
 }
 </script>

@@ -3,7 +3,7 @@
     <div class = "table-grid">
             <div class="contacts-info-box">
                 <div class ="left-section"><strong>{{ specificOrganization.length }} Contacts</strong></div>
-                <div class ="middle-section">middle</div>
+                <div class ="middle-section"></div>
                 <div class="right-section">
                     <button type="button" class="add-button" @click="addContact" :disabled="isAddButtonDisabled">Add Contact</button>
                     <!-- editingContat ="editingContact" means just a string of editingContact is props while :editingContat ="editingContact" means contents of editingContact is props -->

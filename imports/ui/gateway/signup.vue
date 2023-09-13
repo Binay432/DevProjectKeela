@@ -11,6 +11,7 @@
                 <select class="dropdown" id="OrgRole" v-model="orgRole" placeholder="Organization Role">
                     <option v-for="role in roles" :key="role">{{ role }}</option>
                 </select>
+                <p v-if ="RoleError" class="error-message">{{ RoleError }}</p>  
                 <input v-model="password" type="password" placeholder ="Enter Password" required>
                 <input v-model="confirmPassword" type="password" placeholder ="Confirm Password" required>
                 <p v-if ="error" class="error-message">{{ error }}</p>    
@@ -37,6 +38,7 @@ export default {
             password:"",
             confirmPassword:"",  
             error:"", 
+            RoleError:"",
             roles: [],  
         };
     },  
@@ -57,6 +59,11 @@ export default {
                 this.error = "Password should be same";
             }
         },
+        checkRoleVerification(orgRole, orgName){
+            if (orgRole === 'Coordinator' && orgName !==''){
+                this.RoleError = "Coordinator cannot create Organization ! Contact Admin for invitation !";
+            }
+        },
         clearInputField(){
             this.firstName = "";
             this.lastName = "";
@@ -75,7 +82,8 @@ export default {
             const password = this.password;
             const confirmPassword = this.confirmPassword;
             this.checkPasswordValidation(password, confirmPassword);
-            if (this.error === ""){
+            this.checkRoleVerification(orgRole, orgName);
+            if (this.error === "" && this.RoleError === ""){
                 const user = {
                     email : this.email,
                     password : this.password,
@@ -93,13 +101,13 @@ export default {
                 };
                 Accounts.createUser(user, (error) => {
                     if(error){
-                        console.error(error.reason);
+                        alert(error.reason);
                     }
                     else{
                         Meteor.call('organizations.insert', newOrganization);
                         Meteor.call('assignRole', Meteor.userId(), this.orgRole, (error) => {
                             if (error) {
-                            console.error(error.reason);
+                                alert(error.reason);
                             } else {
                             // Redirect or perform any other actions after successful signup
                                 this.clearInputField();

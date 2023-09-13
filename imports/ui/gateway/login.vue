@@ -24,7 +24,7 @@
         logIn(){
             Meteor.loginWithPassword(this.email,this.password, (error)=>{
                 if(error){
-                    console.error(error.reason);
+                    alert(error.reason);
                 }
                 else{
                     this.$router.push('/home');

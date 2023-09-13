@@ -133,11 +133,25 @@ export default {
             if((user._id === Meteor.userId()) || (user.profile.orgRole === 'Keela Admin')){
                 Meteor.call('checkAdminRole',(error,result) =>{
                     if(error){
-                        alert('Error Checking permission : ', error.message);
+                        alert('Error Checking permission : '+  error.message);
                     }else if(result){
                         alert("Permission Denied");
                     }
-                })
+                });
+                Meteor.call('checkKeelaAdminRole',(error,result) =>{
+                    if(error){
+                        alert('Error Checking permission : '+  error.message);
+                    }else if(result){
+                        if(confirm('Are you sure you want to delete this user?')){
+                            Meteor.call('users.delete', user._id, (error)=>{
+                                if(error){
+                                    console.error('Error deleting contact:', error);
+                                    alert('Error deleting contact: ' + error.message);
+                                }
+                            });
+                        }
+                    }
+                });
             }else{
                 if(confirm('Are you sure you want to delete this user?')){
                     Meteor.call('users.delete', user._id, (error)=>{

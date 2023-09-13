@@ -5,7 +5,7 @@
                 <div class ="left-section"><strong>{{ specificOrganization.length }} Contacts</strong></div>
                 <div class ="middle-section"></div>
                 <div class="right-section">
-                    <button type="button" class="add-button" @click="addContact" :disabled="isAddButtonDisabled">Add Contact</button>
+                    <button v-if="checkPermission" type="button" class="add-button" @click="addContact" :disabled="isAddButtonDisabled">Add Contact</button>
                     <!-- editingContat ="editingContact" means just a string of editingContact is props while :editingContat ="editingContact" means contents of editingContact is props -->
                     <contactForm v-if="showForm" :show-Form="showForm" :editingContact ="editingContact" @contact-added="handleContactAdded" @form-closed="formClosed" @contact-edit="handleContactEdit"/>   
                 </div>
@@ -28,8 +28,8 @@
                         <td>{{ contact.contactTag._value }}</td>
                         <td>{{ contact.contactNumber }}</td>
                         <td>
-                            <button class="edit-contact" @click="editContact(contact)">Edit</button>
-                            <button class="delete-contact" @click="deleteContact(contact)">Delete</button>
+                            <button v-if="checkPermission" class="edit-contact" @click="editContact(contact)">Edit</button>
+                            <button v-if="checkPermission" class="delete-contact" @click="deleteContact(contact)">Delete</button>
                         </td>
                     </tr>
                 </tbody>    
@@ -72,6 +72,14 @@ export default{
             const currentOrg = currentUser.profile.orgName;
             return this.contacts.filter(contact => contact.orgName === currentOrg);
         },
+        checkPermission(){
+            const userRole = Meteor.user().profile.orgRole;
+            if(userRole === 'Coordinator'){
+                return false;
+            }else{
+                return true;
+            }
+        }
     },
     methods:{
         onMounted(){

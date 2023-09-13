@@ -22,7 +22,7 @@
             </div>
         </router-link>
 
-        <div @click="checkPermissionAndNavigate">
+        <div v-if="checkPermission" @click="checkPermissionAndNavigate">
             <div class="keela-features" >
                 <div>
                     <img class="features-icon" src="organization.png"> 
@@ -32,7 +32,7 @@
                 </div>  
             </div>
         </div>
-
+        <div v-else></div>
         <button class="logout-button" @click="logout">Log Out</button>
     </div>
 </template>
@@ -41,6 +41,18 @@
 import { Meteor } from 'meteor/meteor';
 export default {
     name:"sidebar",
+    computed:{
+        checkPermission(){
+            const userRole = Meteor.user().profile.orgRole;
+            if(userRole === "Coordinator"){
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+      
+    },
     methods:{
         logout(){
             Meteor.logout((error) => {

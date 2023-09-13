@@ -5,7 +5,7 @@
                 <div class ="left-section"><strong> {{ organizations.length }} Organizations</strong></div>
                 <div class ="middle-section"></div>
                 <div class="right-section">
-                    <button type="button" class="add-button" :disabled="isAddButtonDisabled" @click="addOrganization">Add Organization</button>
+                    <button v-if="checkPermission" type="button" class="add-button" :disabled="isAddButtonDisabled" @click="addOrganization">Add Organization</button>
                     <organizationForm v-if="showForm" :show-Form="showForm" :editingOrganization="editingOrganization" @organization-added="handleOrganizationAdd" @organization-edit="handleOrganizationEdit" @form-closed = "formClosed"/>   
                 </div> 
             </div>
@@ -58,6 +58,16 @@ export default {
             editingOrganization: null, 
             isAddButtonDisabled : false,
             CheckAdminRole: '',
+        }
+    },
+    computed:{
+        checkPermission(){
+            const userRole = Meteor.user().profile.orgRole;
+            if(userRole === 'Admin'){
+                return false;
+            }else{
+                return true;
+            }
         }
     },
     meteor: {

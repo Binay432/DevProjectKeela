@@ -7,10 +7,8 @@
           <h1> {{ organizationName }} </h1>
         </div>
         <div class="rightBox">
-            <select class="org-dropdown" id="organization" v-model="selectedOption">
-                <option value="user" selected>{{ userName }}</option>
-            </select>
-        </div>
+           <strong>{{ userName }}</strong> 
+        </div> 
     </div>
 </template>
 
@@ -20,7 +18,7 @@ export default {
     name : 'headerSection',
     data(){ 
         return {
-            selectedOption:'',
+            selectedOption:'ABS',
         };
     },
     computed:{
@@ -31,7 +29,7 @@ export default {
         userName(){
             const user = Meteor.user();
             return user ? user.profile.firstName+ user.profile.lastName : '' ;
-        }
+        },
     },
     
 };
@@ -79,7 +77,7 @@ export default {
         margin-right:5px;
     }
     .org-dropdown{
-        width:150px;
+        width:auto;
         height:35px;
         align-self:end;
         border:solid;

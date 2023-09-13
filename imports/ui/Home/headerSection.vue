@@ -28,7 +28,7 @@ export default {
         },
         userName(){
             const user = Meteor.user();
-            return user ? user.profile.firstName+ user.profile.lastName : '' ;
+            return user ? user.profile.firstName+" "+ user.profile.lastName : '' ;
         },
     },
     

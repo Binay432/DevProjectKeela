@@ -16,15 +16,24 @@
 import { Meteor } from 'meteor/meteor';
 export default {
     name : 'headerSection',
-    data(){ 
-        return {
-            selectedOption:'ABS',
-        };
+    data(){
+        return{
+            orgName:'',
+        }
     },
     computed:{
         organizationName() {
             const user = Meteor.user();
-            return user ? user.profile.orgName : '';
+            const userOrgId = user.profile.orgId;
+            Meteor.call('getOrganizationNameById', userOrgId, (error, result) => {
+                if(error){
+                    alert(error.reason);
+                }else{
+                    this.orgName = result;
+                }
+            })
+            console.log(this.orgName);
+            return this.orgName;
         },
         userName(){
             const user = Meteor.user();

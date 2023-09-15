@@ -3,7 +3,7 @@
         <router-link to ="/contactTable">
             <div class="keela-features">
                 <div>
-                    <img class="features-icon" src="contactsIcon.png"> 
+                    <img class="features-icon" src="/contactsIcon.png"> 
                 </div>
                 <div>
                     <h1 class="features-text">Contacts</h1>
@@ -14,7 +14,7 @@
         <router-link to="/tags">
             <div class="keela-features">
                 <div>
-                    <img class="features-icon" src="tags.png"> 
+                    <img class="features-icon" src="/tags.png"> 
                 </div>
                 <div>
                     <h1 class="features-text">Tags</h1>
@@ -25,7 +25,7 @@
         <div v-if="checkPermission" @click="checkPermissionAndNavigate">
             <div class="keela-features" >
                 <div>
-                    <img class="features-icon" src="organization.png"> 
+                    <img class="features-icon" src="/organization.png"> 
                 </div>
                 <div>
                     <h1 class="features-text">Organization</h1>

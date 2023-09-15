@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <div class="leftBox">
-            <img class="keelaLogo" src="keela-logo-2.png" alt="keela image">
+            <img class="keelaLogo" src="/keela-logo-2.png" alt="keela image">
         </div>
         <div class="middleBox">
           <h1 id="orgName"> {{ organizationName }} </h1>

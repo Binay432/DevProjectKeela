@@ -21,9 +21,9 @@
                 </thead>
                 <tbody>
                     <tr class = "org-row" v-for="organization in organizations" :key="organization._id">
-                        <td @click="navigateToUserTable(organization.organizationName)">{{ organization.organizationName }}</td>
-                        <td @click="navigateToUserTable(organization.organizationName)">{{ organization.organizationEmail}}</td>
-                        <td @click="navigateToUserTable(organization.organizationName)"> {{ usersInSpecificOrganization(organization.organizationName)}}</td>
+                        <td @click="navigateToUserTable(organization._id)">{{ organization.organizationName }}</td>
+                        <td @click="navigateToUserTable(organization._id)">{{ organization.organizationEmail}}</td>
+                        <td @click="navigateToUserTable(organization._id)"> {{ usersInSpecificOrganization(organization.organizationName)}}</td>
                         <td>
                             <button class="edit-button" @click="editOrganization(organization)">Edit</button>
                             <button class="delete-button" @click="deleteOrganization(organization)">Delete</button>
@@ -164,13 +164,13 @@ export default {
         formClosed(message){
             this.showForm = false;
         },
-        navigateToUserTable(orgName){
+        navigateToUserTable(orgId){
             Meteor.call('checkKeelaAdminRole',(error,result) =>{
                 if(error){
                     alert('Error Checking permission : ', error.message);
                 }else{
                     if(result){
-                        this.$router.push({ name:'userTable', params:{orgName}});
+                        this.$router.push({ name:'userTable', params:{orgId}});
                     }
                 }
             }); 
@@ -179,8 +179,8 @@ export default {
                     alert('Error Checking permission : ', error.message);
                 }else{
                     if(result){
-                        if(Meteor.user().profile.orgName === orgName){
-                            this.$router.push({ name:'userTable', params:{orgName}});
+                        if(Meteor.user().profile.orgId === orgId){
+                            this.$router.push({ name:'userTable', params:{orgId}});
                         }
                         else {
                             alert("permission denied: You're not in this organization");

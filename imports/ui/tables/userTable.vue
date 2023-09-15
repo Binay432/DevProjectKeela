@@ -4,7 +4,7 @@
         <button class ="back-button" @click="backToOrganization">Back</button>
         <div class="table-info-box">
             <div class ="left-section"><strong>{{ specificOrganization.length }} Users</strong></div>
-            <div class ="middle-section"><strong>Organization:</strong> {{ orgName }}</div>
+            <div class ="middle-section"><strong>Organization:</strong> {{ orgId }}</div>
             <div class="right-section">
                 <button type="button" class="add-button" @click="inviteUser" :disabled="isInviteButtonDisabled">Invite User</button>
                 <inviteForm v-if="showForm" :show-Form="showForm" :editingUser ="editingUser" @invite-user="handleInviteContact" @user-edit ="handleUserEdit" @form-closed = "formClosed"/>   
@@ -50,11 +50,11 @@ export default {
         inviteForm,
     },
     props: {
-        orgName: String,
+        orgId: String,
     },
     computed:{
         specificOrganization(){
-            return this.users.filter(user => user.profile.orgName === this.orgName);
+            return this.users.filter(user => user.profile.orgId === this.orgId);
         }, 
     },
     data(){

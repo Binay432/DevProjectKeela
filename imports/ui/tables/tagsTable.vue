@@ -63,15 +63,15 @@ export default{
     computed:{
         specificOrganization(){
             const currentUser = Meteor.user();
-            const currentOrg = currentUser.profile.orgName;
-            return this.tags.filter(tag => tag.orgName === currentOrg);
+            const currentOrg = currentUser.profile.orgId;
+            return this.tags.filter(tag => tag.orgId === currentOrg);
         }, 
     },
     methods:{
         onMounted(){
             this.tags = tags.find().fetch();
         },
-        addTag(orgName){
+        addTag(){
             this.editingTag = null;
             this.showForm = true;
         },

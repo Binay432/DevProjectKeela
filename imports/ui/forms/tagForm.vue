@@ -32,10 +32,10 @@ import {ref} from 'vue';
 
             const addTag = () => {
                 const currentUser = Meteor.user();
-                const currentOrg = currentUser.profile.orgName;
+                const currentOrg = currentUser.profile.orgId;
                 const newTag = {
                     tagName : tagName.value.trim(),
-                    orgName : currentOrg,
+                    orgId : currentOrg,
                 };
                 //Tags.insert(newTag);
                 if(props.editingTag){

@@ -18,7 +18,7 @@ Meteor.methods ({
         if(!this.userId){
             throw new Meteor.Error('not-authorized','You are not authorzed to delete organization.');
         }
-        organizations.remove({_id:organizationId, userId:this.userId});
+        organizations.remove({_id:organizationId});
     },
     'organizations.edit'(organizationId, updatedOrganization){
         if (this.userId) {

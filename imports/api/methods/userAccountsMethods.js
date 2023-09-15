@@ -27,5 +27,13 @@ Meteor.methods({
         const userRoles = Roles.getRolesForUser(userId);
         Roles.removeUsersFromRoles(userId, userRoles);
         Meteor.users.remove(userId);
-    }
+    },
+    'users.insertOrgId'(userId, orgId) {
+        if (!this.userId) {
+          throw new Meteor.Error('not-authorized', 'You are not authorized to add an organization ID.');
+        }
+        Meteor.users.update(userId, {
+          $set: { 'profile.orgId': orgId },
+        });
+      },
 })

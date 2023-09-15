@@ -91,6 +91,7 @@ export default {
                     profile:{
                         firstName : this.firstName,
                         lastName : this.lastName,
+                        orgId : '',
                         orgName : this.orgName,
                         orgRole : this.orgRole,
                     },
@@ -104,14 +105,23 @@ export default {
                         alert(error.reason);
                     }
                     else{
-                        Meteor.call('organizations.insert', newOrganization);
+                        Meteor.call('organizations.insert', newOrganization, (error, orgId)=>{
+                            if(error){
+                                alert(error.reason);
+                            }else{
+                                Meteor.call('users.insertOrgId', Meteor.userId(), orgId ,(error) =>{
+                                    if(error){
+                                        alert(error.reason);
+                                    }
+                                })
+                            }
+                        });
                         Meteor.call('assignRole', Meteor.userId(), this.orgRole, (error) => {
                             if (error) {
                                 alert(error.reason);
                             } else {
-                            // Redirect or perform any other actions after successful signup
                                 this.clearInputField();
-                                this.$router.push('/'); //navigate to login page 
+                                this.$router.push('/');
                             }
                         });
                     }

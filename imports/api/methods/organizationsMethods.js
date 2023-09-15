@@ -22,10 +22,18 @@ Meteor.methods ({
     },
     'organizations.edit'(organizationId, updatedOrganization){
         if (this.userId) {
-            organizations.update({ _id: organizationId, userId: this.userId }, { $set: updatedOrganization });
+            organizations.update({ _id: organizationId}, { $set: updatedOrganization });
         } else {
             throw new Meteor.Error('not-authorized', 'You are not authorized to edit this organization.');
         }
-    }
+    },
+    'getOrganizationNameById'(orgId) {
+        const organization = organizations.findOne(orgId);
+        if (organization) {
+          return organization.organizationName;
+        } else {
+          throw new Meteor.Error('organization-not-found', 'Organization not found');
+        }
+      },
 })
 

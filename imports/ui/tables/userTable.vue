@@ -4,7 +4,7 @@
         <button class ="back-button" @click="backToOrganization">Back</button>
         <div class="table-info-box">
             <div class ="left-section"><strong>{{ specificOrganization.length }} Users</strong></div>
-            <div class ="middle-section"><strong>Organization:</strong> {{ orgId }}</div>
+            <div class ="middle-section"><strong>Organization:</strong> {{ orgName}}</div>
             <div class="right-section">
                 <button type="button" class="add-button" @click="inviteUser" :disabled="isInviteButtonDisabled">Invite User</button>
                 <inviteForm v-if="showForm" :show-Form="showForm" :editingUser ="editingUser" @invite-user="handleInviteContact" @user-edit ="handleUserEdit" @form-closed = "formClosed"/>   
@@ -42,7 +42,6 @@ import home from '../Home/home.vue';
 import { Meteor } from 'meteor/meteor';
 import inviteForm from '../forms/inviteForm.vue';
 
-
 export default {
     name:'userTable',
     components:{
@@ -51,6 +50,7 @@ export default {
     },
     props: {
         orgId: String,
+        orgName: String,
     },
     computed:{
         specificOrganization(){

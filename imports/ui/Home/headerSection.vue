@@ -4,10 +4,10 @@
             <img class="keelaLogo" src="keela-logo-2.png" alt="keela image">
         </div>
         <div class="middleBox">
-          <h1> {{ organizationName }} </h1>
+          <h1 id="orgName"> {{ organizationName }} </h1>
         </div>
         <div class="rightBox">
-           <strong>{{ userName }}</strong> 
+           <strong id="userName">User: {{ userName }}</strong> 
         </div> 
     </div>
 </template>
@@ -44,7 +44,7 @@ export default {
         height: 55px;
         border-width: 1px;
         border-radius: 5px;
-        background-color:rgb(196, 195, 195);
+        background-color:rgb(9, 25, 68);
         border:1px solid rgb(166, 165, 165);
         top :0;
         left:0;
@@ -90,5 +90,8 @@ export default {
     }
     .org-dropdown:hover{
         cursor:pointer;
+    }
+    #userName, #orgName{
+        color:white;
     }
 </style>

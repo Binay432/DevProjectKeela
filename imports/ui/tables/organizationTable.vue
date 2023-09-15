@@ -20,10 +20,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class = "org-row" v-for="organization in organizations" :key="organization._id">
-                        <td @click="navigateToUserTable(organization._id)">{{ organization.organizationName }}</td>
-                        <td @click="navigateToUserTable(organization._id)">{{ organization.organizationEmail}}</td>
-                        <td @click="navigateToUserTable(organization._id)"> {{ usersInSpecificOrganization(organization.organizationName)}}</td>
+                    <tr class = "table-row" v-for="organization in organizations" :key="organization._id">
+                        <td @click="navigateToUserTable(organization._id, organization.organizationName)">{{ organization.organizationName }}</td>
+                        <td @click="navigateToUserTable(organization._id, organization.organizationName)">{{ organization.organizationEmail}}</td>
+                        <td @click="navigateToUserTable(organization._id, organization.organizationName)"> {{ usersInSpecificOrganization(organization._id)}}</td>
                         <td>
                             <button class="edit-button" @click="editOrganization(organization)">Edit</button>
                             <button class="delete-button" @click="deleteOrganization(organization)">Delete</button>
@@ -135,7 +135,6 @@ export default {
             if(confirm('Are you sure you want to edit this organization?')){
                 Meteor.call('organizations.edit', organizationId, newOrganization, (error)=>{
                     if(error){
-                        console.error('Error updating organization:', error);
                         alert('Error editing organization: ' + error.message);
                     }
                 });
@@ -164,13 +163,13 @@ export default {
         formClosed(message){
             this.showForm = false;
         },
-        navigateToUserTable(orgId){
+        navigateToUserTable(orgId, orgName){
             Meteor.call('checkKeelaAdminRole',(error,result) =>{
                 if(error){
                     alert('Error Checking permission : ', error.message);
                 }else{
                     if(result){
-                        this.$router.push({ name:'userTable', params:{orgId}});
+                        this.$router.push({ name:'userTable', params:{orgId, orgName}});
                     }
                 }
             }); 
@@ -180,7 +179,7 @@ export default {
                 }else{
                     if(result){
                         if(Meteor.user().profile.orgId === orgId){
-                            this.$router.push({ name:'userTable', params:{orgId}});
+                            this.$router.push({ name:'userTable', params:{orgId, orgName}});
                         }
                         else {
                             alert("permission denied: You're not in this organization");
@@ -189,8 +188,8 @@ export default {
                 }
             })
         },
-        usersInSpecificOrganization(orgName){
-            return (this.users.filter(user => user.profile.orgName === orgName)).length;
+        usersInSpecificOrganization(orgId){
+            return (this.users.filter(user => user.profile.orgId === orgId)).length;
         },
     }
 }

@@ -22,7 +22,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="contact in specificOrganization" :key="contact._id">
+                    <tr  v-for="contact in specificOrganization" :key="contact._id">
                         <td>{{ contact.contactName }}</td>
                         <td>{{ contact.contactEmail }}</td>
                         <td>{{ contact.contactTag._value }}</td>

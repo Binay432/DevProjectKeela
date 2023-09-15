@@ -53,14 +53,14 @@ import { Meteor } from 'meteor/meteor';
 
             const addContact = () => {
                 const currentUser = Meteor.user();
-                const currentOrg = currentUser.profile.orgName;
+                const currentOrg = currentUser.profile.orgId;
                 console.log(currentOrg);
                 const newContact = {
                     contactName : contactName.value.trim(),
                     contactEmail : contactEmail.value.trim(),
                     contactTag : {...selectedTag},
                     contactNumber : contactNumber.value.trim(), 
-                    orgName : currentOrg, 
+                    orgId : currentOrg, 
                 };
                 if (props.editingContact){
                         const contactId = props.editingContact._id;

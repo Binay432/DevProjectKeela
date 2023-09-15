@@ -69,8 +69,8 @@ export default{
     computed:{
         specificOrganization(){
             const currentUser = Meteor.user();
-            const currentOrg = currentUser.profile.orgName;
-            return this.contacts.filter(contact => contact.orgName === currentOrg);
+            const currentOrg = currentUser.profile.orgId;
+            return this.contacts.filter(contact => contact.orgId === currentOrg);
         },
         checkPermission(){
             const userRole = Meteor.user().profile.orgRole;

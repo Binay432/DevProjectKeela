@@ -2,7 +2,7 @@
     <home/>
     <div class = "table-grid">
             <div class="table-info-box">
-                <div class ="left-section"><strong>{{ }} Contacts</strong></div>
+                <div class ="left-section"><strong>{{specificOrganization.length }} Contacts</strong></div>
                 <div class ="middle-section"></div>
                 <div class="right-section">
                     <button v-if="checkPermission" type="button" class="add-button" @click="addContact" :disabled="isAddButtonDisabled">Add Contact</button>

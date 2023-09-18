@@ -1,5 +1,5 @@
 <template>
-    <div v-if ="showForm" class= "contact-form-overlay">
+    <div v-if ="showForm" class= "form-overlay">
         <div class="modal">
             <div class="close-button" @click="closeForm">
                 <img class ="form-close-icon"  src="cross.png">
@@ -12,7 +12,7 @@
                     <option v-for="tag in tags" :key="tag._id" :value="tag.tagName">{{ tag.tagName }}</option>
                 </select>
                 <ul>
-                    <li v-for="tag in selectedTag" :key="tag">{{ tag }}<span class="remove-tag" @click="removeTag(tag)"> x</span> </li>
+                    <li v-for="tag in selectedTag" :key="tag">{{ tag.tagName }}<span class="remove-tag" @click="removeTag(tag)"> x</span> </li>
                 </ul>
                 <input type= "text" v-model ="contactNumber" placeholder = "Number" required>
                 <button type="submit">{{ editingContact ? 'Save' : 'Add' }}</button>
@@ -26,152 +26,90 @@ import {ref} from 'vue';
 import { tags } from '../../db/tagsCollections';
 import { Meteor } from 'meteor/meteor';
 
-    export default {
-        name:"contactForm",
-        props:{
-            showForm:Boolean, // props defined a properties (showForm here) that is expected to recieve from parent components and here its in the boolean form which is used to verify in the above template 
-            editingContact: {
-                type: Object,
-                default: {}
-            },
-        }, 
-        meteor:{
-            $subscribe:{
-                tags:[],
-            },
-            tags(){
-                return tags.find().fetch();
-            },
-        }, 
-        setup (props, context){
-            const contactName = ref (props.editingContact? props.editingContact.contactName: '');
-            const contactEmail = ref (props.editingContact? props.editingContact.contactEmail: '');
-            const contactTag = ref (props.editingContact ? [props.editingContact.contactTag]: []);
-            const contactNumber = ref (props.editingContact ? props.editingContact.contactNumber: '');
-            const selectedTag = ref([]);
-            const orgName = ref([]);
-
-            const addContact = () => {
-                const currentUser = Meteor.user();
-                const currentOrg = currentUser.profile.orgName;
-                console.log(currentOrg);
-                const newContact = {
-                    contactName : contactName.value.trim(),
-                    contactEmail : contactEmail.value.trim(),
-                    contactTag : {...selectedTag},
-                    contactNumber : contactNumber.value.trim(), 
-                    orgName : currentOrg, 
-                };
-                if (props.editingContact){
-                        const contactId = props.editingContact._id;
-                        context.emit('contact-edit',contactId, newContact);
-                }else{
-                    context.emit('contact-added', newContact); //alternative this.$emit()
-                }
-                // Clear form fields
-                contactName.value = '';
-                contactEmail.value = '';
-                contactNumber.value = '';
-                contactTag.value = '';
-                selectedTag.value = [];
-            };
-            const closeForm = () => {
-                context.emit('form-closed', "Closed");
-            };
-            const addTag = (contactTag) =>{
-                selectedTag.value.push(contactTag);
-            };
-            const removeTag = (tag) =>{
-                let indexOftag = selectedTag.value.indexOf(tag);
-                selectedTag.value.splice(indexOftag, 1);
-            };
-            return {
-                contactName,
-                contactEmail,
-                contactTag,
-                contactNumber,
-                addContact,
-                closeForm,
-                selectedTag,
-                addTag,
-                removeTag,
-            };
+export default {
+    name:"contactForm",
+    props:{
+        showForm:Boolean, // props defined a properties (showForm here) that is expected to recieve from parent components and here its in the boolean form which is used to verify in the above template 
+        editingContact: {
+            type: Object,
+            default: {}
         },
-        
-    };
+    }, 
+    meteor:{
+        $subscribe:{
+            tags:[],
+        },
+        tags(){
+            return tags.find().fetch();
+        },
+    }, 
+    setup (props, context){
+        const contactName = ref (props.editingContact? props.editingContact.contactName: '');
+        const contactEmail = ref (props.editingContact? props.editingContact.contactEmail: '');
+        const contactTag = ref (props.editingContact ? [props.editingContact.contactTag]: []);
+        const contactNumber = ref (props.editingContact ? props.editingContact.contactNumber: '');
+        const selectedTag = ref([]);
+        const orgName = ref([]);
+
+        const addContact = () => {
+            const currentUser = Meteor.user();
+            const currentOrg = currentUser.profile.orgId;
+            console.log(currentOrg);
+            const newContact = {
+                contactName : contactName.value.trim(),
+                contactEmail : contactEmail.value.trim(),
+                contactTag : {...selectedTag},
+                contactNumber : contactNumber.value.trim(), 
+                orgId : currentOrg, 
+            };
+            if (props.editingContact){
+                    const contactId = props.editingContact._id;
+                    context.emit('contact-edit',contactId, newContact);
+            }else{
+                context.emit('contact-added', newContact); //alternative this.$emit()
+            }
+            // Clear form fields
+            contactName.value = '';
+            contactEmail.value = '';
+            contactNumber.value = '';
+            contactTag.value = '';
+            selectedTag.value = [];
+        };
+        const closeForm = () => {
+            context.emit('form-closed', "Closed");
+        };
+        const addTag = (contactTag) =>{
+            Meteor.call('getTagIdByName',contactTag,(error, result)=>{
+                if(error){
+                    alert(error.reason);
+                }else{
+                    selectedTag.value.push({tagId: result, tagName:contactTag});
+                }
+            })
+            console.log(selectedTag);
+            // selectedTag.value.push(contactTag);
+        };
+        const removeTag = (tag) =>{
+            let indexOftag = selectedTag.value.indexOf(tag);
+            selectedTag.value.splice(indexOftag, 1);
+        };
+        return {
+            contactName,
+            contactEmail,
+            contactTag,
+            contactNumber,
+            addContact,
+            closeForm,
+            selectedTag,
+            addTag,
+            removeTag,
+        };
+    },
+    
+};
    
 </script>
 
-<style scoped>
-    .contact-form-overlay{
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000; /* Higher than the table's z-index */
-    }
-    .modal {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-    }
-    .modal input{
-        width: 300px; 
-        height: 40px;
-        padding-left:20px;
-        display:block;
-        margin-right:auto;
-        margin-left:auto;
-        margin-top:10px;
-        border: 1px solid;
-        border-color:skyblue;
-        } 
-    .modal button{
-        width: auto;
-        border: 1px solid;
-        margin-right:auto;
-        margin-left:auto;
-        margin-top:10px;
-        width:300px;
-        height:40px;
-        border:1px solid rgb(133, 131, 131);
-        margin-bottom: 10px;
-    }
-    .modal button:hover{
-        cursor:pointer;
-        background-color:antiquewhite;
-    }
-    .close-button{
-        position: relative;
-        width:100%;
-    }
-    .form-close-icon{
-        height:18px;
-        position: absolute;
-        right:0;
-    }
-    .form-close-icon:hover{
-        cursor : pointer;
-    }
-    .dropdown{
-    width: 300px; 
-    height: 40px;
-    padding-left:20px;
-    display:block;
-    margin-right:auto;
-    margin-left:auto;
-    margin-top:10px;
-    border:1px solid rgb(26, 25, 25);
-    }
-    .remove-tag:hover{
-       cursor:pointer;
-    }
-
-
+<style scoped lang="scss">
+    @import "../../../src/shared-form-styles.scss"   
 </style>

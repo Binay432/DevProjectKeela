@@ -3,7 +3,7 @@
         <router-link to ="/contactTable">
             <div class="keela-features">
                 <div>
-                    <img class="features-icon" src="contactsIcon.png"> 
+                    <img class="features-icon" src="/contactsIcon.png"> 
                 </div>
                 <div>
                     <h1 class="features-text">Contacts</h1>
@@ -14,7 +14,7 @@
         <router-link to="/tags">
             <div class="keela-features">
                 <div>
-                    <img class="features-icon" src="tags.png"> 
+                    <img class="features-icon" src="/tags.png"> 
                 </div>
                 <div>
                     <h1 class="features-text">Tags</h1>
@@ -22,17 +22,17 @@
             </div>
         </router-link>
 
-        <div @click="checkPermissionAndNavigate">
+        <div v-if="checkPermission" @click="checkPermissionAndNavigate">
             <div class="keela-features" >
                 <div>
-                    <img class="features-icon" src="organization.png"> 
+                    <img class="features-icon" src="/organization.png"> 
                 </div>
                 <div>
                     <h1 class="features-text">Organization</h1>
                 </div>  
             </div>
         </div>
-
+        <div v-else></div>
         <button class="logout-button" @click="logout">Log Out</button>
     </div>
 </template>
@@ -41,6 +41,22 @@
 import { Meteor } from 'meteor/meteor';
 export default {
     name:"sidebar",
+    computed:{
+        checkPermission(){
+            if(!Meteor.user()){
+                return ''
+            }else{
+                const userRole = Meteor.user().profile.orgRole;
+                if(userRole === "Coordinator"){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }   
+        }
+      
+    },
     methods:{
         logout(){
             Meteor.logout((error) => {
@@ -75,7 +91,7 @@ export default {
         grid-template-rows:15px 15px 15px 1fr;
         row-gap:20px;
         width:160px;
-        background-color:rgb(196, 195, 195);
+        background-color:rgb(9, 25, 68);
         border:1px solid rgb(166, 165, 165);
         padding:0.5em;
         top:54.5px;

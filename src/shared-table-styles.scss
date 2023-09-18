@@ -1,0 +1,100 @@
+
+.table-grid{
+    display:grid;
+    grid-template-rows:50px 1fr;
+    margin-top:70px;
+    margin-left:200px;
+    margin-right:50px;
+
+}
+.table-info-box{
+    background-color: white;
+    border:1px solid rgb(168, 166, 166);
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.left-section, .right-section{
+    display:flex;
+    margin:5px;
+}
+.table-box{
+    background-color:white;
+    border:1px solid rgb(168, 166, 166);
+}
+.add-button{
+    width:auto;
+    height:35px;
+    border-radius:5px;
+    background-color:rgb(198, 138, 198);
+    border-style:solid; 
+    padding:5px;  
+}
+.add-button:hover{
+    background-color:rgb(197, 193, 197);
+    cursor:pointer;
+}
+.table{
+    border-collapse:collapse;
+    margin :0 0;
+    font-size:0.9em;
+    min-width:400px;
+    border-radius: 5px 5px 0 0;
+    overflow:hidden;
+    box-shadow: 0 0 2px rgba(0,0,0,0.15);
+    table-layout:fixed;
+    width:100%
+}
+.table thead tr{
+    color:black;
+    text-align:left;
+    font-weight:bold;
+    border-bottom:1px solid black;;
+}
+.table th,
+.table td{
+    padding:12px 15px;
+}
+.table tbody tr{
+    border-bottom:1px solid #dddddd;
+    text-align:left;
+}
+.table tbody tr:nth-of-type(even){
+    background-color:#f3f3f3;
+}
+.delete-button{
+    background-color:red;
+    border:1px solid black;
+    width:25%;
+    box-sizing: border-box;
+
+}
+.delete-button:hover{
+    background-color:rgb(197, 193, 197);
+    cursor:pointer;
+}
+.edit-button{
+    margin-left:5px;
+    background-color:rgb(121, 157, 121);
+    border:1px solid black;
+    width:25%;
+    margin-right:5%;
+    box-sizing: border-box;
+}
+.edit-button:hover{
+    background-color:rgb(197, 193, 197);
+    cursor:pointer;
+}
+.back-button{
+    text-align: center;
+    width:5%;
+    height:35px;
+    border-radius:5px;
+    background-color:rgb(198, 138, 198);
+    border-style:solid; 
+    padding:5px;  
+}
+.table-row:hover{
+    cursor: pointer;
+}

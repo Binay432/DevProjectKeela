@@ -25,7 +25,7 @@
                     <tr  v-for="contact in specificOrganization" :key="contact._id">
                         <td>{{ contact.contactName }}</td>
                         <td>{{ contact.contactEmail }}</td>
-                        <td>{{getTagName(contact.contactTag._value.map(tag=> tag.tagId))}}</td>
+                        <td>{{ contact.contactTag._value.map(tag=>tag.tagName).join(', ')}}</td>
                         <td>{{ contact.contactNumber }}</td>
                         <td>
                             <button v-if="checkPermission" class="edit-button" @click="editContact(contact)">Edit</button>
@@ -55,8 +55,6 @@ export default{
             showForm: false,
             editingContact: null,
             isAddButtonDisabled : false,
-            contactTags :[],
-            test: [],
         };
     },
     
@@ -165,14 +163,6 @@ export default{
                 });
             }
             this.showForm = false;
-        },
-        async getTagName(tagIds) {
-            let results = Meteor.call('getTagNameById', tagIds, (error, result) => {
-                if(result){
-                    console.log(result);
-                }
-            })
-
         },
     }        
 }

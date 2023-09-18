@@ -26,87 +26,87 @@ import {ref} from 'vue';
 import { tags } from '../../db/tagsCollections';
 import { Meteor } from 'meteor/meteor';
 
-    export default {
-        name:"contactForm",
-        props:{
-            showForm:Boolean, // props defined a properties (showForm here) that is expected to recieve from parent components and here its in the boolean form which is used to verify in the above template 
-            editingContact: {
-                type: Object,
-                default: {}
-            },
-        }, 
-        meteor:{
-            $subscribe:{
-                tags:[],
-            },
-            tags(){
-                return tags.find().fetch();
-            },
-        }, 
-        setup (props, context){
-            const contactName = ref (props.editingContact? props.editingContact.contactName: '');
-            const contactEmail = ref (props.editingContact? props.editingContact.contactEmail: '');
-            const contactTag = ref (props.editingContact ? [props.editingContact.contactTag]: []);
-            const contactNumber = ref (props.editingContact ? props.editingContact.contactNumber: '');
-            const selectedTag = ref([]);
-            const orgName = ref([]);
-
-            const addContact = () => {
-                const currentUser = Meteor.user();
-                const currentOrg = currentUser.profile.orgId;
-                console.log(currentOrg);
-                const newContact = {
-                    contactName : contactName.value.trim(),
-                    contactEmail : contactEmail.value.trim(),
-                    contactTag : {...selectedTag},
-                    contactNumber : contactNumber.value.trim(), 
-                    orgId : currentOrg, 
-                };
-                if (props.editingContact){
-                        const contactId = props.editingContact._id;
-                        context.emit('contact-edit',contactId, newContact);
-                }else{
-                    context.emit('contact-added', newContact); //alternative this.$emit()
-                }
-                // Clear form fields
-                contactName.value = '';
-                contactEmail.value = '';
-                contactNumber.value = '';
-                contactTag.value = '';
-                selectedTag.value = [];
-            };
-            const closeForm = () => {
-                context.emit('form-closed', "Closed");
-            };
-            const addTag = (contactTag) =>{
-                Meteor.call('getTagIdByName',contactTag,(error, result)=>{
-                    if(error){
-                        alert(error.reason);
-                    }else{
-                        selectedTag.value.push({tagId: result, tagName:contactTag});
-                    }
-                })
-                console.log(selectedTag);
-                // selectedTag.value.push(contactTag);
-            };
-            const removeTag = (tag) =>{
-                let indexOftag = selectedTag.value.indexOf(tag);
-                selectedTag.value.splice(indexOftag, 1);
-            };
-            return {
-                contactName,
-                contactEmail,
-                contactTag,
-                contactNumber,
-                addContact,
-                closeForm,
-                selectedTag,
-                addTag,
-                removeTag,
-            };
+export default {
+    name:"contactForm",
+    props:{
+        showForm:Boolean, // props defined a properties (showForm here) that is expected to recieve from parent components and here its in the boolean form which is used to verify in the above template 
+        editingContact: {
+            type: Object,
+            default: {}
         },
-        
-    };
+    }, 
+    meteor:{
+        $subscribe:{
+            tags:[],
+        },
+        tags(){
+            return tags.find().fetch();
+        },
+    }, 
+    setup (props, context){
+        const contactName = ref (props.editingContact? props.editingContact.contactName: '');
+        const contactEmail = ref (props.editingContact? props.editingContact.contactEmail: '');
+        const contactTag = ref (props.editingContact ? [props.editingContact.contactTag]: []);
+        const contactNumber = ref (props.editingContact ? props.editingContact.contactNumber: '');
+        const selectedTag = ref([]);
+        const orgName = ref([]);
+
+        const addContact = () => {
+            const currentUser = Meteor.user();
+            const currentOrg = currentUser.profile.orgId;
+            console.log(currentOrg);
+            const newContact = {
+                contactName : contactName.value.trim(),
+                contactEmail : contactEmail.value.trim(),
+                contactTag : {...selectedTag},
+                contactNumber : contactNumber.value.trim(), 
+                orgId : currentOrg, 
+            };
+            if (props.editingContact){
+                    const contactId = props.editingContact._id;
+                    context.emit('contact-edit',contactId, newContact);
+            }else{
+                context.emit('contact-added', newContact); //alternative this.$emit()
+            }
+            // Clear form fields
+            contactName.value = '';
+            contactEmail.value = '';
+            contactNumber.value = '';
+            contactTag.value = '';
+            selectedTag.value = [];
+        };
+        const closeForm = () => {
+            context.emit('form-closed', "Closed");
+        };
+        const addTag = (contactTag) =>{
+            Meteor.call('getTagIdByName',contactTag,(error, result)=>{
+                if(error){
+                    alert(error.reason);
+                }else{
+                    selectedTag.value.push({tagId: result, tagName:contactTag});
+                }
+            })
+            console.log(selectedTag);
+            // selectedTag.value.push(contactTag);
+        };
+        const removeTag = (tag) =>{
+            let indexOftag = selectedTag.value.indexOf(tag);
+            selectedTag.value.splice(indexOftag, 1);
+        };
+        return {
+            contactName,
+            contactEmail,
+            contactTag,
+            contactNumber,
+            addContact,
+            closeForm,
+            selectedTag,
+            addTag,
+            removeTag,
+        };
+    },
+    
+};
    
 </script>
 

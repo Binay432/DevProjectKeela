@@ -13,25 +13,38 @@ Meteor.methods ( {
             })
    },
    'tags.delete'(tagId){
-        if(!this.userId){
-            throw new Meteor.Error('not-authorized','You are not authorized to delete tags.');
+      if(this.userId){
+        const tagToDelete = tags.findOne(tagId);
+        if (!tagToDelete) {
+          throw new Meteor.Error('tag-not-found', 'Tag not found');
         }
+        const contactToUpdate = contacts.find({ 'contactTag._value': {$elemMatch:{tagId:tagId}}}).fetch();
+        contactToUpdate.forEach(contact => {
+          const index = contact.contactTag._value.findIndex(tag => tag.tagId === tagId);
+          if(index !== -1){
+            contact.contactTag._value.splice(index, 1);
+            contacts.update({ _id: contact._id }, { $set: { 'contactTag._value': contact.contactTag._value } });
+          }
+        });    
         tags.remove({_id:tagId, userId:this.userId});
+      }else{
+        throw new Meteor.Error('not-authorized','You are not authorized to delete tags.');
+      }
     },
     'tags.edit'(tagId, updatedTag) {
-        if (this.userId) {
-          tags.update({ _id: tagId}, { $set: updatedTag});
-          const contactToUpdate = contacts.find({ 'contactTag._value': {$elemMatch:{tagId:tagId}}}).fetch();
-          contactToUpdate.forEach(contact => {
-            const index = contact.contactTag._value.findIndex(tag => tag.tagId === tagId);
-            if(index != -1){
-              contact.contactTag._value[index].tagName = updatedTag.tagName;
-              contacts.update({ _id: contact._id }, { $set: { contactTag: contact.contactTag } });
-            }
-          })
-        } else {
-          throw new Meteor.Error('not-authorized', 'You are not authorized to edit this tag.');
-        }
+      if (this.userId) {
+        tags.update({ _id: tagId}, { $set: updatedTag});
+        const contactToUpdate = contacts.find({ 'contactTag._value': {$elemMatch:{tagId:tagId}}}).fetch();
+        contactToUpdate.forEach(contact => {
+          const index = contact.contactTag._value.findIndex(tag => tag.tagId === tagId);
+          if(index != -1){
+            contact.contactTag._value[index].tagName = updatedTag.tagName;
+            contacts.update({ _id: contact._id }, { $set: { contactTag: contact.contactTag } });
+          }
+        })
+      } else {
+        throw new Meteor.Error('not-authorized', 'You are not authorized to edit this tag.');
+      }
     },
     'getTagIdByName'(tagName) {
         const tag = tags.findOne({tagName});

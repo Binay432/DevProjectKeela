@@ -67,8 +67,9 @@ export default{
         },
     },  
     computed:{
-         specificOrganization(){
-            if(!Meteor.user){
+        specificOrganization(){
+            //checking if user loged in creditional has fetched before computition takes place , not  doing this will crash out the app once refreshed 
+            if(!Meteor.user()){
                 return []
             }else{
                 const currentUser = Meteor.user()?? null;  

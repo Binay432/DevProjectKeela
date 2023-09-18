@@ -43,13 +43,17 @@ export default {
     name:"sidebar",
     computed:{
         checkPermission(){
-            const userRole = Meteor.user().profile.orgRole;
-            if(userRole === "Coordinator"){
-                return false;
-            }
-            else{
-                return true;
-            }
+            if(!Meteor.user()){
+                return ''
+            }else{
+                const userRole = Meteor.user().profile.orgRole;
+                if(userRole === "Coordinator"){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }   
         }
       
     },

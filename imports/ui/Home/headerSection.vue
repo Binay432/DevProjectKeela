@@ -23,20 +23,28 @@ export default {
     },
     computed:{
         organizationName() {
-            const user = Meteor.user();
-            const userOrgId = user.profile.orgId;
-            Meteor.call('getOrganizationNameById', userOrgId, (error, result) => {
-                if(error){
-                    alert(error.reason);
-                }else{
-                    this.orgName = result;
-                }
-            })
-            return this.orgName;
+            if(!Meteor.user()){
+                return this.orgName = 'Loading ...'
+            }else{
+                const user = Meteor.user();
+                const userOrgId = user.profile.orgId;
+                Meteor.call('getOrganizationNameById', userOrgId, (error, result) => {
+                    if(error){
+                        alert(error.reason);
+                    }else{
+                        this.orgName = result;
+                    }
+                })
+                return this.orgName;
+            }   
         },
         userName(){
-            const user = Meteor.user();
-            return user ? user.profile.firstName+" "+ user.profile.lastName : '' ;
+            if(!Meteor.user()){
+                return 'Loading...';
+            }else{
+                const user = Meteor.user();
+                return user ? user.profile.firstName+" "+ user.profile.lastName : '' ;
+            }
         },
     },
     

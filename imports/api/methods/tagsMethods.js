@@ -34,12 +34,12 @@ Meteor.methods ( {
           throw new Meteor.Error('tag-not-found', 'tag not found');
         }
     },
-    'getTagNameById'(tagId) {
-      const tag = tags.findOne(tagId);
-      if (tag) {
-        return tag.tagName;
-      } else {
-        throw new Meteor.Error('tag-not-found', 'tag not found');
+    'getTagNameById'(tagIds) {
+      const ListOfTags = tags.find({ _id: {$in: tagIds} }).fetch().map(tag=>tag.tagName);
+      if (ListOfTags.length) {
+          return ListOfTags;
+        }else {
+          throw new Meteor.Error('tag-not-found', 'tag not found');
       }
   }
 });

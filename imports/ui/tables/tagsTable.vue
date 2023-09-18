@@ -61,9 +61,13 @@ export default{
     },
     computed:{
         specificOrganization(){
-            const currentUser = Meteor.user();
-            const currentOrg = currentUser.profile.orgId;
-            return this.tags.filter(tag => tag.orgId === currentOrg);
+            if(!Meteor.user()){
+                return []
+            }else{
+                const currentUser = Meteor.user();
+                const currentOrg = currentUser.profile.orgId;
+                return this.tags.filter(tag => tag.orgId === currentOrg);
+            }
         }, 
     },
     methods:{

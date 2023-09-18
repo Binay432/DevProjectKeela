@@ -54,7 +54,11 @@ export default {
     },
     computed:{
         specificOrganization(){
-            return this.users.filter(user => user.profile.orgId === this.orgId);
+            if(!Meteor.user()){
+                return [];
+            }else{
+                return this.users.filter(user => user.profile.orgId === this.orgId);
+            }  
         }, 
     },
     data(){

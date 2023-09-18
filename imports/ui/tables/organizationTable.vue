@@ -62,12 +62,16 @@ export default {
     },
     computed:{
         checkPermission(){
-            const userRole = Meteor.user().profile.orgRole;
-            if(userRole === 'Admin'){
-                return false;
+            if(!Meteor.user()){
+                return '';
             }else{
-                return true;
-            }
+                const userRole = Meteor.user().profile.orgRole;
+                if(userRole === 'Admin'){
+                    return false;
+                }else{
+                    return true;
+                }
+            }   
         }
     },
     meteor: {

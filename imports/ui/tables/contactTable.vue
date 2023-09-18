@@ -2,7 +2,7 @@
     <home/>
     <div class = "table-grid">
             <div class="table-info-box">
-                <div class ="left-section"><strong>{{ specificOrganization.length }} Contacts</strong></div>
+                <div class ="left-section"><strong>{{ }} Contacts</strong></div>
                 <div class ="middle-section"></div>
                 <div class="right-section">
                     <button v-if="checkPermission" type="button" class="add-button" @click="addContact" :disabled="isAddButtonDisabled">Add Contact</button>
@@ -25,7 +25,7 @@
                     <tr  v-for="contact in specificOrganization" :key="contact._id">
                         <td>{{ contact.contactName }}</td>
                         <td>{{ contact.contactEmail }}</td>
-                        <td>{{ getTagName(contact.contactTag._value.map(tag=> tag.tagId))}}</td>
+                        <td>{{getTagName(contact.contactTag._value.map(tag=> tag.tagId))}}</td>
                         <td>{{ contact.contactNumber }}</td>
                         <td>
                             <button v-if="checkPermission" class="edit-button" @click="editContact(contact)">Edit</button>
@@ -56,6 +56,7 @@ export default{
             editingContact: null,
             isAddButtonDisabled : false,
             contactTags :[],
+            test: [],
         };
     },
     
@@ -68,24 +69,30 @@ export default{
         },
     },  
     computed:{
-        specificOrganization(){
-            const currentUser = Meteor.user();
-            const currentOrg = currentUser.profile.orgId;
-            return this.contacts.filter(contact => contact.orgId === currentOrg);
-        },
-        checkPermission(){
-            const userRole = Meteor.user().profile.orgRole;
-            if(userRole === 'Coordinator'){
-                return false;
+         specificOrganization(){
+            if(!Meteor.user){
+                return []
             }else{
-                return true;
+                const currentUser = Meteor.user()?? null;  
+                const currentOrg = currentUser?.profile?.orgId; 
+                return this.contacts.filter(contact => contact.orgId === currentOrg);
             }
-        }
+        },
+        
+        checkPermission(){
+            if(!Meteor.user()){
+                return []
+            }else{
+                const userRole = Meteor.user().profile.orgRole;
+                if(userRole === 'Coordinator'){
+                    return false;
+                }else{
+                    return true;
+                }
+            }  
+        },
     },
     methods:{
-        onMounted(){
-            this.contacts = contacts.find().fetch();
-        },
         addContact(){
             Meteor.call('checkCoordinatorRole',(error,result) =>{
                 if(error){
@@ -140,7 +147,6 @@ export default{
                         if(confirm('Are you sure you want to delete this contact?')){
                             Meteor.call('contacts.delete', contact._id, (error)=>{
                                 if(error){
-                                    console.error('Error deleting contact:', error);
                                     alert('Error deleting contact: ' + error.message);
                                 }
                             });
@@ -160,44 +166,17 @@ export default{
             }
             this.showForm = false;
         },
-        // getTagName(tagId){
-        //     const tagNames = [];
-        //     for(let i=0; i<tagId.length; i++){
-        //         Meteor.call('getTagNameById',tagId[i],(error, result) => {
-        //             if(error){
-        //                 alert(error.message);
-        //             }else{
-        //                 tagNames.push(result);
-        //             }
-        //         })
-        //     }
-        //     console.log(tagNames)
-        // }
         async getTagName(tagIds) {
-            const tagNamePromises = tagIds.map(tagId => {
-                return new Promise((resolve, reject) => {
-                    Meteor.call('getTagNameById', tagId, (error, result) => {
-                        if (error) {
-                            reject(error);
-                        } else {
-                            resolve(result);
-                        }
-                    });
-                });
-            });
+            let results = Meteor.call('getTagNameById', tagIds, (error, result) => {
+                if(result){
+                    console.log(result);
+                }
+            })
 
-            try {
-                const tagNames = await Promise.all(tagNamePromises);
-                console.log(tagNames.join(',')); 
-                return tagNames.join(',');
-            } catch (error) {
-                alert(error.message); 
-                return '';
-            }
         },
-
-    }
+    }        
 }
+
 </script>
 
 <style scoped lang="scss">

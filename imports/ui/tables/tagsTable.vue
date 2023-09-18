@@ -35,7 +35,6 @@
 
 <script> 
 import home from '../Home/home.vue';
-import { ref, onMounted } from 'vue';
 import tagForm from '../forms/tagForm.vue';
 import {tags} from '../../db/tagsCollections';
 import { Meteor } from 'meteor/meteor';
@@ -84,8 +83,7 @@ export default{
             Meteor.call('tags.insert',newTag);
             this.showForm = false;
         },
-        formClosed(message){
-            // alert(message);
+        formClosed(){
             this.showForm = false;
         },
         deleteTag(tag){

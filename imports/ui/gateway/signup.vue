@@ -9,7 +9,7 @@
                 <input type="email" v-model="email" id="email" placeholder ="Email" required>
                 <input type="text" v-model="orgName" id="orgName" placeholder ="Organization Name" required>
                 <select class="dropdown" id="OrgRole" v-model="orgRole" placeholder="Organization Role">
-                    <option v-for="role in roles" :key="role">{{ role }}</option>
+                    <option>Keela Admin</option>
                 </select>
                 <p v-if ="RoleError" class="error-message">{{ RoleError }}</p>  
                 <input v-model="password" type="password" placeholder ="Enter Password" required>
@@ -22,8 +22,6 @@
 </template>
 
 <script>
-import login from './login.vue';
-import { organizations } from '../../db/organizationsCollection';
 import { Meteor } from 'meteor/meteor';
 
 export default {
@@ -42,26 +40,10 @@ export default {
             roles: [],  
         };
     },  
-    mounted() {
-        // Call the Meteor Method to fetch roles
-        Meteor.call('roles.getRoles', (error, result) => {
-            if (!error) {
-                this.roles = result.map((role) => role._id);;
-                console.log(this.roles);
-            } else {
-                console.error(error.reason);
-            }
-        });
-    },
     methods:{
         checkPasswordValidation(password, confirmPassword){
             if(password !== confirmPassword){
                 this.error = "Password should be same";
-            }
-        },
-        checkRoleVerification(orgRole, orgName){
-            if (orgRole === 'Coordinator' && orgName !==''){
-                this.RoleError = "Coordinator cannot create Organization ! Contact Admin for invitation !";
             }
         },
         clearInputField(){
@@ -82,7 +64,6 @@ export default {
             const password = this.password;
             const confirmPassword = this.confirmPassword;
             this.checkPasswordValidation(password, confirmPassword);
-            this.checkRoleVerification(orgRole, orgName);
             if (this.error === "" && this.RoleError === ""){
                 const user = {
                     email : this.email,

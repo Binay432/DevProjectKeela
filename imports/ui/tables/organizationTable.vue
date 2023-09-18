@@ -160,7 +160,7 @@ export default {
                 }
             });    
         },
-        formClosed(message){
+        formClosed(){
             this.showForm = false;
         },
         navigateToUserTable(orgId, orgName){

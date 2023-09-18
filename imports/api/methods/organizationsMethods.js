@@ -34,6 +34,6 @@ Meteor.methods ({
         } else {
           throw new Meteor.Error('organization-not-found', 'Organization not found');
         }
-      },
+    },
 })
 

@@ -20,12 +20,26 @@ Meteor.methods ( {
         tags.remove({_id:tagId, userId:this.userId});
     },
     'tags.edit'(tagId, updatedTag) {
-        console.log(tagId);
-        console.log(updatedTag);
         if (this.userId) {
-          tags.update({ _id: tagId, userId: this.userId }, { $set: updatedTag});
+          tags.update({ _id: tagId}, { $set: updatedTag});
         } else {
           throw new Meteor.Error('not-authorized', 'You are not authorized to edit this tag.');
         }
-      },
+    },
+    'getTagIdByName'(tagName) {
+        const tag = tags.findOne({tagName});
+        if (tag) {
+          return tag._id;
+        } else {
+          throw new Meteor.Error('tag-not-found', 'tag not found');
+        }
+    },
+    'getTagNameById'(tagId) {
+      const tag = tags.findOne(tagId);
+      if (tag) {
+        return tag.tagName;
+      } else {
+        throw new Meteor.Error('tag-not-found', 'tag not found');
+      }
+  }
 });

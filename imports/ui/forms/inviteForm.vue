@@ -2,7 +2,7 @@
     <div v-if ="showForm" class= "form-overlay">
         <div class="modal">
             <div class="close-button" @click="closeForm">
-                <img class ="form-close-icon"  src="cross.png">
+                <img class ="form-close-icon"  src="/cross.png">
             </div>
             <h2>{{ editingUser ? 'Edit User' : 'Invite User' }}</h2>
             <form @submit.prevent = "submit">
@@ -40,8 +40,7 @@ export default {
         // Call the Meteor Method to fetch roles
         Meteor.call('roles.getRoles', (error, result) => {
             if (!error) {
-                this.roles = result.map((role) => role._id);;
-                console.log(this.roles);
+                this.roles = result.map((role) => role._id);
             } else {
                 console.error(error.reason);
             }
@@ -54,7 +53,6 @@ export default {
         // const orgName = ref(props.editingUser ? props.editingUser.profile.orgName: '');
         const orgRole = ref(props.editingUser ? props.editingUser.profile.orgRole: '');
         const password = ref (props.editingUser ? props.editingUser.password: '');
-
         const submit = () =>{
             const newUser = {
                 firstName : firstName.value.trim(),
@@ -78,7 +76,7 @@ export default {
             password.value ='';
         };
         const closeForm =() => {
-                context.emit('form-closed', "Closed");
+            context.emit('form-closed', "Closed");
         };
         return {
             firstName,

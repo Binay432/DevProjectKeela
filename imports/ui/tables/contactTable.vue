@@ -25,7 +25,7 @@
                     <tr  v-for="contact in specificOrganization" :key="contact._id">
                         <td>{{ contact.contactName }}</td>
                         <td>{{ contact.contactEmail }}</td>
-                        <td>{{ contact.contactTag._value }}</td>
+                        <td>{{ getTagName(contact.contactTag._value.map(tag=> tag.tagId))}}</td>
                         <td>{{ contact.contactNumber }}</td>
                         <td>
                             <button v-if="checkPermission" class="edit-button" @click="editContact(contact)">Edit</button>
@@ -55,6 +55,7 @@ export default{
             showForm: false,
             editingContact: null,
             isAddButtonDisabled : false,
+            contactTags :[],
         };
     },
     
@@ -159,6 +160,42 @@ export default{
             }
             this.showForm = false;
         },
+        // getTagName(tagId){
+        //     const tagNames = [];
+        //     for(let i=0; i<tagId.length; i++){
+        //         Meteor.call('getTagNameById',tagId[i],(error, result) => {
+        //             if(error){
+        //                 alert(error.message);
+        //             }else{
+        //                 tagNames.push(result);
+        //             }
+        //         })
+        //     }
+        //     console.log(tagNames)
+        // }
+        async getTagName(tagIds) {
+            const tagNamePromises = tagIds.map(tagId => {
+                return new Promise((resolve, reject) => {
+                    Meteor.call('getTagNameById', tagId, (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
+                    });
+                });
+            });
+
+            try {
+                const tagNames = await Promise.all(tagNamePromises);
+                console.log(tagNames.join(',')); 
+                return tagNames.join(',');
+            } catch (error) {
+                alert(error.message); 
+                return '';
+            }
+        },
+
     }
 }
 </script>

@@ -22,7 +22,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="user in specificOrganization" :key="user._id">
-                        <td>{{ user.profile.firstName + user.profile.lastName }}</td>
+                        <td>{{ user.profile.firstName +' '+ user.profile.lastName }}</td>
                         <td>{{ user.emails[0].address }}</td>
                         <td>{{ user.profile.orgRole }}</td>
                         <td>
@@ -84,6 +84,15 @@ export default {
                         alert('Error Checking permission : ', error.message);
                     }else if(result){
                         alert("Permission Denied");
+                    }else{
+                        Meteor.call('checkKeelaAdminRole',(error, result) => {
+                            if(error){
+                                alert('Error Checking permission : ', error.message);
+                            }else if(result){
+                                this.editingUser = {...user};
+                                this.showForm = true;
+                            }
+                        })
                     }
                 })
             }else{
@@ -115,8 +124,22 @@ export default {
             this.showForm = false;
         },
         handleUserEdit(userId, newUser){
+            console.log(userId);
+            console.log(newUser);
             if(confirm('Are you sure you want to edit this user?')){
-                Meteor.call('users.edit', userId, newUser, (error)=>{
+                const user = {
+                    emails  : [
+                        {address: newUser.email, verified: false}
+                    ],
+                    profile:{
+                        firstName : newUser.firstName,
+                        lastName : newUser.lastName,
+                        orgId: this.orgId,
+                        orgName : this.orgName,
+                        orgRole : newUser.orgRole,
+                    },
+                }
+                Meteor.call('users.edit', userId, user, (error)=>{
                     if(error){
                         console.error('Error updating user:', error);
                         alert('Error editing user: ' + error.message);

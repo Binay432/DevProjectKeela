@@ -12,7 +12,7 @@
                     <option v-for="tag in tags" :key="tag._id" :value="tag.tagName">{{ tag.tagName }}</option>
                 </select>
                 <ul>
-                    <li v-for="tag in selectedTag" :key="tag">{{ tag }}<span class="remove-tag" @click="removeTag(tag)"> x</span> </li>
+                    <li v-for="tag in selectedTag" :key="tag">{{ tag.tagName }}<span class="remove-tag" @click="removeTag(tag)"> x</span> </li>
                 </ul>
                 <input type= "text" v-model ="contactNumber" placeholder = "Number" required>
                 <button type="submit">{{ editingContact ? 'Save' : 'Add' }}</button>
@@ -79,7 +79,15 @@ import { Meteor } from 'meteor/meteor';
                 context.emit('form-closed', "Closed");
             };
             const addTag = (contactTag) =>{
-                selectedTag.value.push(contactTag);
+                Meteor.call('getTagIdByName',contactTag,(error, result)=>{
+                    if(error){
+                        alert(error.reason);
+                    }else{
+                        selectedTag.value.push({tagId: result, tagName:contactTag});
+                    }
+                })
+                console.log(selectedTag);
+                // selectedTag.value.push(contactTag);
             };
             const removeTag = (tag) =>{
                 let indexOftag = selectedTag.value.indexOf(tag);

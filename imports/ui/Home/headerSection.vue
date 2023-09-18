@@ -32,7 +32,6 @@ export default {
                     this.orgName = result;
                 }
             })
-            console.log(this.orgName);
             return this.orgName;
         },
         userName(){

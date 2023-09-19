@@ -2,7 +2,7 @@
     <home/>
     <div class = "table-grid">
             <div class="table-info-box">
-                <div class ="left-section"><strong>{{specificOrganization.length }} Contacts</strong></div>
+                <div class ="left-section"><strong>{{contacts.length }} Contacts</strong></div>
                 <div class ="middle-section"></div>
                 <div class="right-section">
                     <button v-if="checkPermission" type="button" class="add-button" @click="addContact" :disabled="isAddButtonDisabled">Add Contact</button>
@@ -22,7 +22,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr  v-for="contact in specificOrganization" :key="contact._id">
+                    <tr  v-for="contact in contacts" :key="contact._id">
                         <td>{{ contact.contactName }}</td>
                         <td>{{ contact.contactEmail }}</td>
                         <td>{{ contact.contactTag._value.map(tag=>tag.tagName).join(', ')}}</td>
@@ -67,17 +67,6 @@ export default{
         },
     },  
     computed:{
-        specificOrganization(){
-            //checking if user loged in creditional has fetched before computition takes place , not  doing this will crash out the app once refreshed 
-            if(!Meteor.user()){
-                return []
-            }else{
-                const currentUser = Meteor.user()?? null;  
-                const currentOrg = currentUser?.profile?.orgId; 
-                return this.contacts.filter(contact => contact.orgId === currentOrg);
-            }
-        },
-        
         checkPermission(){
             if(!Meteor.user()){
                 return []

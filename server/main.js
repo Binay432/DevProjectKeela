@@ -11,14 +11,14 @@ import './roles';
 
 Meteor.publish('contacts', function (){
     if (this.userId) {
-        return contacts.find();
+        return contacts.find({'orgId': Meteor.user().profile.orgId});
     } else {
         return this.ready(); //indicate that the publication is ready but contains no data.
     }
 });
 Meteor.publish('tags', function publishTags(){
     if(this.userId){
-        return tags.find();
+        return tags.find({'orgId': Meteor.user().profile.orgId});
     } else{
         return this.ready(); //indicate that the publication is ready but contains no data.
     }  

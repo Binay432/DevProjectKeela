@@ -2,7 +2,7 @@
     <home/>
     <div class = "table-grid">
             <div class="table-info-box">
-                <div class ="left-section"> <strong>{{ specificOrganization.length }} Tags</strong></div>
+                <div class ="left-section"> <strong>{{ tags.length }} Tags</strong></div>
                 <div class ="middle-section"></div>
                 <div class="right-section">
                     <button type="button" class="add-button" @click="addTag">Add Tags</button>
@@ -19,7 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="tag in specificOrganization" :key="tag._id">
+                    <tr v-for="tag in tags" :key="tag._id">
                         <td>{{ tag.tagName }}</td>
                         <td>{{ tag.createdAt}}</td>
                         <td>
@@ -58,17 +58,6 @@ export default{
         tags(){
             return tags.find().fetch();
         }
-    },
-    computed:{
-        specificOrganization(){
-            if(!Meteor.user()){
-                return []
-            }else{
-                const currentUser = Meteor.user();
-                const currentOrg = currentUser.profile.orgId;
-                return this.tags.filter(tag => tag.orgId === currentOrg);
-            }
-        }, 
     },
     methods:{
         onMounted(){

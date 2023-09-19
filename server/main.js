@@ -33,11 +33,9 @@ Meteor.publish('userData', function () {
 Meteor.publish('organizations', function (){
     if(this.userId){
         if(Roles.userIsInRole(this.userId,'Keela Admin')){
-            console.log("enter keela admin");
             return organizations.find();
         }
         else if(Roles.userIsInRole(this.userId, 'Admin')){
-            console.log("enter admin");
             return organizations.find({'_id': Meteor.user().profile.orgId});
         }else{
             return "Permission Denied";

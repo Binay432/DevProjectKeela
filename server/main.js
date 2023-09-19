@@ -11,14 +11,14 @@ import './roles';
 
 Meteor.publish('contacts', function (){
     if (this.userId) {
-        return contacts.find();
+        return contacts.find({'orgId': Meteor.user().profile.orgId});
     } else {
         return this.ready(); //indicate that the publication is ready but contains no data.
     }
 });
 Meteor.publish('tags', function publishTags(){
     if(this.userId){
-        return tags.find();
+        return tags.find({'orgId': Meteor.user().profile.orgId});
     } else{
         return this.ready(); //indicate that the publication is ready but contains no data.
     }  
@@ -32,7 +32,16 @@ Meteor.publish('userData', function () {
 });
 Meteor.publish('organizations', function (){
     if(this.userId){
-        return organizations.find();
+        if(Roles.userIsInRole(this.userId,'Keela Admin')){
+            console.log("enter keela admin");
+            return organizations.find();
+        }
+        else if(Roles.userIsInRole(this.userId, 'Admin')){
+            console.log("enter admin");
+            return organizations.find({'_id': Meteor.user().profile.orgId});
+        }else{
+            return "Permission Denied";
+        }       
     }else{
         return this.ready();
     }

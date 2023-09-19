@@ -168,29 +168,7 @@ export default {
             this.showForm = false;
         },
         navigateToUserTable(orgId, orgName){
-            Meteor.call('checkKeelaAdminRole',(error,result) =>{
-                if(error){
-                    alert('Error Checking permission : ', error.message);
-                }else{
-                    if(result){
-                        this.$router.push({ name:'userTable', params:{orgId, orgName}});
-                    }
-                }
-            }); 
-            Meteor.call('checkAdminRole',(error,result) =>{
-                if(error){
-                    alert('Error Checking permission : ', error.message);
-                }else{
-                    if(result){
-                        if(Meteor.user().profile.orgId === orgId){
-                            this.$router.push({ name:'userTable', params:{orgId, orgName}});
-                        }
-                        else {
-                            alert("permission denied: You're not in this organization");
-                        }
-                    }
-                }
-            })
+            this.$router.push({ name:'userTable', params:{orgId, orgName}});
         },
         usersInSpecificOrganization(orgId){
             return (this.users.filter(user => user.profile.orgId === orgId)).length;

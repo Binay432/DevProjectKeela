@@ -1,6 +1,6 @@
 <template>
     <div class="sidebar-grid">
-        <router-link to ="/contactTable">
+        <router-link to ="/contacts">
             <div class="keela-features">
                 <div>
                     <img class="features-icon" src="/contactsIcon.png"> 

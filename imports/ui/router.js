@@ -24,13 +24,13 @@ const router = createRouter({
       component:signup,   //components that need to be display in this path 
     },
     {
-      path:'/contactTable',
+      path:'/contacts',
       name:'contactTable',
       component:contactTable,
     },
     {
       path:'/tags',
-      name:'tagsTable',
+      name:'tags',
       component:tagsTable
     },
     {
@@ -39,7 +39,7 @@ const router = createRouter({
       component:empty
     },
     {
-      path:'/userTable/:orgId, :orgName',
+      path:'/users/:orgId, :orgName',
       name:'userTable',
       component:userTable,
       props: route => ({ 

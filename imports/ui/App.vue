@@ -3,7 +3,6 @@
 </template>
 
 
-
 <script>
  export  default{
    name:'App',
@@ -13,7 +12,7 @@
 
 <style>
 body{
-  background-color: black;
+  background-color:none;
 }
 #app {
  font-family: Avenir, Helvetica, Arial, sans-serif;

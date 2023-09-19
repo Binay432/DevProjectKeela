@@ -18,7 +18,7 @@
                         <th>EMAIL</th>
                         <th>TAGS</th>
                         <th>CONTACT NUMBER</th>
-                        <th>ACTIONS</th>
+                        <th v-if="checkPermission">ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,7 +57,6 @@ export default{
             isAddButtonDisabled : false,
         };
     },
-    
     meteor:{
         $subscribe:{
             contacts:[],

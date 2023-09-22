@@ -105,12 +105,12 @@ export default {
         align-items: center;
         margin-top:10px;
         background-color:rgb(239, 235, 243);
-        transition: background-color 0.5s ease, transform 0.5s ease;
+        transition: background-color 0.4s ease, transform 0.4s ease;
         border-radius: 5px;
     }
     .keela-features:hover{
         cursor:pointer; 
-        background-color:rgb(214, 216, 218);
+        background-color: greenyellow;
         transform: scale(1.09);
 
     }

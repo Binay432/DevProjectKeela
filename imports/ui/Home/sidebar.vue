@@ -105,10 +105,13 @@ export default {
         align-items: center;
         margin-top:10px;
         background-color:rgb(239, 235, 243);
+        transition: background-color 0.5s ease, transform 0.5s ease;
+        border-radius: 5px;
     }
     .keela-features:hover{
         cursor:pointer; 
         background-color:rgb(214, 216, 218);
+        transform: scale(1.09);
 
     }
     .features-icon{
@@ -124,10 +127,13 @@ export default {
         place-self: end center;
         width:140px;
         background-color:rgb(200, 202, 204);
+        transition: background-color 0.5s ease, transform 0.5s ease;
+        border-radius: 5px;
     }
     .logout-button:hover{
         cursor:pointer;
         background-color:rgb(214, 216, 218);
+        transform: scale(1.09);
     }
 
 </style>

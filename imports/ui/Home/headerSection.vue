@@ -64,9 +64,11 @@ export default {
         border:1px solid rgb(166, 165, 165);
         top :0;
         left:0;
+        right:0;
         float:top;
         justify-content: space-between; /* it distribute the flexbox at equal space in between them */
         align-items: center; /* it align the contents in flexbox */
+        position: fixed;
     }
     .leftBox{
         display:flex;
